@@ -1,40 +1,51 @@
 package audible;
 
-import audible.notifications.*;
+import audible.idelisteners.*;
 import audible.wav.Sound;
 import audible.wav.Sounds;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static liveplugin.PluginUtil.show;
-
 public class NotificationListener implements
-        Compilation.Listener, EditorNavigation.Listener, Refactoring.Listener, UnitTests.Listener, VcsActions.Listener {
+        Compilation.Listener, Navigation.Listener, EditorModification.Listener,
+        Refactoring.Listener, UnitTests.Listener, VcsActions.Listener {
 
     private final Sounds sounds;
-    private final Map<String, Sound> soundsByNavigationAction;
+    private final Map<String, Sound> soundsByAction;
     private final Map<String, Sound> soundsByRefactoring;
+    private boolean compilationIsFailing;
+    private boolean testsAreFailing;
 
     public NotificationListener(Sounds sounds) {
         this.sounds = sounds;
-        this.soundsByNavigationAction = createNavigationSounds(sounds);
+        this.soundsByAction = createEditorSounds(sounds);
         this.soundsByRefactoring = createRefactoringSounds(sounds);
     }
 
     @Override
     public void compilationSucceeded() {
-        show("compilationSucceeded"); // TODO
-    }
-
-    @Override
-    public void compilationFailed() {
+        compilationIsFailing = false;
         sounds.coin.play();
     }
 
     @Override
-    public void onNavigationAction(String actionId) {
-        Sound sound = soundsByNavigationAction.get(actionId);
+    public void compilationFailed() {
+        compilationIsFailing = true;
+        sounds.coin.play();
+    }
+
+    @Override
+    public void onEditorNavigation(String actionId) {
+        Sound sound = soundsByAction.get(actionId);
+        if (sound != null) {
+            sound.play();
+        }
+    }
+
+    @Override
+    public void onEditorModification(String actionId) {
+        Sound sound = soundsByAction.get(actionId);
         if (sound != null) {
             sound.play();
         }
@@ -48,6 +59,28 @@ public class NotificationListener implements
         }
     }
 
+    @Override
+    public void onUnitTestSucceeded() {
+        testsAreFailing = false;
+        sounds.coin.play();
+    }
+
+    @Override
+    public void onUnitTestFailed() {
+        testsAreFailing = true;
+        sounds.coin.play();
+    }
+
+    @Override
+    public void onVcsCommit() {
+        sounds.coin.play();
+    }
+
+    @Override
+    public void onVcsUpdate() {
+        sounds.coin.play();
+    }
+
     private static Map<String, Sound> createRefactoringSounds(Sounds sounds) {
         Map<String, Sound> result = new HashMap<String, Sound>();
         result.put("refactoring.rename", sounds.coin);
@@ -59,7 +92,7 @@ public class NotificationListener implements
         return result;
     }
 
-    private static Map<String, Sound> createNavigationSounds(Sounds sounds) {
+    private static Map<String, Sound> createEditorSounds(Sounds sounds) {
         Map<String, Sound> result = new HashMap<String, Sound>();
         result.put("EditorUp", sounds.coin);
         result.put("EditorDown", sounds.coin);
@@ -83,28 +116,8 @@ public class NotificationListener implements
         result.put("EditorPageUp", sounds.coin);
         result.put("EditorPageDown", sounds.coin);
 
-        // TODO complete statement action
+        result.put("EditorCompleteStatement", sounds.coin);
 
         return result;
-    }
-
-    @Override
-    public void onUnitTestSucceeded() {
-        sounds.coin.play();
-    }
-
-    @Override
-    public void onUnitTestFailed() {
-        sounds.coin.play();
-    }
-
-    @Override
-    public void onVcsCommit() {
-        sounds.coin.play();
-    }
-
-    @Override
-    public void onVcsUpdate() {
-        sounds.coin.play();
     }
 }

@@ -4,8 +4,9 @@ import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerAdapter;
+import com.intellij.openapi.project.ProjectManagerListener;
 import org.jetbrains.annotations.NotNull;
-import audible.notifications.*;
+import audible.idelisteners.*;
 import audible.wav.Sounds;
 
 import java.util.HashMap;
@@ -16,14 +17,15 @@ public class AppComponent implements ApplicationComponent {
     private final Map<Project, VcsActions> vcsActionsByProject = new HashMap<Project, VcsActions>();
     private final Map<Project, Compilation> compilationByProject = new HashMap<Project, Compilation>();
     private final Map<Project, UnitTests> unitTestsByProject = new HashMap<Project, UnitTests>();
-    private EditorNavigation editorNavigation;
+    private Navigation navigation;
+    private EditorModification editorModification;
     public Sounds sounds;
 
     @Override public void initComponent() {
         sounds = new Sounds();
         final NotificationListener listener = new NotificationListener(sounds);
 
-        ProjectManager.getInstance().addProjectManagerListener(new ProjectManagerAdapter() {
+        ProjectManagerListener projectManagerListener = new ProjectManagerAdapter() {
             @Override
             public void projectOpened(Project project) {
                 Refactoring refactoring = new Refactoring(project, listener);
@@ -54,14 +56,23 @@ public class AppComponent implements ApplicationComponent {
                 unitTestsByProject.get(project).stop();
                 unitTestsByProject.remove(project);
             }
-        });
-        editorNavigation = new EditorNavigation(listener);
-        editorNavigation.start();
+        };
+
+        ProjectManager.getInstance().addProjectManagerListener(projectManagerListener);
+        for (Project project : ProjectManager.getInstance().getOpenProjects()) {
+            projectManagerListener.projectOpened(project);
+        }
+
+        navigation = new Navigation(listener);
+        navigation.start();
+        editorModification = new EditorModification(listener);
+        editorModification.start();
     }
 
     @Override
     public void disposeComponent() {
-        editorNavigation.stop();
+        navigation.stop();
+        editorModification.stop();
     }
 
     @SuppressWarnings("ConstantConditions")
