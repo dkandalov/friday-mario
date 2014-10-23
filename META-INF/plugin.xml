@@ -1,0 +1,31 @@
+<idea-plugin version="2">
+  <id>AudibleActions</id>
+  <name>AudibleActions</name>
+  <version>0.1 beta</version>
+  <vendor email="dmitry.kandalov@gmail.com" url="http://www.yourcompany.com">Dmitry Kandalov</vendor>
+
+  <description><![CDATA[
+      Plays sounds for various actions in IDE.
+    ]]></description>
+
+  <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="138"/>
+
+  <!-- see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
+  <depends>com.intellij.modules.lang</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+  </extensions>
+
+  <application-components>
+      <component>
+          <implementation-class>audible.AppComponent</implementation-class>
+      </component>
+  </application-components>
+
+  <project-components>
+  </project-components>
+
+  <actions>
+  </actions>
+</idea-plugin>
