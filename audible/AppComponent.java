@@ -17,15 +17,18 @@ public class AppComponent implements ApplicationComponent {
     private final Map<Project, VcsActions> vcsActionsByProject = new HashMap<Project, VcsActions>();
     private final Map<Project, Compilation> compilationByProject = new HashMap<Project, Compilation>();
     private final Map<Project, UnitTests> unitTestsByProject = new HashMap<Project, UnitTests>();
+
     private Navigation navigation;
     private EditorModification editorModification;
-    public Sounds sounds;
+    private ProjectManagerListener projectManagerListener;
+
+    private NotificationListener listener;
 
     @Override public void initComponent() {
-        sounds = new Sounds();
-        final NotificationListener listener = new NotificationListener(sounds);
+        Sounds sounds = new Sounds();
+        listener = new NotificationListener(sounds).init();
 
-        ProjectManagerListener projectManagerListener = new ProjectManagerAdapter() {
+        projectManagerListener = new ProjectManagerAdapter() {
             @Override
             public void projectOpened(Project project) {
                 Refactoring refactoring = new Refactoring(project, listener);
@@ -71,8 +74,12 @@ public class AppComponent implements ApplicationComponent {
 
     @Override
     public void disposeComponent() {
+        for (Project project : ProjectManager.getInstance().getOpenProjects()) {
+            projectManagerListener.projectClosed(project);
+        }
         navigation.stop();
         editorModification.stop();
+        listener.dispose();
     }
 
     @SuppressWarnings("ConstantConditions")

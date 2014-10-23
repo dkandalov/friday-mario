@@ -23,16 +23,32 @@ public class NotificationListener implements
         this.soundsByRefactoring = createRefactoringSounds(sounds);
     }
 
+    public NotificationListener init() {
+        sounds.background.playInBackground();
+        return this;
+    }
+
+    public void dispose() {
+        sounds.background.stop();
+        sounds.backgroundSad.stop();
+    }
+
     @Override
     public void compilationSucceeded() {
-        compilationIsFailing = false;
-        sounds.coin.play();
+        if (compilationIsFailing) {
+            compilationIsFailing = false;
+            sounds.background.playInBackground();
+            sounds.backgroundSad.stop();
+        }
     }
 
     @Override
     public void compilationFailed() {
-        compilationIsFailing = true;
-        sounds.coin.play();
+        if (!compilationIsFailing) {
+            compilationIsFailing = true;
+            sounds.backgroundSad.playInBackground();
+            sounds.background.stop();
+        }
     }
 
     @Override
@@ -62,23 +78,23 @@ public class NotificationListener implements
     @Override
     public void onUnitTestSucceeded() {
         testsAreFailing = false;
-        sounds.coin.play();
+        sounds.oneUp.play();
     }
 
     @Override
     public void onUnitTestFailed() {
         testsAreFailing = true;
-        sounds.coin.play();
+        sounds.oneDown.play();
     }
 
     @Override
     public void onVcsCommit() {
-        sounds.coin.play();
+        sounds.powerupAppears.play();
     }
 
     @Override
     public void onVcsUpdate() {
-        sounds.coin.play();
+        sounds.powerup.play();
     }
 
     private static Map<String, Sound> createRefactoringSounds(Sounds sounds) {
@@ -94,29 +110,30 @@ public class NotificationListener implements
 
     private static Map<String, Sound> createEditorSounds(Sounds sounds) {
         Map<String, Sound> result = new HashMap<String, Sound>();
-        result.put("EditorUp", sounds.coin);
-        result.put("EditorDown", sounds.coin);
-        result.put("EditorLeft", sounds.coin);
-        result.put("EditorRight", sounds.coin);
-        result.put("EditorUpWithSelection", sounds.coin);
-        result.put("EditorDownWithSelection", sounds.coin);
-        result.put("EditorLeftWithSelection", sounds.coin);
-        result.put("EditorRightWithSelection", sounds.coin);
+//        result.put("EditorUp", sounds.coin);
+//        result.put("EditorDown", sounds.coin);
+//        result.put("EditorLeft", sounds.coin);
+//        result.put("EditorRight", sounds.coin);
+//        result.put("EditorUpWithSelection", sounds.coin);
+//        result.put("EditorDownWithSelection", sounds.coin);
+//        result.put("EditorLeftWithSelection", sounds.coin);
+//        result.put("EditorRightWithSelection", sounds.coin);
+        result.put("EditorPreviousWord", sounds.kick);
+        result.put("EditorNextWord", sounds.kick);
+        result.put("EditorPreviousWordWithSelection", sounds.kick);
+        result.put("EditorNextWordWithSelection", sounds.kick);
+        result.put("EditorLineStart", sounds.jumpSmall);
+        result.put("EditorLineEnd", sounds.jumpSmall);
+        result.put("EditorLineStartWithSelection", sounds.jumpSmall);
+        result.put("EditorLineEndWithSelection", sounds.jumpSmall);
+        result.put("EditorPageUp", sounds.jumpSuper);
+        result.put("EditorPageDown", sounds.jumpSuper);
 
-        result.put("EditorPreviousWord", sounds.coin);
-        result.put("EditorNextWord", sounds.coin);
-        result.put("EditorPreviousWordWithSelection", sounds.coin);
-        result.put("EditorNextWordWithSelection", sounds.coin);
-
-        result.put("EditorLineStart", sounds.coin);
-        result.put("EditorLineEnd", sounds.coin);
-        result.put("EditorLineStartWithSelection", sounds.coin);
-        result.put("EditorLineEndWithSelection", sounds.coin);
-
-        result.put("EditorPageUp", sounds.coin);
-        result.put("EditorPageDown", sounds.coin);
-
-        result.put("EditorCompleteStatement", sounds.coin);
+        result.put("EditorCompleteStatement", sounds.fireball);
+        result.put("HippieCompletion", sounds.fireball);
+        result.put("HippieBackwardCompletion", sounds.fireball);
+        result.put("EditorDeleteLine", sounds.breakblock);
+        result.put("$Paste", sounds.bowserfalls);
 
         return result;
     }

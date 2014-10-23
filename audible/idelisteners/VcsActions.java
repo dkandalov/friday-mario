@@ -55,5 +55,6 @@ public class VcsActions implements Restartable {
     public static interface Listener {
         void onVcsCommit();
         void onVcsUpdate();
+        // TODO git push
     }
 }

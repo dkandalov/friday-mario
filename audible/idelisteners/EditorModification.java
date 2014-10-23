@@ -16,6 +16,10 @@ public class EditorModification implements Restartable {
 
         actionsToWrap = new ArrayList<String>();
         actionsToWrap.add("EditorCompleteStatement");
+        actionsToWrap.add("EditorDeleteLine");
+        actionsToWrap.add("HippieCompletion");
+        actionsToWrap.add("HippieBackwardCompletion");
+        actionsToWrap.add("$Paste");
     }
 
     @Override
