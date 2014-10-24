@@ -5,7 +5,7 @@
   <vendor email="dmitry.kandalov@gmail.com" url="http://www.yourcompany.com">Dmitry Kandalov</vendor>
 
   <description><![CDATA[
-      Plays sounds for various actions in IDE.
+      The first plugin in the world to gamify development in IntelliJ IDEs.
     ]]></description>
 
   <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->

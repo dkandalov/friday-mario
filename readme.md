@@ -1,6 +1,6 @@
 What is this?
 =============
-This is the first plugin in the world to play sounds on various actions in IntelliJ IDEs.
+This is the first plugin in the world to gamify development in IntelliJ IDEs.
 
 WAT?!
 =====
