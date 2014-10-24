@@ -1,13 +1,15 @@
 package audible;
 
+import audible.idelisteners.*;
+import audible.wav.Sounds;
+import com.intellij.openapi.application.ApplicationAdapter;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerAdapter;
 import com.intellij.openapi.project.ProjectManagerListener;
 import org.jetbrains.annotations.NotNull;
-import audible.idelisteners.*;
-import audible.wav.Sounds;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +25,7 @@ public class AppComponent implements ApplicationComponent {
     private ProjectManagerListener projectManagerListener;
 
     private NotificationListener listener;
+    private ApplicationAdapter applicationListener;
 
     @Override public void initComponent() {
         Sounds sounds = new Sounds();
@@ -70,6 +73,14 @@ public class AppComponent implements ApplicationComponent {
         navigation.start();
         editorModification = new EditorModification(listener);
         editorModification.start();
+
+        applicationListener = new ApplicationAdapter() {
+            @Override
+            public void applicationExiting() {
+                listener.applicationExiting();
+            }
+        };
+        ApplicationManager.getApplication().addApplicationListener(applicationListener);
     }
 
     @Override
@@ -77,6 +88,7 @@ public class AppComponent implements ApplicationComponent {
         for (Project project : ProjectManager.getInstance().getOpenProjects()) {
             projectManagerListener.projectClosed(project);
         }
+        ApplicationManager.getApplication().removeApplicationListener(applicationListener);
         navigation.stop();
         editorModification.stop();
         listener.dispose();

@@ -15,7 +15,6 @@ public class NotificationListener implements
     private final Map<String, Sound> soundsByAction;
     private final Map<String, Sound> soundsByRefactoring;
     private boolean compilationIsFailing;
-    private boolean testsAreFailing;
 
     public NotificationListener(Sounds sounds) {
         this.sounds = sounds;
@@ -35,6 +34,7 @@ public class NotificationListener implements
 
     @Override
     public void compilationSucceeded() {
+        sounds.oneUp.play();
         if (compilationIsFailing) {
             compilationIsFailing = false;
             sounds.background.playInBackground();
@@ -44,6 +44,7 @@ public class NotificationListener implements
 
     @Override
     public void compilationFailed() {
+        sounds.oneDown.play();
         if (!compilationIsFailing) {
             compilationIsFailing = true;
             sounds.backgroundSad.playInBackground();
@@ -72,18 +73,18 @@ public class NotificationListener implements
         Sound sound = soundsByRefactoring.get(refactoringId);
         if (sound != null) {
             sound.play();
+        } else {
+            sounds.coin.play();
         }
     }
 
     @Override
     public void onUnitTestSucceeded() {
-        testsAreFailing = false;
         sounds.oneUp.play();
     }
 
     @Override
     public void onUnitTestFailed() {
-        testsAreFailing = true;
         sounds.oneDown.play();
     }
 
@@ -95,6 +96,14 @@ public class NotificationListener implements
     @Override
     public void onVcsUpdate() {
         sounds.powerup.play();
+    }
+
+    public void applicationExiting() {
+        sounds.gameover.play();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ignored) {
+        }
     }
 
     private static Map<String, Sound> createRefactoringSounds(Sounds sounds) {
@@ -110,14 +119,8 @@ public class NotificationListener implements
 
     private static Map<String, Sound> createEditorSounds(Sounds sounds) {
         Map<String, Sound> result = new HashMap<String, Sound>();
-//        result.put("EditorUp", sounds.coin);
-//        result.put("EditorDown", sounds.coin);
-//        result.put("EditorLeft", sounds.coin);
-//        result.put("EditorRight", sounds.coin);
-//        result.put("EditorUpWithSelection", sounds.coin);
-//        result.put("EditorDownWithSelection", sounds.coin);
-//        result.put("EditorLeftWithSelection", sounds.coin);
-//        result.put("EditorRightWithSelection", sounds.coin);
+        result.put("EditorUp", sounds.kick);
+        result.put("EditorDown", sounds.kick);
         result.put("EditorPreviousWord", sounds.kick);
         result.put("EditorNextWord", sounds.kick);
         result.put("EditorPreviousWordWithSelection", sounds.kick);
@@ -132,8 +135,20 @@ public class NotificationListener implements
         result.put("EditorCompleteStatement", sounds.fireball);
         result.put("HippieCompletion", sounds.fireball);
         result.put("HippieBackwardCompletion", sounds.fireball);
+        result.put("EditorStartNewLine", sounds.kick);
         result.put("EditorDeleteLine", sounds.breakblock);
-        result.put("$Paste", sounds.bowserfalls);
+        result.put("EditorDeleteToWordStart", sounds.breakblock);
+        result.put("EditorDeleteToWordEnd", sounds.breakblock);
+        result.put("CommentByLineComment", sounds.breakblock);
+        result.put("CommentByBlockComment", sounds.breakblock);
+
+        result.put("NextTab", sounds.jumpSuper);
+        result.put("PreviousTab", sounds.jumpSuper);
+        result.put("CloseActiveTab", sounds.fireworks);
+        result.put("$Undo", sounds.fireworks);
+        result.put("$Redo", sounds.fireworks);
+        result.put("ExpandAllRegions", sounds.stomp);
+        result.put("CollapseAllRegions", sounds.stomp);
 
         return result;
     }

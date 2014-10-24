@@ -21,14 +21,14 @@ public class Sound {
         return this;
     }
 
-    public Sound stop() {
-        Clip clip = clipReference.get();
-        if (clip != null) clip.stop();
+    public Sound playInBackground() {
+        playSoundFromStream(new ByteArrayInputStream(bytes), Clip.LOOP_CONTINUOUSLY);
         return this;
     }
 
-    public Sound playInBackground() {
-        playSoundFromStream(new ByteArrayInputStream(bytes), Clip.LOOP_CONTINUOUSLY);
+    public Sound stop() {
+        Clip clip = clipReference.get();
+        if (clip != null) clip.stop();
         return this;
     }
 

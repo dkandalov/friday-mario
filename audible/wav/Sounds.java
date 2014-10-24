@@ -16,6 +16,7 @@ public class Sounds {
     public final Sound breakblock;
     public final Sound fireball;
     public final Sound fireworks;
+    public final Sound gameover;
     public final Sound jumpSmall;
     public final Sound jumpSuper;
     public final Sound kick;
@@ -35,6 +36,7 @@ public class Sounds {
             breakblock = load("/audible/wav/smb_breakblock.wav");
             fireball = load("/audible/wav/smb_fireball.wav");
             fireworks = load("/audible/wav/smb_fireworks.wav");
+            gameover = load("/audible/wav/smb_gameover.wav");
             jumpSmall = load("/audible/wav/smb_jump-small.wav");
             jumpSuper = load("/audible/wav/smb_jump-super.wav");
             kick = load("/audible/wav/smb_kick.wav");

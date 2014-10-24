@@ -16,10 +16,22 @@ public class EditorModification implements Restartable {
 
         actionsToWrap = new ArrayList<String>();
         actionsToWrap.add("EditorCompleteStatement");
+        actionsToWrap.add("EditorDeleteToWordStart");
+        actionsToWrap.add("EditorDeleteToWordEnd");
+        actionsToWrap.add("EditorStartNewLine");
         actionsToWrap.add("EditorDeleteLine");
         actionsToWrap.add("HippieCompletion");
         actionsToWrap.add("HippieBackwardCompletion");
-        actionsToWrap.add("$Paste");
+        actionsToWrap.add("CommentByLineComment");
+        actionsToWrap.add("CommentByBlockComment");
+        actionsToWrap.add("$Undo");
+        actionsToWrap.add("$Redo");
+        actionsToWrap.add("ExpandAllRegions");
+        actionsToWrap.add("CollapseAllRegions");
+        //actionsToWrap.add("EditorBackSpace"); // TODO fails
+        //actionsToWrap.add("ExpandLiveTemplateByTab"); // TODO fails
+        //actionsToWrap.add("ExpandLiveTemplateCustom"); // TODO fails
+        //actionsToWrap.add("EditorPaste"); // TODO fails
     }
 
     @Override

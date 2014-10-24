@@ -15,15 +15,9 @@ public class Navigation implements Restartable {
         this.listener = listener;
 
         actionsToWrap = new ArrayList<String>();
+
         actionsToWrap.add("EditorUp");
         actionsToWrap.add("EditorDown");
-        actionsToWrap.add("EditorLeft");
-        actionsToWrap.add("EditorRight");
-        actionsToWrap.add("EditorUpWithSelection");
-        actionsToWrap.add("EditorDownWithSelection");
-        actionsToWrap.add("EditorLeftWithSelection");
-        actionsToWrap.add("EditorRightWithSelection");
-
         actionsToWrap.add("EditorPreviousWord");
         actionsToWrap.add("EditorNextWord");
         actionsToWrap.add("EditorPreviousWordWithSelection");
@@ -36,6 +30,10 @@ public class Navigation implements Restartable {
 
         actionsToWrap.add("EditorPageUp");
         actionsToWrap.add("EditorPageDown");
+
+        actionsToWrap.add("NextTab");
+        actionsToWrap.add("PreviousTab");
+        actionsToWrap.add("CloseActiveTab"); // TODO doesn't work?
     }
 
     @Override
