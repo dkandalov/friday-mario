@@ -77,7 +77,7 @@ public class AppComponent implements ApplicationComponent {
         applicationListener = new ApplicationAdapter() {
             @Override
             public void applicationExiting() {
-                listener.applicationExiting();
+                listener.stop();
             }
         };
         ApplicationManager.getApplication().addApplicationListener(applicationListener);
@@ -91,7 +91,6 @@ public class AppComponent implements ApplicationComponent {
         ApplicationManager.getApplication().removeApplicationListener(applicationListener);
         navigation.stop();
         editorModification.stop();
-        listener.dispose();
     }
 
     @SuppressWarnings("ConstantConditions")

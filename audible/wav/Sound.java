@@ -21,6 +21,19 @@ public class Sound {
         return this;
     }
 
+    public Sound playAndWait() {
+        playSoundFromStream(new ByteArrayInputStream(bytes), 0);
+
+        Clip clip = clipReference.get();
+        if (clip != null) {
+            try {
+                Thread.sleep(clip.getMicrosecondLength());
+            } catch (InterruptedException ignored) {
+            }
+        }
+        return this;
+    }
+
     public Sound playInBackground() {
         playSoundFromStream(new ByteArrayInputStream(bytes), Clip.LOOP_CONTINUOUSLY);
         return this;

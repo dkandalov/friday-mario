@@ -27,9 +27,10 @@ public class NotificationListener implements
         return this;
     }
 
-    public void dispose() {
+    public void stop() {
         sounds.background.stop();
         sounds.backgroundSad.stop();
+        sounds.gameover.playAndWait();
     }
 
     @Override
@@ -96,14 +97,6 @@ public class NotificationListener implements
     @Override
     public void onVcsUpdate() {
         sounds.powerup.play();
-    }
-
-    public void applicationExiting() {
-        sounds.gameover.play();
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException ignored) {
-        }
     }
 
     private static Map<String, Sound> createRefactoringSounds(Sounds sounds) {
