@@ -13,7 +13,7 @@ public class LivePluginUtil {
         ActionManager actionManager = ActionManager.getInstance();
         final AnAction action = actionManager.getAction(actionId);
         if (action == null) {
-            LOG.warn("Couldn't wrap action '${actionId}' because it was not found");
+            LOG.warn("Couldn't wrap action " + actionId + " because it was not found");
             return null;
         }
 
@@ -26,7 +26,7 @@ public class LivePluginUtil {
 
         actionManager.unregisterAction(actionId);
         actionManager.registerAction(actionId, newAction);
-        LOG.info("Wrapped action '${actionId}'");
+        LOG.info("Wrapped action " + actionId);
 
         return newAction;
     }
@@ -35,17 +35,17 @@ public class LivePluginUtil {
         ActionManager actionManager = ActionManager.getInstance();
         AnAction wrappedAction = actionManager.getAction(actionId);
         if (wrappedAction == null) {
-            LOG.warn("Couldn't unwrap action '${actionId}' because it was not found");
+            LOG.warn("Couldn't unwrap action "  + actionId + " because it was not found");
             return null;
         }
         if (!(wrappedAction instanceof WrappedAction)) {
-            LOG.warn("Action '${actionId}' is not wrapped");
+            LOG.warn("Action " + actionId + " is not wrapped");
             return wrappedAction;
         }
 
         actionManager.unregisterAction(actionId);
         actionManager.registerAction(actionId, ((WrappedAction) wrappedAction).originalAction);
-        LOG.info("Unwrapped action '${actionId}'");
+        LOG.info("Unwrapped action " + actionId);
 
         return ((WrappedAction) wrappedAction).originalAction;
     }
