@@ -5,3 +5,6 @@ Converted from mpeg wav to pcm wav with "ffmpeg -i input.wav -f wav -acodec pcm_
 
 Copied from http://themushroomkingdom.net/media/smb/wav
  - other *.wav files
+
+
+See also http://www.superluigibros.com/super-mario-bros-3-sound-effects
