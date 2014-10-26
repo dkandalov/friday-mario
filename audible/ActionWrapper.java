@@ -10,6 +10,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.DocCommandGroupId;
 import com.intellij.openapi.editor.actionSystem.EditorAction;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
+import com.intellij.openapi.project.DumbAware;
 import org.jetbrains.annotations.NotNull;
 
 public class ActionWrapper {
@@ -26,8 +27,10 @@ public class ActionWrapper {
         AnAction newAction;
         if (action instanceof EditorAction) {
             newAction = new WrappedEditorAction(listener, (EditorAction) action);
-        } else {
+        } else if (action instanceof DumbAware) {
             newAction = new WrappedAction(listener, action);
+        } else {
+            newAction = new WrappedDumbUnawareAction(listener, action);
         }
         newAction.getTemplatePresentation().setText(action.getTemplatePresentation().getText());
         newAction.getTemplatePresentation().setIcon(action.getTemplatePresentation().getIcon());
@@ -63,13 +66,11 @@ public class ActionWrapper {
         void beforeAction();
     }
 
-
     private static interface DelegatesToAction {
         AnAction originalAction();
     }
 
-
-    private static class WrappedAction extends AnAction implements DelegatesToAction {
+    private static class WrappedAction extends AnAction implements DelegatesToAction, DumbAware {
         private final Listener listener;
         public final AnAction originalAction;
 
@@ -93,6 +94,11 @@ public class ActionWrapper {
         }
     }
 
+    private static class WrappedDumbUnawareAction extends WrappedAction {
+        public WrappedDumbUnawareAction(Listener listener, AnAction originalAction) {
+            super(listener, originalAction);
+        }
+    }
 
     private static class WrappedEditorAction extends EditorAction implements DelegatesToAction {
         private final EditorAction originalAction;

@@ -17,8 +17,6 @@ public class Navigation implements Restartable {
 
         actionsToWrap = new ArrayList<String>();
 
-        // TODO wrapped actions are not available during reindexing!
-
         actionsToWrap.add("EditorUp");
         actionsToWrap.add("EditorDown");
         actionsToWrap.add("EditorPreviousWord");
