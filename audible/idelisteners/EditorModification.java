@@ -1,11 +1,12 @@
 package audible.idelisteners;
 
-import audible.LivePluginUtil;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
+import audible.ActionWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static audible.ActionWrapper.unwrapAction;
+import static audible.ActionWrapper.wrapAction;
 
 public class EditorModification implements Restartable {
     private final List<String> actionsToWrap;
@@ -37,11 +38,10 @@ public class EditorModification implements Restartable {
     @Override
     public void start() {
         for (final String actionId : actionsToWrap) {
-            LivePluginUtil.wrapAction(actionId, new LivePluginUtil.ActionWrapper() {
+            wrapAction(actionId, new ActionWrapper.Listener() {
                 @Override
-                public void call(AnActionEvent event, AnAction action) {
+                public void beforeAction() {
                     listener.onEditorModification(actionId);
-                    action.actionPerformed(event);
                 }
             });
         }
@@ -50,7 +50,7 @@ public class EditorModification implements Restartable {
     @Override
     public void stop() {
         for (String actionId : actionsToWrap) {
-            LivePluginUtil.unwrapAction(actionId);
+            unwrapAction(actionId);
         }
     }
 

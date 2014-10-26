@@ -1,11 +1,12 @@
 package audible.idelisteners;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import audible.LivePluginUtil;
+import audible.ActionWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static audible.ActionWrapper.unwrapAction;
+import static audible.ActionWrapper.wrapAction;
 
 public class Navigation implements Restartable {
     private final List<String> actionsToWrap;
@@ -15,6 +16,8 @@ public class Navigation implements Restartable {
         this.listener = listener;
 
         actionsToWrap = new ArrayList<String>();
+
+        // TODO wrapped actions are not available during reindexing!
 
         actionsToWrap.add("EditorUp");
         actionsToWrap.add("EditorDown");
@@ -39,11 +42,10 @@ public class Navigation implements Restartable {
     @Override
     public void start() {
         for (final String actionId : actionsToWrap) {
-            LivePluginUtil.wrapAction(actionId, new LivePluginUtil.ActionWrapper() {
+            wrapAction(actionId, new ActionWrapper.Listener() {
                 @Override
-                public void call(AnActionEvent event, AnAction action) {
+                public void beforeAction() {
                     listener.onEditorNavigation(actionId);
-                    action.actionPerformed(event);
                 }
             });
         }
@@ -52,7 +54,7 @@ public class Navigation implements Restartable {
     @Override
     public void stop() {
         for (String actionId : actionsToWrap) {
-            LivePluginUtil.unwrapAction(actionId);
+            unwrapAction(actionId);
         }
     }
 

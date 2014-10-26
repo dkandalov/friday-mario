@@ -91,6 +91,7 @@ public class AppComponent implements ApplicationComponent {
         ApplicationManager.getApplication().removeApplicationListener(applicationListener);
         navigation.stop();
         editorModification.stop();
+        listener.stop();
     }
 
     @SuppressWarnings("ConstantConditions")

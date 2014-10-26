@@ -15,6 +15,7 @@ public class NotificationListener implements
     private final Map<String, Sound> soundsByAction;
     private final Map<String, Sound> soundsByRefactoring;
     private boolean compilationIsFailing;
+    private boolean stopped;
 
     public NotificationListener(Sounds sounds) {
         this.sounds = sounds;
@@ -28,6 +29,8 @@ public class NotificationListener implements
     }
 
     public void stop() {
+        if (stopped) return;
+        stopped = true;
         sounds.background.stop();
         sounds.backgroundSad.stop();
         sounds.gameover.playAndWait();
