@@ -53,21 +53,29 @@ public class AppComponent implements ApplicationComponent {
 
             @Override
             public void projectClosed(Project project) {
-                refactoringByProject.get(project).stop();
-                refactoringByProject.remove(project);
-                vcsActionsByProject.get(project).stop();
-                vcsActionsByProject.remove(project);
-                compilationByProject.get(project).stop();
-                compilationByProject.remove(project);
-                unitTestsByProject.get(project).stop();
-                unitTestsByProject.remove(project);
+                if (refactoringByProject.containsKey(project)) {
+                    refactoringByProject.get(project).stop();
+                    refactoringByProject.remove(project);
+                }
+                if (vcsActionsByProject.containsKey(project)) {
+                    vcsActionsByProject.get(project).stop();
+                    vcsActionsByProject.remove(project);
+                }
+                if (compilationByProject.containsKey(project)) {
+                    compilationByProject.get(project).stop();
+                    compilationByProject.remove(project);
+                }
+                if (unitTestsByProject.containsKey(project)) {
+                    unitTestsByProject.get(project).stop();
+                    unitTestsByProject.remove(project);
+                }
             }
         };
 
-        ProjectManager.getInstance().addProjectManagerListener(projectManagerListener);
         for (Project project : ProjectManager.getInstance().getOpenProjects()) {
             projectManagerListener.projectOpened(project);
         }
+        ProjectManager.getInstance().addProjectManagerListener(projectManagerListener);
 
         navigation = new Navigation(listener);
         navigation.start();

@@ -158,6 +158,11 @@ public class ActionWrapper {
                 }
             });
             this.originalAction = originalAction;
+
+            // Force loading action handler.
+            // (It seems that handlers cannot be re-wrapped without calling
+            // com.intellij.openapi.editor.actionSystem.EditorAction#ensureHandlersLoaded.)
+            setupHandler(getHandler());
         }
 
         @Override public void update(@NotNull AnActionEvent event) {
