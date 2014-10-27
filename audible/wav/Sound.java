@@ -1,5 +1,7 @@
 package audible.wav;
 
+import com.intellij.openapi.diagnostic.Logger;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -9,11 +11,15 @@ import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Sound {
+    private static final Logger LOG = Logger.getInstance(Sound.class);
+
     private final byte[] bytes;
+    private final String name;
     private final AtomicReference<Clip> clipReference = new AtomicReference<Clip>();
 
-    public Sound(byte[] bytes) {
+    public Sound(byte[] bytes, String name) {
         this.bytes = bytes;
+        this.name = name;
     }
 
     public Sound play() {
@@ -45,6 +51,11 @@ public class Sound {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Sound{name='" + name + '\'' + '}';
+    }
+
     /**
      * Originally copied from {@link com.intellij.util.ui.UIUtil}.
      */
@@ -61,7 +72,9 @@ public class Sound {
                     clip.open(inputStream);
                     clip.loop(loopCount);
                     clipReference.set(clip);
-                } catch (Exception ignore) {
+                } catch (Exception e) {
+                    // TODO javax.sound.sampled.LineUnavailableException: No Free Voices
+                    LOG.warn(e);
                 }
             }
         }).start();

@@ -60,7 +60,7 @@ public class Sounds {
             bytes = StreamUtil.loadFromStream(inputStream);
             cache.put(fileName, bytes);
         }
-        return new Sound(bytes);
+        return new Sound(bytes, fileName);
     }
 }
 
