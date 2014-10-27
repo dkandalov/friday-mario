@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="audible-actions">
-    <output-path>$PROJECT_DIR$/out/artifacts/audible_actions</output-path>
-    <root id="archive" name="audible-actions.jar">
-      <element id="module-output" name="audible-actions" />
-    </root>
-  </artifact>
-</component>

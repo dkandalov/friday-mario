@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/audible-actions.iml" filepath="$PROJECT_DIR$/audible-actions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/friday-mario.iml" filepath="$PROJECT_DIR$/friday-mario.iml" />
     </modules>
   </component>
 </project>
-

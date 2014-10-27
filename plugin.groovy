@@ -4,7 +4,7 @@ import com.intellij.openapi.components.ApplicationComponent
 import static liveplugin.PluginUtil.changeGlobalVar
 import static liveplugin.PluginUtil.show
 
-// add-to-classpath $PLUGIN_PATH/out/artifacts/audible_actions/audible-actions.jar
+// add-to-classpath $PLUGIN_PATH/out/artifacts/friday_mario/friday-mario.jar
 
 changeGlobalVar("AppComponent"){ ApplicationComponent oldInstance ->
 	if (oldInstance != null) oldInstance.disposeComponent()
