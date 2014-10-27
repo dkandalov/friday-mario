@@ -13,6 +13,8 @@ import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.project.DumbAware;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Method;
+
 public class ActionWrapper {
     private static final Logger LOG = Logger.getInstance(ActionWrapper.class);
 
@@ -52,13 +54,36 @@ public class ActionWrapper {
             LOG.warn("Couldn't unwrap action "  + actionId + " because it was not found");
             return;
         }
-        if (wrappedAction instanceof DelegatesToAction) {
+        if (isActionWrapper(wrappedAction)) {
             actionManager.unregisterAction(actionId);
-            actionManager.registerAction(actionId, ((DelegatesToAction) wrappedAction).originalAction());
+            actionManager.registerAction(actionId, originalAction(wrappedAction));
             LOG.info("Unwrapped action " + actionId);
         } else {
             LOG.warn("Action " + actionId + " is not wrapped");
         }
+    }
+
+    private static AnAction originalAction(AnAction wrappedAction) {
+        for (Method method : wrappedAction.getClass().getMethods()) {
+            if (method.getName().equals("originalAction")) {
+                try {
+                    method.setAccessible(true);
+                    return (AnAction) method.invoke(wrappedAction);
+                } catch (Exception e) {
+                    LOG.warn(e);
+                }
+            }
+        }
+        throw new IllegalStateException();
+    }
+
+    private static boolean isActionWrapper(AnAction wrappedAction) {
+        for (Class<?> aClass : wrappedAction.getClass().getInterfaces()) {
+            if (aClass.getCanonicalName().equals(DelegatesToAction.class.getCanonicalName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -66,13 +91,14 @@ public class ActionWrapper {
         void beforeAction();
     }
 
-    private static interface DelegatesToAction {
+    public static interface DelegatesToAction {
+        @SuppressWarnings("UnusedDeclaration") // used via reflection
         AnAction originalAction();
     }
 
     private static class WrappedAction extends AnAction implements DelegatesToAction, DumbAware {
         private final Listener listener;
-        public final AnAction originalAction;
+        private final AnAction originalAction;
 
         public WrappedAction(Listener listener, AnAction originalAction) {
             this.listener = listener;
