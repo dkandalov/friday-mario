@@ -1,4 +1,4 @@
-package audible.idelisteners;
+package audible.listeners;
 
 public interface Restartable {
     void start();

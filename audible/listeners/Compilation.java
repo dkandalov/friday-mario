@@ -1,4 +1,4 @@
-package audible.idelisteners;
+package audible.listeners;
 
 import com.intellij.openapi.compiler.CompilationStatusAdapter;
 import com.intellij.openapi.compiler.CompileContext;

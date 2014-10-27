@@ -1,4 +1,4 @@
-package audible.idelisteners;
+package audible.listeners;
 
 import audible.ActionWrapper;
 

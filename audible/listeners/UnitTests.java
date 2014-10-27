@@ -1,4 +1,4 @@
-package audible.idelisteners;
+package audible.listeners;
 
 import com.intellij.execution.testframework.TestsUIUtil;
 import com.intellij.notification.Notification;

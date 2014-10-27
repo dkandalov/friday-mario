@@ -1,13 +1,13 @@
 package audible;
 
-import audible.idelisteners.*;
-import audible.wav.Sound;
-import audible.wav.Sounds;
+import audible.listeners.*;
+import audible.sounds.Sound;
+import audible.sounds.Sounds;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class NotificationListener implements
+public class SoundPlayer implements
         Compilation.Listener, Navigation.Listener, EditorModification.Listener,
         Refactoring.Listener, UnitTests.Listener, VcsActions.Listener {
 
@@ -17,13 +17,13 @@ public class NotificationListener implements
     private boolean compilationIsFailing;
     private boolean stopped;
 
-    public NotificationListener(Sounds sounds) {
+    public SoundPlayer(Sounds sounds) {
         this.sounds = sounds;
         this.soundsByAction = createEditorSounds(sounds);
         this.soundsByRefactoring = createRefactoringSounds(sounds);
     }
 
-    public NotificationListener init() {
+    public SoundPlayer init() {
         sounds.background.playInBackground();
         return this;
     }

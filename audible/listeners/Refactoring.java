@@ -1,4 +1,4 @@
-package audible.idelisteners;
+package audible.listeners;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.refactoring.listeners.RefactoringEventData;

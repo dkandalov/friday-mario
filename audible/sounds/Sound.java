@@ -1,4 +1,4 @@
-package audible.wav;
+package audible.sounds;
 
 import com.intellij.openapi.diagnostic.Logger;
 

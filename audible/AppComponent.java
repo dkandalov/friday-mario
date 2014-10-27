@@ -1,7 +1,7 @@
 package audible;
 
-import audible.idelisteners.*;
-import audible.wav.Sounds;
+import audible.listeners.*;
+import audible.sounds.Sounds;
 import com.intellij.openapi.application.ApplicationAdapter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
@@ -24,12 +24,12 @@ public class AppComponent implements ApplicationComponent {
     private EditorModification editorModification;
     private ProjectManagerListener projectManagerListener;
 
-    private NotificationListener listener;
+    private SoundPlayer listener;
     private ApplicationAdapter applicationListener;
 
     @Override public void initComponent() {
         Sounds sounds = new Sounds();
-        listener = new NotificationListener(sounds).init();
+        listener = new SoundPlayer(sounds).init();
 
         projectManagerListener = new ProjectManagerAdapter() {
             @Override
