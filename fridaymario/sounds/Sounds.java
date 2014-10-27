@@ -1,4 +1,4 @@
-package audible.sounds;
+package fridaymario.sounds;
 
 import com.intellij.openapi.util.io.StreamUtil;
 
@@ -29,23 +29,23 @@ public class Sounds {
 
 	public Sounds() {
 		try {
-			oneUp = load("/audible/sounds/smb_1-up.wav");
-			oneDown = load("/audible/sounds/smb_pipe.wav");
-			coin = load("/audible/sounds/smb_coin.wav");
-			bowserfalls = load("/audible/sounds/smb_bowserfalls.wav");
-			breakblock = load("/audible/sounds/smb_breakblock.wav");
-			fireball = load("/audible/sounds/smb_fireball.wav");
-			fireworks = load("/audible/sounds/smb_fireworks.wav");
-			gameover = load("/audible/sounds/smb_gameover.wav");
-			jumpSmall = load("/audible/sounds/smb_jump-small.wav");
-			jumpSuper = load("/audible/sounds/smb_jump-super.wav");
-			kick = load("/audible/sounds/smb_kick.wav");
-			stomp = load("/audible/sounds/smb_stomp.wav");
-			powerup = load("/audible/sounds/smb_powerup.wav");
-			powerupAppears = load("/audible/sounds/smb_powerup_appears.wav");
+			oneUp = load("/fridaymario/sounds/smb_1-up.wav");
+			oneDown = load("/fridaymario/sounds/smb_pipe.wav");
+			coin = load("/fridaymario/sounds/smb_coin.wav");
+			bowserfalls = load("/fridaymario/sounds/smb_bowserfalls.wav");
+			breakblock = load("/fridaymario/sounds/smb_breakblock.wav");
+			fireball = load("/fridaymario/sounds/smb_fireball.wav");
+			fireworks = load("/fridaymario/sounds/smb_fireworks.wav");
+			gameover = load("/fridaymario/sounds/smb_gameover.wav");
+			jumpSmall = load("/fridaymario/sounds/smb_jump-small.wav");
+			jumpSuper = load("/fridaymario/sounds/smb_jump-super.wav");
+			kick = load("/fridaymario/sounds/smb_kick.wav");
+			stomp = load("/fridaymario/sounds/smb_stomp.wav");
+			powerup = load("/fridaymario/sounds/smb_powerup.wav");
+			powerupAppears = load("/fridaymario/sounds/smb_powerup_appears.wav");
 
-			background = load("/audible/sounds/mario_08.wav");
-			backgroundSad = load("/audible/sounds/zelda_04.wav");
+			background = load("/fridaymario/sounds/mario_08.wav");
+			backgroundSad = load("/fridaymario/sounds/zelda_04.wav");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

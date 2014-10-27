@@ -1,4 +1,4 @@
-package audible.sounds;
+package fridaymario.sounds;
 
 import com.intellij.openapi.diagnostic.Logger;
 

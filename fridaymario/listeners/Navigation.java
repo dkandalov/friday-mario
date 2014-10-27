@@ -1,12 +1,12 @@
-package audible.listeners;
+package fridaymario.listeners;
 
-import audible.ActionWrapper;
+import fridaymario.ActionWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static audible.ActionWrapper.unwrapAction;
-import static audible.ActionWrapper.wrapAction;
+import static fridaymario.ActionWrapper.unwrapAction;
+import static fridaymario.ActionWrapper.wrapAction;
 
 public class Navigation implements Restartable {
 	private final List<String> actionsToWrap;

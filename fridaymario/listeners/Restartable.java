@@ -1,4 +1,4 @@
-package audible.listeners;
+package fridaymario.listeners;
 
 public interface Restartable {
 	void start();

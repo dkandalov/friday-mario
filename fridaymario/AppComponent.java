@@ -1,7 +1,7 @@
-package audible;
+package fridaymario;
 
-import audible.listeners.*;
-import audible.sounds.Sounds;
+import fridaymario.listeners.*;
+import fridaymario.sounds.Sounds;
 import com.intellij.openapi.application.ApplicationAdapter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;

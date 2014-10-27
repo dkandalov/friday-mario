@@ -1,8 +1,8 @@
-package audible;
+package fridaymario;
 
-import audible.listeners.*;
-import audible.sounds.Sound;
-import audible.sounds.Sounds;
+import fridaymario.listeners.*;
+import fridaymario.sounds.Sound;
+import fridaymario.sounds.Sounds;
 
 import java.util.HashMap;
 import java.util.Map;

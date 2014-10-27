@@ -1,4 +1,4 @@
-package audible.listeners;
+package fridaymario.listeners;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.refactoring.listeners.RefactoringEventData;

@@ -1,6 +1,6 @@
 <idea-plugin version="2">
-    <id>AudibleActions</id>
-    <name>AudibleActions</name>
+    <id>FridayMario</id>
+    <name>FridayMario</name>
     <version>0.1 beta</version>
     <vendor email="dmitry.kandalov@gmail.com" url="http://www.yourcompany.com">Dmitry Kandalov</vendor>
 
@@ -18,7 +18,7 @@
 
     <application-components>
         <component>
-            <implementation-class>audible.AppComponent</implementation-class>
+            <implementation-class>fridaymario.AppComponent</implementation-class>
         </component>
     </application-components>
 </idea-plugin>

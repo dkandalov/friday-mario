@@ -1,11 +1,11 @@
-import audible.ActionWrapper
+import fridaymario.ActionWrapper
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.editor.actionSystem.EditorAction
 import liveplugin.testrunner.IntegrationTestsRunner
 import org.junit.Test
 
-import static audible.ActionWrapper.unwrapAction
-import static audible.ActionWrapper.wrapAction
+import static fridaymario.ActionWrapper.unwrapAction
+import static fridaymario.ActionWrapper.wrapAction
 
 // add-to-classpath $PLUGIN_PATH/out/artifacts/audible_actions/audible-actions.jar
 

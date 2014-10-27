@@ -1,4 +1,4 @@
-package audible;
+package fridaymario;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;

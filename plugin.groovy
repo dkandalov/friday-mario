@@ -1,4 +1,4 @@
-import audible.AppComponent
+import fridaymario.AppComponent
 import com.intellij.openapi.components.ApplicationComponent
 
 import static liveplugin.PluginUtil.changeGlobalVar
