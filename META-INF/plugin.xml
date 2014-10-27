@@ -18,7 +18,7 @@
 
     <application-components>
         <component>
-            <implementation-class>fridaymario.AppComponent</implementation-class>
+            <implementation-class>fridaymario.IntelliJAppComponent</implementation-class>
         </component>
     </application-components>
 </idea-plugin>

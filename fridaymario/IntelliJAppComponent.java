@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AppComponent implements ApplicationComponent {
+public class IntelliJAppComponent implements ApplicationComponent {
 	private final Map<Project, Refactoring> refactoringByProject = new HashMap<Project, Refactoring>();
 	private final Map<Project, VcsActions> vcsActionsByProject = new HashMap<Project, VcsActions>();
 	private final Map<Project, Compilation> compilationByProject = new HashMap<Project, Compilation>();

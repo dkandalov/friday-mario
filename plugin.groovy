@@ -1,4 +1,4 @@
-import fridaymario.AppComponent
+import fridaymario.IntelliJAppComponent
 import com.intellij.openapi.components.ApplicationComponent
 
 import static liveplugin.PluginUtil.changeGlobalVar
@@ -8,7 +8,7 @@ import static liveplugin.PluginUtil.show
 
 changeGlobalVar("AppComponent"){ ApplicationComponent oldInstance ->
 	if (oldInstance != null) oldInstance.disposeComponent()
-	def component = new AppComponent()
+	def component = new IntelliJAppComponent()
 	component.initComponent()
 	component
 //    null
