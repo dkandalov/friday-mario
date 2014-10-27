@@ -1,31 +1,24 @@
 <idea-plugin version="2">
-  <id>AudibleActions</id>
-  <name>AudibleActions</name>
-  <version>0.1 beta</version>
-  <vendor email="dmitry.kandalov@gmail.com" url="http://www.yourcompany.com">Dmitry Kandalov</vendor>
+    <id>AudibleActions</id>
+    <name>AudibleActions</name>
+    <version>0.1 beta</version>
+    <vendor email="dmitry.kandalov@gmail.com" url="http://www.yourcompany.com">Dmitry Kandalov</vendor>
 
-  <description><![CDATA[
-      The first plugin in the world to gamify development in IntelliJ IDEs.
-    ]]></description>
+    <description><![CDATA[
+        The first plugin in the world to gamify development in IntelliJ IDEs.
+        ]]></description>
 
-  <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="138"/>
+    <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="138" />
 
-  <!-- see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
-  <depends>com.intellij.modules.lang</depends>
+    <!-- see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
+    <depends>com.intellij.modules.lang</depends>
 
-  <extensions defaultExtensionNs="com.intellij">
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij"/>
 
-  <application-components>
-      <component>
-          <implementation-class>audible.AppComponent</implementation-class>
-      </component>
-  </application-components>
-
-  <project-components>
-  </project-components>
-
-  <actions>
-  </actions>
+    <application-components>
+        <component>
+            <implementation-class>audible.AppComponent</implementation-class>
+        </component>
+    </application-components>
 </idea-plugin>

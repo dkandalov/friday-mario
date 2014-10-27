@@ -3,13 +3,14 @@ import com.intellij.openapi.components.ApplicationComponent
 
 import static liveplugin.PluginUtil.changeGlobalVar
 import static liveplugin.PluginUtil.show
+
 // add-to-classpath $PLUGIN_PATH/out/artifacts/audible_actions/audible-actions.jar
 
-changeGlobalVar("AppComponent") { ApplicationComponent oldInstance ->
-    if (oldInstance != null) oldInstance.disposeComponent()
-    def component = new AppComponent()
-    component.initComponent()
-    component
+changeGlobalVar("AppComponent"){ ApplicationComponent oldInstance ->
+	if (oldInstance != null) oldInstance.disposeComponent()
+	def component = new AppComponent()
+	component.initComponent()
+	component
 //    null
 }
 

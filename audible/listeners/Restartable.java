@@ -1,6 +1,7 @@
 package audible.listeners;
 
 public interface Restartable {
-    void start();
-    void stop();
+	void start();
+
+	void stop();
 }

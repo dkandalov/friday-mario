@@ -13,48 +13,47 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class VcsActions implements Restartable {
-    private final MessageBusConnection busConnection;
-    private final UpdatedFilesListener updatedListener;
-    private final CheckinHandlerFactory checkinListener;
+	private final MessageBusConnection busConnection;
+	private final UpdatedFilesListener updatedListener;
+	private final CheckinHandlerFactory checkinListener;
 
-    public VcsActions(Project project, final Listener listener) {
-        this.busConnection = project.getMessageBus().connect();
+	public VcsActions(Project project, final Listener listener) {
+		this.busConnection = project.getMessageBus().connect();
 
-        updatedListener = new UpdatedFilesListener() {
-            @Override
-            public void consume(Set<String> files) {
-                listener.onVcsUpdate();
-            }
-        };
-        checkinListener = new CheckinHandlerFactory() {
-            @NotNull
-            @Override
-            public CheckinHandler createHandler(@NotNull CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
-                return new CheckinHandler() {
-                    @Override
-                    public void checkinSuccessful() {
-                        listener.onVcsCommit();
-                    }
-                };
-            }
-        };
-    }
+		updatedListener = new UpdatedFilesListener() {
+			@Override
+			public void consume(Set<String> files) {
+				listener.onVcsUpdate();
+			}
+		};
+		checkinListener = new CheckinHandlerFactory() {
+			@NotNull
+			@Override
+			public CheckinHandler createHandler(@NotNull CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
+				return new CheckinHandler() {
+					@Override
+					public void checkinSuccessful() {
+						listener.onVcsCommit();
+					}
+				};
+			}
+		};
+	}
 
-    @Override
-    public void start() {
-        busConnection.subscribe(UpdatedFilesListener.UPDATED_FILES, updatedListener);
-        CheckinHandlersManager.getInstance().registerCheckinHandlerFactory(checkinListener);
-    }
+	@Override public void start() {
+		busConnection.subscribe(UpdatedFilesListener.UPDATED_FILES, updatedListener);
+		CheckinHandlersManager.getInstance().registerCheckinHandlerFactory(checkinListener);
+	}
 
-    @Override
-    public void stop() {
-        busConnection.disconnect();
-        CheckinHandlersManager.getInstance().unregisterCheckinHandlerFactory(checkinListener);
-    }
+	@Override public void stop() {
+		busConnection.disconnect();
+		CheckinHandlersManager.getInstance().unregisterCheckinHandlerFactory(checkinListener);
+	}
 
-    public static interface Listener {
-        void onVcsCommit();
-        void onVcsUpdate();
-        // TODO git push
-    }
+	public static interface Listener {
+		void onVcsCommit();
+
+		void onVcsUpdate();
+		// TODO git push
+	}
 }

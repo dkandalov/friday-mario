@@ -6,6 +6,7 @@ import org.junit.Test
 
 import static audible.ActionWrapper.unwrapAction
 import static audible.ActionWrapper.wrapAction
+
 // add-to-classpath $PLUGIN_PATH/out/artifacts/audible_actions/audible-actions.jar
 
 IntegrationTestsRunner.runIntegrationTests([ActionWrapperTest], project, pluginPath)
