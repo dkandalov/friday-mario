@@ -96,6 +96,14 @@ public class SoundPlayer implements
 		sounds.powerup.play();
 	}
 
+	@Override public void onVcsPush() {
+		sounds.powerup.play();
+	}
+
+	@Override public void onVcsPushFailed() {
+		sounds.oneDown.play();
+	}
+
 	private static Map<String, Sound> refactoringSounds(Sounds sounds) {
 		Map<String, Sound> result = new HashMap<String, Sound>();
 		result.put("refactoring.rename", sounds.coin);
