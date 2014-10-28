@@ -22,8 +22,6 @@ public class IntelliJAppComponent implements ApplicationComponent {
 
 	private SoundPlayer soundPlayer;
 	private AllActions allActions;
-	private Navigation navigation;
-	private EditorModification editorModification;
 
 	private ProjectManagerListener projectManagerListener;
 	private ApplicationAdapter applicationListener;
@@ -50,10 +48,6 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private void initApplicationListeners() {
 		allActions = new AllActions(soundPlayer);
 		allActions.start();
-		navigation = new Navigation(soundPlayer);
-		navigation.start();
-		editorModification = new EditorModification(soundPlayer);
-		editorModification.start();
 
 		applicationListener = new ApplicationAdapter() {
 			@Override
@@ -67,8 +61,6 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private void disposeApplicationListeners() {
 		ApplicationManager.getApplication().removeApplicationListener(applicationListener);
 		allActions.stop();
-		navigation.stop();
-		editorModification.stop();
 	}
 
 	private void initProjectListeners() {

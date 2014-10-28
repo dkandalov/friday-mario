@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SoundPlayer implements
-		Compilation.Listener, Navigation.Listener, EditorModification.Listener,
-		Refactoring.Listener, UnitTests.Listener, VcsActions.Listener, AllActions.Listener {
+		Compilation.Listener, Refactoring.Listener, UnitTests.Listener, VcsActions.Listener, AllActions.Listener {
 
 	private final Sounds sounds;
 	private final Map<String, Sound> soundsByAction;
@@ -37,17 +36,6 @@ public class SoundPlayer implements
 	}
 
 	@Override public void onAction(String actionId) {
-		// TODO
-	}
-
-	@Override public void onEditorNavigation(String actionId) {
-		Sound sound = soundsByAction.get(actionId);
-		if (sound != null) {
-			sound.play();
-		}
-	}
-
-	@Override public void onEditorModification(String actionId) {
 		Sound sound = soundsByAction.get(actionId);
 		if (sound != null) {
 			sound.play();
