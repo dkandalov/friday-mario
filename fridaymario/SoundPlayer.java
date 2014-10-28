@@ -24,15 +24,15 @@ public class SoundPlayer implements
 	}
 
 	public SoundPlayer init() {
-		sounds.background.playInBackground();
+		sounds.marioSong.playInBackground();
 		return this;
 	}
 
 	public void stop() {
 		if (stopped) return;
 		stopped = true;
-		sounds.background.stop();
-		sounds.backgroundSad.stop();
+		sounds.marioSong.stop();
+		sounds.zeldaSong.stop();
 		sounds.gameover.playAndWait();
 	}
 
@@ -67,8 +67,8 @@ public class SoundPlayer implements
 		sounds.oneUp.play();
 		if (compilationFailed) {
 			compilationFailed = false;
-			sounds.background.playInBackground();
-			sounds.backgroundSad.stop();
+			sounds.marioSong.playInBackground();
+			sounds.zeldaSong.stop();
 		}
 	}
 
@@ -76,8 +76,8 @@ public class SoundPlayer implements
 		sounds.oneDown.play();
 		if (!compilationFailed) {
 			compilationFailed = true;
-			sounds.backgroundSad.playInBackground();
-			sounds.background.stop();
+			sounds.zeldaSong.playInBackground();
+			sounds.marioSong.stop();
 		}
 	}
 

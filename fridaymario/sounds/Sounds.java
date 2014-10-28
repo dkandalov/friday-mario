@@ -24,8 +24,8 @@ public class Sounds {
 	public final Sound powerupAppears;
 	public final Sound powerup;
 
-	public final Sound background;
-	public final Sound backgroundSad;
+	public final Sound marioSong;
+	public final Sound zeldaSong;
 
 	public Sounds() {
 		try {
@@ -44,8 +44,8 @@ public class Sounds {
 			powerup = load("/fridaymario/sounds/smb_powerup.wav");
 			powerupAppears = load("/fridaymario/sounds/smb_powerup_appears.wav");
 
-			background = load("/fridaymario/sounds/mario_08.wav");
-			backgroundSad = load("/fridaymario/sounds/zelda_04.wav");
+			marioSong = load("/fridaymario/sounds/mario_08.wav");
+			zeldaSong = load("/fridaymario/sounds/zelda_04.wav");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
