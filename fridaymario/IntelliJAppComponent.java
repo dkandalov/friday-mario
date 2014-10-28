@@ -162,7 +162,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private static void show(String message) {
 		if (isEmptyOrSpaces(message)) return;
 		String noTitle = "";
-		Notification notification = new Notification("Friday Mario Explore", noTitle, message, NotificationType.INFORMATION);
+		Notification notification = new Notification("Friday Mario", noTitle, message, NotificationType.INFORMATION);
 		ApplicationManager.getApplication().getMessageBus().syncPublisher(Notifications.TOPIC).notify(notification);
 	}
 }

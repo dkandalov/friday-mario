@@ -127,6 +127,8 @@ public class SoundPlayer implements
 		result.put("EditorPageDown", sounds.jumpSuper);
 
 		result.put("EditorCompleteStatement", sounds.fireball);
+		result.put("EditorChooseLookupItem", sounds.fireball);
+		result.put("EditorChooseLookupItemReplace", sounds.fireball);
 		result.put("HippieCompletion", sounds.fireball);
 		result.put("HippieBackwardCompletion", sounds.fireball);
 		result.put("EditorStartNewLine", sounds.kick);
