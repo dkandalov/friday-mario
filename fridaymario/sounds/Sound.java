@@ -1,10 +1,9 @@
 package fridaymario.sounds;
 
 import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -16,6 +15,7 @@ public class Sound {
 	private final byte[] bytes;
 	private final String name;
 	private final AtomicReference<Clip> clipReference = new AtomicReference<Clip>();
+	private final AtomicReference<LineListener> lineListener = new AtomicReference<LineListener>();
 
 	public Sound(byte[] bytes, String name) {
 		this.bytes = bytes;
@@ -47,7 +47,10 @@ public class Sound {
 
 	public Sound stop() {
 		Clip clip = clipReference.get();
-		if (clip != null) clip.stop();
+		if (clip != null) {
+			clip.stop();
+			clip.close();
+		}
 		return this;
 	}
 
@@ -60,15 +63,25 @@ public class Sound {
 			@Override
 			public void run() {
 				try {
-					Clip clip = AudioSystem.getClip();
+					final Clip clip = AudioSystem.getClip();
 					InputStream stream = inputStream;
 					if (!stream.markSupported()) stream = new BufferedInputStream(stream);
 					AudioInputStream inputStream = AudioSystem.getAudioInputStream(stream);
 					clip.open(inputStream);
 					clip.loop(loopCount);
 					clipReference.set(clip);
+
+					LineListener listener = new LineListener() {
+						@Override public void update(@NotNull LineEvent event) {
+							if (event.getType() == LineEvent.Type.STOP) {
+								clip.close();
+								clip.removeLineListener(lineListener.get());
+							}
+						}
+					};
+					lineListener.set(listener);
+					clip.addLineListener(lineListener.get());
 				} catch (Exception e) {
-					// TODO javax.sound.sampled.LineUnavailableException: No Free Voices
 					logger.warn(e);
 				}
 			}
