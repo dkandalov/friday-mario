@@ -41,7 +41,8 @@ public class VcsActions implements Restartable {
 	}
 
 	@Override public void start() {
-		// TODO document why use busConnection for updates
+		// using bus to listen to updates because normal listener calls it twice
+		// (see also https://gist.github.com/dkandalov/8840509)
 		busConnection.subscribe(UpdatedFilesListener.UPDATED_FILES, updatedListener);
 		CheckinHandlersManager.getInstance().registerCheckinHandlerFactory(checkinListener);
 	}
@@ -55,6 +56,7 @@ public class VcsActions implements Restartable {
 		void onVcsCommit();
 
 		void onVcsUpdate();
+
 		// TODO git push
 	}
 }
