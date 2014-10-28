@@ -1,9 +1,5 @@
 package fridaymario;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
-import com.intellij.openapi.application.ApplicationManager;
 import fridaymario.listeners.*;
 import fridaymario.sounds.Sound;
 import fridaymario.sounds.Sounds;
@@ -15,15 +11,16 @@ public class SoundPlayer implements
 		Compilation.Listener, Refactoring.Listener, UnitTests.Listener, VcsActions.Listener, AllActions.Listener {
 
 	private final Sounds sounds;
-	private final boolean logUnmappedActions;
+	private final Listener listener;
 	private final Map<String, Sound> soundsByAction;
 	private final Map<String, Sound> soundsByRefactoring;
 	private boolean compilationFailed;
 	private boolean stopped;
 
-	public SoundPlayer(Sounds sounds, boolean logUnmappedActions) {
+
+	public SoundPlayer(Sounds sounds, Listener listener) {
 		this.sounds = sounds;
-		this.logUnmappedActions = logUnmappedActions;
+		this.listener = listener;
 		this.soundsByAction = editorSounds(sounds);
 		this.soundsByRefactoring = refactoringSounds(sounds);
 	}
@@ -45,8 +42,8 @@ public class SoundPlayer implements
 		Sound sound = soundsByAction.get(actionId);
 		if (sound != null) {
 			sound.play();
-		} else if (logUnmappedActions) {
-			show(actionId);
+		} else {
+			listener.unmappedAction(actionId);
 		}
 	}
 
@@ -56,9 +53,7 @@ public class SoundPlayer implements
 			sound.play();
 		} else {
 			sounds.coin.play();
-			if (logUnmappedActions) {
-				show(refactoringId);
-			}
+			listener.unmappedRefactoring(refactoringId);
 		}
 	}
 
@@ -152,10 +147,9 @@ public class SoundPlayer implements
 		return result;
 	}
 
-	private static void show(String message) {
-		String noTitle = "";
-		Notification notification = new Notification("Friday Mario Explore", noTitle, message, NotificationType.INFORMATION);
-		ApplicationManager.getApplication().getMessageBus().syncPublisher(Notifications.TOPIC).notify(notification);
-	}
 
+	public interface Listener {
+		void unmappedAction(String actionId);
+		void unmappedRefactoring(String refactoringId);
+	}
 }

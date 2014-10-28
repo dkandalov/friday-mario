@@ -1,5 +1,8 @@
 package fridaymario;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import fridaymario.listeners.*;
 import fridaymario.sounds.Sounds;
 import com.intellij.openapi.application.ApplicationAdapter;
@@ -13,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.intellij.openapi.util.text.StringUtil.isEmptyOrSpaces;
 
 public class IntelliJAppComponent implements ApplicationComponent {
 	private final Map<Project, Refactoring> refactoringByProject = new HashMap<Project, Refactoring>();
@@ -29,7 +34,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private boolean logUnmappedActions;
 
 	@Override public void initComponent() {
-		soundPlayer = new SoundPlayer(createSounds(), logUnmappedActions).init();
+		soundPlayer = new SoundPlayer(createSounds(), createLoggingListener()).init();
 		initApplicationListeners();
 		initProjectListeners();
 	}
@@ -127,5 +132,24 @@ public class IntelliJAppComponent implements ApplicationComponent {
 
 	private Sounds createSounds() {
 		return (silentMode ? Sounds.createSilent() : Sounds.create());
+	}
+
+	private SoundPlayer.Listener createLoggingListener() {
+		return new SoundPlayer.Listener() {
+			@Override public void unmappedAction(String actionId) {
+				if (logUnmappedActions) show(actionId);
+			}
+
+			@Override public void unmappedRefactoring(String refactoringId) {
+				if (logUnmappedActions) show(refactoringId);
+			}
+		};
+	}
+
+	private static void show(String message) {
+		if (isEmptyOrSpaces(message)) return;
+		String noTitle = "";
+		Notification notification = new Notification("Friday Mario Explore", noTitle, message, NotificationType.INFORMATION);
+		ApplicationManager.getApplication().getMessageBus().syncPublisher(Notifications.TOPIC).notify(notification);
 	}
 }
