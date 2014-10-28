@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Sound {
-	private static final Logger LOG = Logger.getInstance(Sound.class);
+	private static final Logger logger = Logger.getInstance(Sound.class);
 
 	private final byte[] bytes;
 	private final String name;
@@ -69,7 +69,7 @@ public class Sound {
 					clipReference.set(clip);
 				} catch (Exception e) {
 					// TODO javax.sound.sampled.LineUnavailableException: No Free Voices
-					LOG.warn(e);
+					logger.warn(e);
 				}
 			}
 		}).start();

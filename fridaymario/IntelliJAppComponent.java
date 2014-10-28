@@ -27,9 +27,16 @@ public class IntelliJAppComponent implements ApplicationComponent {
 
 	private ProjectManagerListener projectManagerListener;
 	private ApplicationAdapter applicationListener;
+	private boolean silentMode;
+
+	public IntelliJAppComponent silentMode() {
+		silentMode = true;
+		return this;
+	}
 
 	@Override public void initComponent() {
-		soundPlayer = new SoundPlayer(new Sounds()).init();
+		Sounds sounds = (silentMode ? Sounds.createSilent() : Sounds.create());
+		soundPlayer = new SoundPlayer(sounds).init();
 		initApplicationListeners();
 		initProjectListeners();
 	}

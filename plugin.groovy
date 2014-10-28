@@ -8,7 +8,7 @@ import static liveplugin.PluginUtil.show
 
 changeGlobalVar("AppComponent"){ ApplicationComponent oldInstance ->
 	if (oldInstance != null) oldInstance.disposeComponent()
-	def component = new IntelliJAppComponent()
+	def component = new IntelliJAppComponent().silentMode()
 	component.initComponent()
 	component
 //    null
