@@ -1,45 +1,41 @@
 package fridaymario.sounds;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
-import com.intellij.openapi.application.ApplicationManager;
-
 public class SilentSound extends Sound {
-	private final String name;
+	private final String soundName;
+	private final Listener listener;
 
-	public SilentSound(byte[] bytes, String name) {
-		super(bytes, name);
-		this.name = name;
+	public SilentSound(byte[] bytes, String soundName, Listener listener) {
+		super(bytes, soundName);
+		this.soundName = soundName;
+		this.listener = listener;
 	}
 
 	@Override public Sound play() {
-		show(name);
+		listener.playing(soundName);
 		return this;
 	}
 
 	@Override public Sound playAndWait() {
-		show(name);
+		listener.playing(soundName);
 		return this;
 	}
 
 	@Override public Sound playInBackground() {
-		show(name);
+		listener.playing(soundName);
 		return this;
 	}
 
 	@Override public Sound stop() {
-		show("stopped: " + name);
+		listener.stopped("stopped: " + soundName);
 		return this;
 	}
 
 	@Override public String toString() {
-		return "SilentLogSound{name='" + name + '\'' + '}';
+		return "SilentLogSound{name='" + soundName + '\'' + '}';
 	}
 
-	private static void show(String message) {
-		String noTitle = "";
-		Notification notification = new Notification("Friday Mario Silent Sound", noTitle, message, NotificationType.INFORMATION);
-		ApplicationManager.getApplication().getMessageBus().syncPublisher(Notifications.TOPIC).notify(notification);
+	public interface Listener {
+		void playing(String soundName);
+		void stopped(String soundName);
 	}
 }

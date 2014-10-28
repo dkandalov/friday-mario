@@ -33,10 +33,10 @@ public class Sounds {
 		});
 	}
 
-	public static Sounds createSilent() {
+	public static Sounds createSilent(final SilentSound.Listener listener) {
 		return new Sounds(new Function<String, Sound>() {
 			@Override public Sound fun(String fileName) {
-				return new SilentSound(loadBytes(fileName), fileName);
+				return new SilentSound(loadBytes(fileName), fileName, listener);
 			}
 		});
 	}

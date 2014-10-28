@@ -4,6 +4,7 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import fridaymario.listeners.*;
+import fridaymario.sounds.SilentSound;
 import fridaymario.sounds.Sounds;
 import com.intellij.openapi.application.ApplicationAdapter;
 import com.intellij.openapi.application.ApplicationManager;
@@ -131,7 +132,19 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	}
 
 	private Sounds createSounds() {
-		return (silentMode ? Sounds.createSilent() : Sounds.create());
+		if (silentMode) {
+			return Sounds.createSilent(new SilentSound.Listener() {
+				@Override public void playing(String soundName) {
+					show(soundName);
+				}
+
+				@Override public void stopped(String soundName) {
+					show("stopped: " + soundName);
+				}
+			});
+		} else {
+			return Sounds.create();
+		}
 	}
 
 	private SoundPlayer.Listener createLoggingListener() {
