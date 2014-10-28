@@ -20,32 +20,66 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private final Map<Project, Compilation> compilationByProject = new HashMap<Project, Compilation>();
 	private final Map<Project, UnitTests> unitTestsByProject = new HashMap<Project, UnitTests>();
 
+	private SoundPlayer soundPlayer;
+	private AllActions allActions;
 	private Navigation navigation;
 	private EditorModification editorModification;
-	private ProjectManagerListener projectManagerListener;
 
-	private SoundPlayer listener;
+	private ProjectManagerListener projectManagerListener;
 	private ApplicationAdapter applicationListener;
 
 	@Override public void initComponent() {
-		Sounds sounds = new Sounds();
-		listener = new SoundPlayer(sounds).init();
+		soundPlayer = new SoundPlayer(new Sounds()).init();
+		initApplicationListeners();
+		initProjectListeners();
+	}
 
+	@Override public void disposeComponent() {
+		disposeProjectListeners();
+		disposeApplicationListeners();
+		soundPlayer.stop();
+	}
+
+	private void initApplicationListeners() {
+		allActions = new AllActions(soundPlayer);
+		allActions.start();
+		navigation = new Navigation(soundPlayer);
+		navigation.start();
+		editorModification = new EditorModification(soundPlayer);
+		editorModification.start();
+
+		applicationListener = new ApplicationAdapter() {
+			@Override
+			public void applicationExiting() {
+				soundPlayer.stop();
+			}
+		};
+		ApplicationManager.getApplication().addApplicationListener(applicationListener);
+	}
+
+	private void disposeApplicationListeners() {
+		ApplicationManager.getApplication().removeApplicationListener(applicationListener);
+		allActions.stop();
+		navigation.stop();
+		editorModification.stop();
+	}
+
+	private void initProjectListeners() {
 		projectManagerListener = new ProjectManagerAdapter() {
 			@Override public void projectOpened(Project project) {
-				Refactoring refactoring = new Refactoring(project, listener);
+				Refactoring refactoring = new Refactoring(project, soundPlayer);
 				refactoring.start();
 				refactoringByProject.put(project, refactoring);
 
-				VcsActions vcsActions = new VcsActions(project, listener);
+				VcsActions vcsActions = new VcsActions(project, soundPlayer);
 				vcsActions.start();
 				vcsActionsByProject.put(project, vcsActions);
 
-				Compilation compilation = new Compilation(project, listener);
+				Compilation compilation = new Compilation(project, soundPlayer);
 				compilation.start();
 				compilationByProject.put(project, compilation);
 
-				UnitTests unitTests = new UnitTests(project, listener);
+				UnitTests unitTests = new UnitTests(project, soundPlayer);
 				unitTests.start();
 				unitTestsByProject.put(project, unitTests);
 			}
@@ -74,34 +108,16 @@ public class IntelliJAppComponent implements ApplicationComponent {
 			projectManagerListener.projectOpened(project);
 		}
 		ProjectManager.getInstance().addProjectManagerListener(projectManagerListener);
-
-		navigation = new Navigation(listener);
-		navigation.start();
-		editorModification = new EditorModification(listener);
-		editorModification.start();
-
-		applicationListener = new ApplicationAdapter() {
-			@Override
-			public void applicationExiting() {
-				listener.stop();
-			}
-		};
-		ApplicationManager.getApplication().addApplicationListener(applicationListener);
 	}
 
-	@Override public void disposeComponent() {
+	private void disposeProjectListeners() {
 		for (Project project : ProjectManager.getInstance().getOpenProjects()) {
 			projectManagerListener.projectClosed(project);
 		}
-		ApplicationManager.getApplication().removeApplicationListener(applicationListener);
-		navigation.stop();
-		editorModification.stop();
-		listener.stop();
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	@NotNull
-	@Override public String getComponentName() {
+	@NotNull @Override public String getComponentName() {
 		return this.getClass().getCanonicalName();
 	}
 }

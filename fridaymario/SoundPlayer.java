@@ -9,18 +9,18 @@ import java.util.Map;
 
 public class SoundPlayer implements
 		Compilation.Listener, Navigation.Listener, EditorModification.Listener,
-		Refactoring.Listener, UnitTests.Listener, VcsActions.Listener {
+		Refactoring.Listener, UnitTests.Listener, VcsActions.Listener, AllActions.Listener {
 
 	private final Sounds sounds;
 	private final Map<String, Sound> soundsByAction;
 	private final Map<String, Sound> soundsByRefactoring;
-	private boolean compilationIsFailing;
+	private boolean compilationFailed;
 	private boolean stopped;
 
 	public SoundPlayer(Sounds sounds) {
 		this.sounds = sounds;
-		this.soundsByAction = createEditorSounds(sounds);
-		this.soundsByRefactoring = createRefactoringSounds(sounds);
+		this.soundsByAction = editorSounds(sounds);
+		this.soundsByRefactoring = refactoringSounds(sounds);
 	}
 
 	public SoundPlayer init() {
@@ -36,22 +36,8 @@ public class SoundPlayer implements
 		sounds.gameover.playAndWait();
 	}
 
-	@Override public void compilationSucceeded() {
-		sounds.oneUp.play();
-		if (compilationIsFailing) {
-			compilationIsFailing = false;
-			sounds.background.playInBackground();
-			sounds.backgroundSad.stop();
-		}
-	}
-
-	@Override public void compilationFailed() {
-		sounds.oneDown.play();
-		if (!compilationIsFailing) {
-			compilationIsFailing = true;
-			sounds.backgroundSad.playInBackground();
-			sounds.background.stop();
-		}
+	@Override public void onAction(String actionId) {
+		// TODO
 	}
 
 	@Override public void onEditorNavigation(String actionId) {
@@ -77,6 +63,24 @@ public class SoundPlayer implements
 		}
 	}
 
+	@Override public void compilationSucceeded() {
+		sounds.oneUp.play();
+		if (compilationFailed) {
+			compilationFailed = false;
+			sounds.background.playInBackground();
+			sounds.backgroundSad.stop();
+		}
+	}
+
+	@Override public void compilationFailed() {
+		sounds.oneDown.play();
+		if (!compilationFailed) {
+			compilationFailed = true;
+			sounds.backgroundSad.playInBackground();
+			sounds.background.stop();
+		}
+	}
+
 	@Override public void onUnitTestSucceeded() {
 		sounds.oneUp.play();
 	}
@@ -93,7 +97,7 @@ public class SoundPlayer implements
 		sounds.powerup.play();
 	}
 
-	private static Map<String, Sound> createRefactoringSounds(Sounds sounds) {
+	private static Map<String, Sound> refactoringSounds(Sounds sounds) {
 		Map<String, Sound> result = new HashMap<String, Sound>();
 		result.put("refactoring.rename", sounds.coin);
 		result.put("refactoring.extractVariable", sounds.coin);
@@ -104,8 +108,9 @@ public class SoundPlayer implements
 		return result;
 	}
 
-	private static Map<String, Sound> createEditorSounds(Sounds sounds) {
+	private static Map<String, Sound> editorSounds(Sounds sounds) {
 		Map<String, Sound> result = new HashMap<String, Sound>();
+
 		result.put("EditorUp", sounds.kick);
 		result.put("EditorDown", sounds.kick);
 		result.put("EditorPreviousWord", sounds.kick);
