@@ -8,34 +8,11 @@ import static liveplugin.PluginUtil.show
 
 changeGlobalVar("AppComponent"){ ApplicationComponent oldInstance ->
 	if (oldInstance != null) oldInstance.disposeComponent()
-	def component = new IntelliJAppComponent().silentMode()
+	def component = new IntelliJAppComponent().silentMode().logUnmappedActionsMode()
 	component.initComponent()
 	component
 //    null
 }
-
-/*
-// TODO use it and remove
-changeGlobalVar("actionsListener") { previousListener ->
-    if (previousListener != null) {
-        ActionManager.instance.removeAnActionListener(previousListener)
-    }
-    def listener = new AnActionListener.Adapter() {
-        @Override void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
-//            show("!!" + ActionManager.instance.getId(action))
-            show(action.hashCode())
-        }
-    }
-    ActionManager.instance.addAnActionListener(listener)
-    listener
-}
-*/
-
-//unwrapAction("EditorCompleteStatement")
-//wrapAction("EditorCompleteStatement") { AnActionEvent event, AnAction originalAction ->
-//    show("aaa!!!")
-//    originalAction.actionPerformed(event)
-//}
 
 // TODO triggers before actual complete; popup window on typing "."
 //unwrapAction("CodeCompletion")

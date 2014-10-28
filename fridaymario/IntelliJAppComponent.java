@@ -26,10 +26,10 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private ProjectManagerListener projectManagerListener;
 	private ApplicationAdapter applicationListener;
 	private boolean silentMode;
+	private boolean logUnmappedActions;
 
 	@Override public void initComponent() {
-		Sounds sounds = (silentMode ? Sounds.createSilent() : Sounds.create());
-		soundPlayer = new SoundPlayer(sounds).init();
+		soundPlayer = new SoundPlayer(createSounds(), logUnmappedActions).init();
 		initApplicationListeners();
 		initProjectListeners();
 	}
@@ -118,5 +118,14 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	public IntelliJAppComponent silentMode() {
 		silentMode = true;
 		return this;
+	}
+
+	public IntelliJAppComponent logUnmappedActionsMode() {
+		logUnmappedActions = true;
+		return this;
+	}
+
+	private Sounds createSounds() {
+		return (silentMode ? Sounds.createSilent() : Sounds.create());
 	}
 }
