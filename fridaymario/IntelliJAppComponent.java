@@ -27,11 +27,6 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private ApplicationAdapter applicationListener;
 	private boolean silentMode;
 
-	public IntelliJAppComponent silentMode() {
-		silentMode = true;
-		return this;
-	}
-
 	@Override public void initComponent() {
 		Sounds sounds = (silentMode ? Sounds.createSilent() : Sounds.create());
 		soundPlayer = new SoundPlayer(sounds).init();
@@ -118,5 +113,10 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	@SuppressWarnings("ConstantConditions")
 	@NotNull @Override public String getComponentName() {
 		return this.getClass().getCanonicalName();
+	}
+
+	public IntelliJAppComponent silentMode() {
+		silentMode = true;
+		return this;
 	}
 }

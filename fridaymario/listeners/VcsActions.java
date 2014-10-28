@@ -41,6 +41,7 @@ public class VcsActions implements Restartable {
 	}
 
 	@Override public void start() {
+		// TODO document why use busConnection for updates
 		busConnection.subscribe(UpdatedFilesListener.UPDATED_FILES, updatedListener);
 		CheckinHandlersManager.getInstance().registerCheckinHandlerFactory(checkinListener);
 	}

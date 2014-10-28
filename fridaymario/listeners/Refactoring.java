@@ -22,14 +22,11 @@ public class Refactoring implements Restartable {
 				listener.onRefactoring(refactoringId);
 			}
 
-			@Override public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {
-			}
+			@Override public void refactoringStarted(@NotNull String refactoringId, @Nullable RefactoringEventData beforeData) {}
 
-			@Override public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {
-			}
+			@Override public void conflictsDetected(@NotNull String refactoringId, @NotNull RefactoringEventData conflictsData) {}
 
-			@Override public void undoRefactoring(@NotNull String refactoringId) {
-			}
+			@Override public void undoRefactoring(@NotNull String refactoringId) {}
 		});
 	}
 
