@@ -3,7 +3,10 @@ package fridaymario.sounds;
 import com.intellij.openapi.diagnostic.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -14,8 +17,7 @@ public class Sound {
 
 	private final byte[] bytes;
 	private final String name;
-	private final AtomicReference<Clip> clipReference = new AtomicReference<Clip>();
-	private final AtomicReference<LineListener> lineListener = new AtomicReference<LineListener>();
+	private Clip clip;
 
 	public Sound(byte[] bytes, String name) {
 		this.bytes = bytes;
@@ -30,7 +32,6 @@ public class Sound {
 	public Sound playAndWait() {
 		playSoundFromStream(new ByteArrayInputStream(bytes), 0);
 
-		Clip clip = clipReference.get();
 		if (clip != null) {
 			try {
 				Thread.sleep(clip.getMicrosecondLength());
@@ -46,10 +47,8 @@ public class Sound {
 	}
 
 	public Sound stop() {
-		Clip clip = clipReference.get();
 		if (clip != null) {
 			clip.stop();
-			clip.close();
 		}
 		return this;
 	}
@@ -58,34 +57,35 @@ public class Sound {
 	 * Originally copied from {@link com.intellij.util.ui.UIUtil}.
 	 */
 	private void playSoundFromStream(final InputStream inputStream, final int loopCount) {
-		new Thread(new Runnable() {
-			// The wrapper thread is unnecessary, unless it blocks on the Clip finishing;
-			@Override
-			public void run() {
-				try {
-					final Clip clip = AudioSystem.getClip();
-					InputStream stream = inputStream;
-					if (!stream.markSupported()) stream = new BufferedInputStream(stream);
-					AudioInputStream inputStream = AudioSystem.getAudioInputStream(stream);
-					clip.open(inputStream);
-					clip.loop(loopCount);
-					clipReference.set(clip);
+		try {
+			final Clip clip = AudioSystem.getClip();
+			InputStream stream = inputStream;
+			if (!stream.markSupported()) stream = new BufferedInputStream(stream);
+			clip.open(AudioSystem.getAudioInputStream(stream));
 
-					LineListener listener = new LineListener() {
-						@Override public void update(@NotNull LineEvent event) {
-							if (event.getType() == LineEvent.Type.STOP) {
-								clip.close();
-								clip.removeLineListener(lineListener.get());
-							}
-						}
-					};
-					lineListener.set(listener);
-					clip.addLineListener(lineListener.get());
-				} catch (Exception e) {
-					logger.warn(e);
+			final AtomicReference<LineListener> lineListener = new AtomicReference<LineListener>();
+			LineListener listener = new LineListener() {
+				@Override public void update(@NotNull LineEvent event) {
+					if (event.getType() == LineEvent.Type.STOP) {
+						clip.close();
+						clip.removeLineListener(lineListener.get());
+					}
 				}
-			}
-		}).start();
+			};
+			lineListener.set(listener);
+			clip.addLineListener(lineListener.get());
+
+			this.clip = clip;
+
+			// The wrapper thread is unnecessary, unless it blocks on the Clip finishing;
+			new Thread(new Runnable() {
+				@Override public void run() {
+					clip.loop(loopCount);
+				}
+			}).start();
+		} catch (Exception e) {
+			logger.warn(e);
+		}
 	}
 
 	@Override public String toString() {
