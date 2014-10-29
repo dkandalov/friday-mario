@@ -29,8 +29,8 @@ Note that IntelliJAppComponent has silentMode() and logUnmappedActionsMode() met
 
 Folder structure
 ================
-fridaymario/listeners - classes which listen to IDE events hiding details of IntelliJ API
-fridaymario/sounds - code to play sounds and wav files
-fridaymario/IntelliJAppComponent - plugin entry point
-META-INF/plugin.xml - plugin meta info
-plugin.groovy - entry point for liveplugin
+ - fridaymario/listeners - classes which listen to IDE events hiding details of IntelliJ API
+ - fridaymario/sounds - code to play sounds and wav files
+ - fridaymario/IntelliJAppComponent - plugin entry point
+ - META-INF/plugin.xml - plugin meta info
+ - plugin.groovy - entry point for liveplugin
