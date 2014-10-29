@@ -123,12 +123,15 @@ public class SoundPlayer implements
 
 		result.put("EditorUp", sounds.kick);
 		result.put("EditorDown", sounds.kick);
+		result.put("EditorUpWithSelection", sounds.kick);
+		result.put("EditorDownWithSelection", sounds.kick);
 		result.put("EditorPreviousWord", sounds.kick);
 		result.put("EditorNextWord", sounds.kick);
 		result.put("EditorPreviousWordWithSelection", sounds.kick);
 		result.put("EditorNextWordWithSelection", sounds.kick);
 		result.put("EditorSelectWord", sounds.kick);
 		result.put("EditorUnSelectWord", sounds.kick);
+		result.put("$SelectAll", sounds.kick);
 		result.put("EditorLineStart", sounds.jumpSmall);
 		result.put("EditorLineEnd", sounds.jumpSmall);
 		result.put("EditorLineStartWithSelection", sounds.jumpSmall);
@@ -144,9 +147,13 @@ public class SoundPlayer implements
 		result.put("Back", sounds.jumpSuper);
 		result.put("Forward", sounds.jumpSuper);
 		result.put("GotoSuperMethod", sounds.jumpSuper);
+		result.put("GotoDeclaration", sounds.jumpSuper);
+		result.put("GotoImplementation", sounds.jumpSuper);
 		result.put("EditSource", sounds.jumpSuper); // this is F4 navigate action
 
+		result.put("EditorPaste", sounds.fireball);
 		result.put("ReformatCode", sounds.fireball);
+		result.put("EditorToggleCase", sounds.fireball);
 		result.put("ExpandLiveTemplateByTab", sounds.fireball);
 		result.put("EditorCompleteStatement", sounds.fireball);
 		result.put("EditorChooseLookupItem", sounds.fireball);
@@ -157,14 +164,17 @@ public class SoundPlayer implements
 		result.put("MoveStatementDown", sounds.fireball);
 		result.put("EditorStartNewLine", sounds.kick);
 		result.put("EditorDuplicate", sounds.kick);
-		result.put("EditorJoinLines", sounds.breakblock);
+		result.put("EditorBackSpace", sounds.breakblock);
+		result.put("EditorDelete", sounds.breakblock);
 		result.put("EditorDeleteLine", sounds.breakblock);
 		result.put("EditorDeleteToWordStart", sounds.breakblock);
 		result.put("EditorDeleteToWordEnd", sounds.breakblock);
 		result.put("CommentByLineComment", sounds.breakblock);
 		result.put("CommentByBlockComment", sounds.breakblock);
-		result.put("ToggleBookmark", sounds.kick);
-		result.put("ToggleLineBreakpoint", sounds.kick);
+		result.put("ToggleBookmark", sounds.stomp);
+		result.put("ToggleBookmarkWithMnemonic", sounds.stomp);
+		result.put("ToggleLineBreakpoint", sounds.stomp);
+		result.put("HighlightUsagesInFile", sounds.stomp);
 
 		result.put("NextTab", sounds.jumpSuper);
 		result.put("PreviousTab", sounds.jumpSuper);
@@ -174,8 +184,62 @@ public class SoundPlayer implements
 		result.put("$Redo", sounds.fireworks);
 		result.put("ExpandAllRegions", sounds.stomp);
 		result.put("CollapseAllRegions", sounds.stomp);
+		result.put("ExpandRegion", sounds.stomp);
+		result.put("CollapseRegion", sounds.stomp);
+		result.put("CollapseSelection", sounds.stomp);
 		result.put("PasteMultiple", sounds.stomp);
+		result.put("FileStructurePopup", sounds.stomp);
+		result.put("ShowBookmarks", sounds.stomp);
+		result.put("ViewBreakpoints", sounds.stomp);
+		result.put("QuickJavaDoc", sounds.stomp);
+		result.put("ParameterInfo", sounds.stomp);
+		result.put("ShowIntentionActions", sounds.stomp);
 		result.put("EditorToggleColumnMode", sounds.stomp);
+		result.put("SurroundWith", sounds.stomp);
+		result.put("InsertLiveTemplate", sounds.stomp);
+		result.put("SurroundWithLiveTemplate", sounds.stomp);
+		result.put("NewElement", sounds.stomp);
+		result.put("Generate", sounds.stomp);
+		result.put("OverrideMethods", sounds.stomp);
+		result.put("ImplementMethods", sounds.stomp);
+
+		result.put("ChangeSignature", sounds.stomp);
+		result.put("Inline", sounds.stomp);
+
+		result.put("Find", sounds.stomp);
+		result.put("FindInPath", sounds.stomp);
+
+		result.put("ChangesView.Diff", sounds.stomp);
+		result.put("CompareClipboardWithSelection", sounds.stomp);
+
+		result.put("RecentFiles", sounds.stomp);
+		result.put("GotoClass", sounds.stomp);
+		result.put("GotoFile", sounds.stomp);
+		result.put("GotoSymbol", sounds.stomp);
+		result.put("SearchEverywhere", sounds.stomp);
+		result.put("GotoLine", sounds.stomp);
+		result.put("ShowUsages", sounds.stomp);
+		result.put("FindUsages", sounds.stomp);
+		result.put("ShowNavBar", sounds.stomp);
+		result.put("RunInspection", sounds.stomp);
+
+		result.put("SelectIn", sounds.stomp);
+		result.put("QuickChangeScheme", sounds.stomp);
+		result.put("ActivateProjectToolWindow", sounds.stomp);
+		result.put("ActivateStructureToolWindow", sounds.stomp);
+		result.put("ActivateFindToolWindow", sounds.stomp);
+		result.put("ActivateChangesToolWindow", sounds.stomp);
+		result.put("ActivateRunToolWindow", sounds.stomp);
+		result.put("ActivateDebugToolWindow", sounds.stomp);
+		result.put("ActivateMessagesToolWindow", sounds.stomp);
+		result.put("ActivateFavoritesToolWindow", sounds.stomp);
+		result.put("TypeHierarchy", sounds.stomp);
+		result.put("HideActiveWindow", sounds.stomp);
+		result.put("Vcs.QuickListPopupAction", sounds.stomp);
+		result.put("Vcs.ShowMessageHistory", sounds.stomp);
+
+		result.put("ChooseRunConfiguration", sounds.stomp);
+		result.put("ChooseDebugConfiguration", sounds.stomp);
 
 		return result;
 	}
