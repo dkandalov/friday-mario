@@ -3,6 +3,8 @@ package fridaymario;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import fridaymario.listeners.*;
 import fridaymario.sounds.SilentSound;
 import fridaymario.sounds.Sounds;
@@ -34,16 +36,20 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private boolean silentMode;
 	private boolean logUnmappedActions;
 
+	private boolean enabled;
+
 	@Override public void initComponent() {
 		soundPlayer = new SoundPlayer(createSounds(), createLoggingListener()).init();
 		initApplicationListeners();
 		initProjectListeners();
+		enabled = true;
 	}
 
 	@Override public void disposeComponent() {
 		disposeProjectListeners();
 		disposeApplicationListeners();
 		soundPlayer.stop();
+		enabled = false;
 	}
 
 	private void initApplicationListeners() {
@@ -52,7 +58,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 
 		applicationListener = new ApplicationAdapter() {
 			@Override public void applicationExiting() {
-				soundPlayer.stop();
+				soundPlayer.stopAndWait();
 			}
 		};
 		ApplicationManager.getApplication().addApplicationListener(applicationListener);
@@ -163,5 +169,29 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		String noTitle = "";
 		Notification notification = new Notification("Friday Mario", noTitle, message, NotificationType.INFORMATION);
 		ApplicationManager.getApplication().getMessageBus().syncPublisher(Notifications.TOPIC).notify(notification);
+	}
+
+	private static IntelliJAppComponent instance() {
+		return ApplicationManager.getApplication().getComponent(IntelliJAppComponent.class);
+	}
+
+	public static class Enable extends AnAction {
+		@Override public void actionPerformed(@NotNull AnActionEvent e) {
+			instance().initComponent();
+		}
+
+		@Override public void update(@NotNull AnActionEvent e) {
+			e.getPresentation().setEnabled(!instance().enabled);
+		}
+	}
+
+	public static class Disable extends AnAction {
+		@Override public void actionPerformed(@NotNull AnActionEvent e) {
+			instance().disposeComponent();
+		}
+
+		@Override public void update(@NotNull AnActionEvent e) {
+			e.getPresentation().setEnabled(instance().enabled);
+		}
 	}
 }

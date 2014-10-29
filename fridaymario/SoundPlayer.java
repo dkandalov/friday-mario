@@ -35,6 +35,14 @@ public class SoundPlayer implements
 		stopped = true;
 		sounds.marioSong.stop();
 		sounds.zeldaSong.stop();
+		sounds.gameover.play();
+	}
+
+	public void stopAndWait() {
+		if (stopped) return;
+		stopped = true;
+		sounds.marioSong.stop();
+		sounds.zeldaSong.stop();
 		sounds.gameover.playAndWait();
 	}
 
