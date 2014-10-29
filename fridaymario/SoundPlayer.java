@@ -139,6 +139,8 @@ public class SoundPlayer implements
 		result.put("MethodDown", sounds.jumpSuper);
 		result.put("Back", sounds.jumpSuper);
 		result.put("Forward", sounds.jumpSuper);
+		result.put("GotoSuperMethod", sounds.jumpSuper);
+		result.put("EditSource", sounds.jumpSuper); // this is F4 navigate action
 
 		result.put("ReformatCode", sounds.fireball);
 		result.put("ExpandLiveTemplateByTab", sounds.fireball);
@@ -147,6 +149,8 @@ public class SoundPlayer implements
 		result.put("EditorChooseLookupItemReplace", sounds.fireball);
 		result.put("HippieCompletion", sounds.fireball);
 		result.put("HippieBackwardCompletion", sounds.fireball);
+		result.put("MoveStatementUp", sounds.fireball);
+		result.put("MoveStatementDown", sounds.fireball);
 		result.put("EditorStartNewLine", sounds.kick);
 		result.put("EditorDuplicate", sounds.kick);
 		result.put("EditorDeleteLine", sounds.breakblock);
@@ -158,6 +162,7 @@ public class SoundPlayer implements
 		result.put("NextTab", sounds.jumpSuper);
 		result.put("PreviousTab", sounds.jumpSuper);
 		result.put("CloseEditor", sounds.fireworks);
+		result.put("CloseAllEditorsButActive", sounds.fireworks);
 		result.put("$Undo", sounds.fireworks);
 		result.put("$Redo", sounds.fireworks);
 		result.put("ExpandAllRegions", sounds.stomp);
