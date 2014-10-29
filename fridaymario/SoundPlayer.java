@@ -125,7 +125,10 @@ public class SoundPlayer implements
 		result.put("EditorLineEndWithSelection", sounds.jumpSmall);
 		result.put("EditorPageUp", sounds.jumpSuper);
 		result.put("EditorPageDown", sounds.jumpSuper);
+		result.put("Back", sounds.jumpSuper);
+		result.put("Forward", sounds.jumpSuper);
 
+		result.put("ReformatCode", sounds.fireball);
 		result.put("EditorCompleteStatement", sounds.fireball);
 		result.put("EditorChooseLookupItem", sounds.fireball);
 		result.put("EditorChooseLookupItemReplace", sounds.fireball);
@@ -140,7 +143,7 @@ public class SoundPlayer implements
 
 		result.put("NextTab", sounds.jumpSuper);
 		result.put("PreviousTab", sounds.jumpSuper);
-		result.put("CloseActiveTab", sounds.fireworks);
+		result.put("CloseEditor", sounds.fireworks);
 		result.put("$Undo", sounds.fireworks);
 		result.put("$Redo", sounds.fireworks);
 		result.put("ExpandAllRegions", sounds.stomp);
