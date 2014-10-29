@@ -135,6 +135,10 @@ public class SoundPlayer implements
 		result.put("EditorLineEndWithSelection", sounds.jumpSmall);
 		result.put("EditorPageUp", sounds.jumpSuper);
 		result.put("EditorPageDown", sounds.jumpSuper);
+		result.put("GotoPreviousError", sounds.jumpSuper);
+		result.put("GotoNextError", sounds.jumpSuper);
+		result.put("FindNext", sounds.jumpSuper);
+		result.put("FindPrevious", sounds.jumpSuper);
 		result.put("MethodUp", sounds.jumpSuper);
 		result.put("MethodDown", sounds.jumpSuper);
 		result.put("Back", sounds.jumpSuper);
@@ -153,11 +157,14 @@ public class SoundPlayer implements
 		result.put("MoveStatementDown", sounds.fireball);
 		result.put("EditorStartNewLine", sounds.kick);
 		result.put("EditorDuplicate", sounds.kick);
+		result.put("EditorJoinLines", sounds.breakblock);
 		result.put("EditorDeleteLine", sounds.breakblock);
 		result.put("EditorDeleteToWordStart", sounds.breakblock);
 		result.put("EditorDeleteToWordEnd", sounds.breakblock);
 		result.put("CommentByLineComment", sounds.breakblock);
 		result.put("CommentByBlockComment", sounds.breakblock);
+		result.put("ToggleBookmark", sounds.kick);
+		result.put("ToggleLineBreakpoint", sounds.kick);
 
 		result.put("NextTab", sounds.jumpSuper);
 		result.put("PreviousTab", sounds.jumpSuper);
