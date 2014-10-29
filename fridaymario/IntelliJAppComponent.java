@@ -51,8 +51,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		allActions.start();
 
 		applicationListener = new ApplicationAdapter() {
-			@Override
-			public void applicationExiting() {
+			@Override public void applicationExiting() {
 				soundPlayer.stop();
 			}
 		};
