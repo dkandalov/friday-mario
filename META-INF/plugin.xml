@@ -6,6 +6,9 @@
 
     <description><![CDATA[
         The first plugin in the world to gamify development in IntelliJ IDEs.
+        Basically, it plays sounds from Mario video game on various actions.
+        <br/>
+        (See also "Main menu -> Tools -> Start/Stop Friday Mario".)
         ]]></description>
 
     <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->

@@ -4,7 +4,7 @@ This is the first plugin in the world to gamify development in IntelliJ IDEs.
 
 WAT?!
 =====
-Basically, it's a bunch of sounds from [Mario](http://en.wikipedia.org/wiki/Mario) video game added to IntelliJ.
+Basically, it plays sounds from [Mario](http://en.wikipedia.org/wiki/Mario) video game on various IDE action.
 Yes, it's good fun. Please use responsibly on Friday afternoon.
 
 Credits
