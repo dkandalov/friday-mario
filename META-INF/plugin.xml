@@ -16,6 +16,13 @@
 
     <extensions defaultExtensionNs="com.intellij"/>
 
+    <actions>
+        <action class="fridaymario.IntelliJAppComponent$StartStop" id="FridayMario.StartStop" text="Stop Friday Mario">
+            <add-to-group anchor="last" group-id="ToolsMenu"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt shift m"/>
+        </action>
+    </actions>
+
     <application-components>
         <component>
             <implementation-class>fridaymario.IntelliJAppComponent</implementation-class>

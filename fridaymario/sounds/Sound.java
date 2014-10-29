@@ -34,7 +34,7 @@ public class Sound {
 
 		if (clip != null) {
 			try {
-				Thread.sleep(clip.getMicrosecondLength());
+				Thread.sleep(clip.getMicrosecondLength() / 1000);
 			} catch (InterruptedException ignored) {
 			}
 		}

@@ -36,20 +36,20 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private boolean silentMode;
 	private boolean logUnmappedActions;
 
-	private boolean enabled;
+	private boolean started;
 
 	@Override public void initComponent() {
 		soundPlayer = new SoundPlayer(createSounds(), createLoggingListener()).init();
 		initApplicationListeners();
 		initProjectListeners();
-		enabled = true;
+		started = true;
 	}
 
 	@Override public void disposeComponent() {
 		disposeProjectListeners();
 		disposeApplicationListeners();
 		soundPlayer.stop();
-		enabled = false;
+		started = false;
 	}
 
 	private void initApplicationListeners() {
@@ -175,23 +175,22 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		return ApplicationManager.getApplication().getComponent(IntelliJAppComponent.class);
 	}
 
-	public static class Enable extends AnAction {
-		@Override public void actionPerformed(@NotNull AnActionEvent e) {
-			instance().initComponent();
+	@SuppressWarnings("ComponentNotRegistered") // inspection is wrong
+	public static class StartStop extends AnAction {
+		@Override public void actionPerformed(@NotNull AnActionEvent event) {
+			if (instance().started) {
+				instance().disposeComponent();
+			} else {
+				instance().initComponent();
+			}
 		}
 
-		@Override public void update(@NotNull AnActionEvent e) {
-			e.getPresentation().setEnabled(!instance().enabled);
-		}
-	}
-
-	public static class Disable extends AnAction {
-		@Override public void actionPerformed(@NotNull AnActionEvent e) {
-			instance().disposeComponent();
-		}
-
-		@Override public void update(@NotNull AnActionEvent e) {
-			e.getPresentation().setEnabled(instance().enabled);
+		@Override public void update(@NotNull AnActionEvent event) {
+			if (instance().started) {
+				event.getPresentation().setText("Stop Friday Mario");
+			} else {
+				event.getPresentation().setText("Start Friday Mario");
+			}
 		}
 	}
 }
