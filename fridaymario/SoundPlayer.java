@@ -127,22 +127,28 @@ public class SoundPlayer implements
 		result.put("EditorNextWord", sounds.kick);
 		result.put("EditorPreviousWordWithSelection", sounds.kick);
 		result.put("EditorNextWordWithSelection", sounds.kick);
+		result.put("EditorSelectWord", sounds.kick);
+		result.put("EditorUnSelectWord", sounds.kick);
 		result.put("EditorLineStart", sounds.jumpSmall);
 		result.put("EditorLineEnd", sounds.jumpSmall);
 		result.put("EditorLineStartWithSelection", sounds.jumpSmall);
 		result.put("EditorLineEndWithSelection", sounds.jumpSmall);
 		result.put("EditorPageUp", sounds.jumpSuper);
 		result.put("EditorPageDown", sounds.jumpSuper);
+		result.put("MethodUp", sounds.jumpSuper);
+		result.put("MethodDown", sounds.jumpSuper);
 		result.put("Back", sounds.jumpSuper);
 		result.put("Forward", sounds.jumpSuper);
 
 		result.put("ReformatCode", sounds.fireball);
+		result.put("ExpandLiveTemplateByTab", sounds.fireball);
 		result.put("EditorCompleteStatement", sounds.fireball);
 		result.put("EditorChooseLookupItem", sounds.fireball);
 		result.put("EditorChooseLookupItemReplace", sounds.fireball);
 		result.put("HippieCompletion", sounds.fireball);
 		result.put("HippieBackwardCompletion", sounds.fireball);
 		result.put("EditorStartNewLine", sounds.kick);
+		result.put("EditorDuplicate", sounds.kick);
 		result.put("EditorDeleteLine", sounds.breakblock);
 		result.put("EditorDeleteToWordStart", sounds.breakblock);
 		result.put("EditorDeleteToWordEnd", sounds.breakblock);
@@ -156,6 +162,8 @@ public class SoundPlayer implements
 		result.put("$Redo", sounds.fireworks);
 		result.put("ExpandAllRegions", sounds.stomp);
 		result.put("CollapseAllRegions", sounds.stomp);
+		result.put("PasteMultiple", sounds.stomp);
+		result.put("EditorToggleColumnMode", sounds.stomp);
 
 		return result;
 	}
@@ -163,6 +171,7 @@ public class SoundPlayer implements
 
 	public interface Listener {
 		void unmappedAction(String actionId);
+
 		void unmappedRefactoring(String refactoringId);
 	}
 }
