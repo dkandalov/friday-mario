@@ -162,8 +162,9 @@ public class SoundPlayer implements
 		result.put("HippieBackwardCompletion", sounds.fireball);
 		result.put("MoveStatementUp", sounds.fireball);
 		result.put("MoveStatementDown", sounds.fireball);
-		result.put("EditorStartNewLine", sounds.kick);
-		result.put("EditorDuplicate", sounds.kick);
+		result.put("EditorStartNewLineBefore", sounds.fireball);
+		result.put("EditorStartNewLine", sounds.fireball);
+		result.put("EditorDuplicate", sounds.fireball);
 		result.put("EditorBackSpace", sounds.breakblock);
 		result.put("EditorJoinLines", sounds.breakblock);
 		result.put("EditorDelete", sounds.breakblock);

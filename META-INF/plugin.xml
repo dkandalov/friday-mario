@@ -3,12 +3,11 @@
     <name>FridayMario</name>
     <version>0.1 halloween beta</version>
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/friday-mario">Dmitry Kandalov</vendor>
-
     <description><![CDATA[
-        The first plugin in the world to gamify development in IntelliJ IDEs.
-        Basically, it plays sounds from Mario video game on various actions.
-        <br/>
-        (See also "Main menu -> Tools -> Start/Stop Friday Mario".)
+        The first plugin in the world to gamify development in IntelliJ IDEs.<br/>
+        Basically, it plays sounds from Mario video game on various actions.<br/>
+        See <a href="http://youtu.be/tlrl25lwWDs">youtube video</a>.<br/><br/>
+        To start/stop use "Main menu -> Tools -> Start/Stop Friday Mario".
         ]]></description>
 
     <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->

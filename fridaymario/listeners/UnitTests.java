@@ -20,8 +20,7 @@ public class UnitTests implements Restartable {
 
 	@Override public void start() {
 		busConnection.subscribe(Notifications.TOPIC, new NotificationsAdapter() {
-			@Override
-			public void notify(@NotNull Notification notification) {
+			@Override public void notify(@NotNull Notification notification) {
 				if (notification.getGroupId().equals(TestsUIUtil.NOTIFICATION_GROUP.getDisplayId())) {
 					boolean testsFailed = (notification.getType() == NotificationType.ERROR);
 					if (testsFailed) {
