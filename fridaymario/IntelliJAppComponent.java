@@ -72,21 +72,29 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private void initProjectListeners() {
 		projectManagerListener = new ProjectManagerAdapter() {
 			@Override public void projectOpened(Project project) {
-				Refactoring refactoring = new Refactoring(project, soundPlayer);
-				refactoring.start();
-				refactoringByProject.put(project, refactoring);
+				if (!refactoringByProject.containsKey(project)) {
+					Refactoring refactoring = new Refactoring(project, soundPlayer);
+					refactoring.start();
+					refactoringByProject.put(project, refactoring);
+				}
 
-				VcsActions vcsActions = new VcsActions(project, soundPlayer);
-				vcsActions.start();
-				vcsActionsByProject.put(project, vcsActions);
+				if (!vcsActionsByProject.containsKey(project)) {
+					VcsActions vcsActions = new VcsActions(project, soundPlayer);
+					vcsActions.start();
+					vcsActionsByProject.put(project, vcsActions);
+				}
 
-				Compilation compilation = new Compilation(project, soundPlayer);
-				compilation.start();
-				compilationByProject.put(project, compilation);
+				if (!compilationByProject.containsKey(project)) {
+					Compilation compilation = new Compilation(project, soundPlayer);
+					compilation.start();
+					compilationByProject.put(project, compilation);
+				}
 
-				UnitTests unitTests = new UnitTests(project, soundPlayer);
-				unitTests.start();
-				unitTestsByProject.put(project, unitTests);
+				if (!unitTestsByProject.containsKey(project)) {
+					UnitTests unitTests = new UnitTests(project, soundPlayer);
+					unitTests.start();
+					unitTestsByProject.put(project, unitTests);
+				}
 			}
 
 			@Override public void projectClosed(Project project) {
