@@ -1,6 +1,7 @@
 What is this?
 =============
-This is the first plugin in the world to gamify development in IntelliJ IDEs.
+This is [FridayMario](http://plugins.jetbrains.com/plugin/7599?pr=idea)
+the first plugin in the world to gamify development in IntelliJ IDEs.
 
 WAT?!
 =====
