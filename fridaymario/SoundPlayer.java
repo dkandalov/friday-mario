@@ -165,6 +165,7 @@ public class SoundPlayer implements
 		result.put("EditorStartNewLine", sounds.kick);
 		result.put("EditorDuplicate", sounds.kick);
 		result.put("EditorBackSpace", sounds.breakblock);
+		result.put("EditorJoinLines", sounds.breakblock);
 		result.put("EditorDelete", sounds.breakblock);
 		result.put("EditorDeleteLine", sounds.breakblock);
 		result.put("EditorDeleteToWordStart", sounds.breakblock);
@@ -204,14 +205,19 @@ public class SoundPlayer implements
 		result.put("ImplementMethods", sounds.stomp);
 
 		result.put("ChangeSignature", sounds.stomp);
+		result.put("ExtractMethod", sounds.stomp);
 		result.put("Inline", sounds.stomp);
+		result.put("Move", sounds.stomp);
 
 		result.put("Find", sounds.stomp);
 		result.put("FindInPath", sounds.stomp);
+		result.put("Replace", sounds.stomp);
+		result.put("ReplaceInPath", sounds.stomp);
 
 		result.put("ChangesView.Diff", sounds.stomp);
 		result.put("CompareClipboardWithSelection", sounds.stomp);
 
+		result.put("Switcher", sounds.stomp);
 		result.put("RecentFiles", sounds.stomp);
 		result.put("GotoClass", sounds.stomp);
 		result.put("GotoFile", sounds.stomp);
@@ -233,6 +239,7 @@ public class SoundPlayer implements
 		result.put("ActivateDebugToolWindow", sounds.stomp);
 		result.put("ActivateMessagesToolWindow", sounds.stomp);
 		result.put("ActivateFavoritesToolWindow", sounds.stomp);
+		result.put("AddToFavoritesPopup", sounds.stomp);
 		result.put("TypeHierarchy", sounds.stomp);
 		result.put("HideActiveWindow", sounds.stomp);
 		result.put("Vcs.QuickListPopupAction", sounds.stomp);
