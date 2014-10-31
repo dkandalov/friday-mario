@@ -30,4 +30,9 @@
             <implementation-class>fridaymario.IntelliJAppComponent</implementation-class>
         </component>
     </application-components>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceInterface="fridaymario.Settings" serviceImplementation="fridaymario.Settings"/>
+    </extensions>
+
 </idea-plugin>

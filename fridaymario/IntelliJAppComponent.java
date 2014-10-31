@@ -5,16 +5,16 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import fridaymario.listeners.*;
-import fridaymario.sounds.SilentSound;
-import fridaymario.sounds.Sounds;
 import com.intellij.openapi.application.ApplicationAdapter;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerAdapter;
 import com.intellij.openapi.project.ProjectManagerListener;
+import fridaymario.listeners.*;
+import fridaymario.sounds.SilentSound;
+import fridaymario.sounds.Sounds;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -36,20 +36,29 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private boolean silentMode;
 	private boolean logUnmappedActions;
 
-	private boolean started;
 
 	@Override public void initComponent() {
-		soundPlayer = new SoundPlayer(createSounds(), createLoggingListener()).init();
-		initApplicationListeners();
-		initProjectListeners();
-		started = true;
+		if (!Settings.getInstance().isPluginEnabled()) return;
+		init();
 	}
 
 	@Override public void disposeComponent() {
+		if (!Settings.getInstance().isPluginEnabled()) return;
+		dispose();
+	}
+
+	public void init() {
+		soundPlayer = new SoundPlayer(createSounds(), createLoggingListener()).init();
+		initApplicationListeners();
+		initProjectListeners();
+		Settings.getInstance().setPluginEnabled(true);
+	}
+
+	public void dispose() {
 		disposeProjectListeners();
 		disposeApplicationListeners();
 		soundPlayer.stop();
-		started = false;
+		Settings.getInstance().setPluginEnabled(false);
 	}
 
 	private void initApplicationListeners() {
@@ -186,19 +195,20 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	@SuppressWarnings("ComponentNotRegistered") // inspection is wrong
 	public static class StartStop extends AnAction {
 		@Override public void actionPerformed(@NotNull AnActionEvent event) {
-			if (instance().started) {
-				instance().disposeComponent();
+			if (Settings.getInstance().isPluginEnabled()) {
+				instance().dispose();
 			} else {
-				instance().initComponent();
+				instance().init();
 			}
 		}
 
 		@Override public void update(@NotNull AnActionEvent event) {
-			if (instance().started) {
+			if (Settings.getInstance().isPluginEnabled()) {
 				event.getPresentation().setText("Stop Friday Mario");
 			} else {
 				event.getPresentation().setText("Start Friday Mario");
 			}
 		}
 	}
+
 }
