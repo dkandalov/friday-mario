@@ -12,4 +12,4 @@ Yes, it's good fun. Please use responsibly on Friday afternoon.
 
 Credits
 =======
-Created using [liveplugin](https://github.com/dkandalov/live-plugin) at [SECR 2014](http://2014.secr.ru/).
+Created using [liveplugin](https://github.com/dkandalov/live-plugin) at [SECR 2014](http://2014.secr.ru/lang/en/).
