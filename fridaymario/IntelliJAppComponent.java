@@ -93,7 +93,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 					vcsActionsByProject.put(project, vcsActions);
 				}
 
-				if (!compilationByProject.containsKey(project)) {
+				if (!compilationByProject.containsKey(project) && isIdeWithCompilation()) {
 					Compilation compilation = new Compilation(project, soundPlayer);
 					compilation.start();
 					compilationByProject.put(project, compilation);
@@ -191,6 +191,16 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private static IntelliJAppComponent instance() {
 		return ApplicationManager.getApplication().getComponent(IntelliJAppComponent.class);
 	}
+
+	private static boolean isIdeWithCompilation() {
+		try {
+			Class.forName("com.intellij.openapi.compiler.CompilationStatusAdapter");
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+	}
+
 
 	@SuppressWarnings("ComponentNotRegistered") // inspection is wrong
 	public static class StartStop extends AnAction {
