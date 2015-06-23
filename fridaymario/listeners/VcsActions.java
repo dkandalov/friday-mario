@@ -18,8 +18,8 @@ import java.util.Set;
 public class VcsActions implements Restartable {
 	private final MessageBusConnection busConnection;
 	private final UpdatedFilesListener updatedListener;
-	private final CheckinHandlerFactory checkinListener;
 	private final NotificationsAdapter pushListener;
+	private final Listener listener;
 
 	public VcsActions(Project project, final Listener listener) {
 		this.busConnection = project.getMessageBus().connect();
@@ -27,16 +27,6 @@ public class VcsActions implements Restartable {
 		updatedListener = new UpdatedFilesListener() {
 			@Override public void consume(Set<String> files) {
 				listener.onVcsUpdate();
-			}
-		};
-		checkinListener = new CheckinHandlerFactory() {
-			@NotNull @Override
-			public CheckinHandler createHandler(@NotNull CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
-				return new CheckinHandler() {
-					@Override public void checkinSuccessful() {
-						listener.onVcsCommit();
-					}
-				};
 			}
 		};
 
@@ -53,6 +43,7 @@ public class VcsActions implements Restartable {
 				}
 			}
 		};
+		this.listener = listener;
 	}
 
 	@Override public void start() {
@@ -60,12 +51,12 @@ public class VcsActions implements Restartable {
 		// (see also https://gist.github.com/dkandalov/8840509)
 		busConnection.subscribe(UpdatedFilesListener.UPDATED_FILES, updatedListener);
 		busConnection.subscribe(Notifications.TOPIC, pushListener);
-		CheckinHandlersManager.getInstance().registerCheckinHandlerFactory(checkinListener);
+		MyCheckinHandlerFactory.listener = listener;
 	}
 
 	@Override public void stop() {
 		busConnection.disconnect();
-		CheckinHandlersManager.getInstance().unregisterCheckinHandlerFactory(checkinListener);
+		MyCheckinHandlerFactory.listener = null;
 	}
 
 	private static boolean isVcsNotification(Notification notification) {
@@ -80,6 +71,25 @@ public class VcsActions implements Restartable {
 			if (notification.getTitle().startsWith(title)) return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Using listener registration through extension point even though it's not reloadable.
+	 * This is because deprecated part of {@link CheckinHandlersManager} API was deleted in IJ15.
+	 */
+	public static class MyCheckinHandlerFactory extends CheckinHandlerFactory {
+		public static Listener listener;
+
+		@NotNull @Override
+		public CheckinHandler createHandler(CheckinProjectPanel checkinProjectPanel, CommitContext commitContext) {
+			return new CheckinHandler() {
+				@Override public void checkinSuccessful() {
+					if (listener != null) {
+						listener.onVcsCommit();
+					}
+				}
+			};
+		}
 	}
 
 	public interface Listener {
