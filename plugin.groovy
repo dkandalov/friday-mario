@@ -6,6 +6,9 @@ import static liveplugin.PluginUtil.changeGlobalVar
 import static liveplugin.PluginUtil.show
 // add-to-classpath $PLUGIN_PATH/out/artifacts/friday_mario/friday-mario.jar
 
+if (isIdeStartup) return
+show("Reloaded FridayMario plugin")
+
 Settings.instance.pluginEnabled = true
 
 changeGlobalVar("AppComponent"){ ApplicationComponent oldInstance ->
@@ -15,4 +18,3 @@ changeGlobalVar("AppComponent"){ ApplicationComponent oldInstance ->
 	component
 }
 
-if (!isIdeStartup) show("Reloaded FridayMario plugin")

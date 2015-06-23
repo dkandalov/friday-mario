@@ -30,12 +30,10 @@ public class VcsActions implements Restartable {
 			}
 		};
 		checkinListener = new CheckinHandlerFactory() {
-			@NotNull
-			@Override
+			@NotNull @Override
 			public CheckinHandler createHandler(@NotNull CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
 				return new CheckinHandler() {
-					@Override
-					public void checkinSuccessful() {
+					@Override public void checkinSuccessful() {
 						listener.onVcsCommit();
 					}
 				};
@@ -84,7 +82,7 @@ public class VcsActions implements Restartable {
 		return false;
 	}
 
-	public static interface Listener {
+	public interface Listener {
 		void onVcsCommit();
 
 		void onVcsUpdate();

@@ -34,7 +34,7 @@ public class Refactoring implements Restartable {
 		busConnection.disconnect();
 	}
 
-	public static interface Listener {
+	public interface Listener {
 		void onRefactoring(String refactoringId);
 	}
 }

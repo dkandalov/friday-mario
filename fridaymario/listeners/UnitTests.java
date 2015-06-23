@@ -37,7 +37,7 @@ public class UnitTests implements Restartable {
 		busConnection.disconnect();
 	}
 
-	public static interface Listener {
+	public interface Listener {
 		void onUnitTestSucceeded();
 
 		void onUnitTestFailed();
