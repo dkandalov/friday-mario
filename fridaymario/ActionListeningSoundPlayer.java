@@ -7,7 +7,7 @@ import fridaymario.sounds.Sounds;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SoundPlayer implements
+public class ActionListeningSoundPlayer implements
 		Compilation.Listener, Refactoring.Listener, UnitTests.Listener, VcsActions.Listener, AllActions.Listener {
 
 	private final Sounds sounds;
@@ -18,14 +18,14 @@ public class SoundPlayer implements
 	private boolean stopped;
 
 
-	public SoundPlayer(Sounds sounds, Listener listener) {
+	public ActionListeningSoundPlayer(Sounds sounds, Listener listener) {
 		this.sounds = sounds;
 		this.listener = listener;
 		this.soundsByAction = editorSounds(sounds);
 		this.soundsByRefactoring = refactoringSounds(sounds);
 	}
 
-	public SoundPlayer init() {
+	public ActionListeningSoundPlayer init() {
 		sounds.marioSong.playInBackground();
 		return this;
 	}

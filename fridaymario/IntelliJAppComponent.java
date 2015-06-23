@@ -28,7 +28,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private final Map<Project, Compilation> compilationByProject = new HashMap<Project, Compilation>();
 	private final Map<Project, UnitTests> unitTestsByProject = new HashMap<Project, UnitTests>();
 
-	private SoundPlayer soundPlayer;
+	private ActionListeningSoundPlayer soundPlayer;
 	private AllActions allActions;
 
 	private ProjectManagerListener projectManagerListener;
@@ -48,7 +48,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	}
 
 	public void init() {
-		soundPlayer = new SoundPlayer(createSounds(), createLoggingListener()).init();
+		soundPlayer = new ActionListeningSoundPlayer(createSounds(), createLoggingListener()).init();
 		initApplicationListeners();
 		initProjectListeners();
 		Settings.getInstance().setPluginEnabled(true);
@@ -169,8 +169,8 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		}
 	}
 
-	private SoundPlayer.Listener createLoggingListener() {
-		return new SoundPlayer.Listener() {
+	private ActionListeningSoundPlayer.Listener createLoggingListener() {
+		return new ActionListeningSoundPlayer.Listener() {
 			@Override public void unmappedAction(String actionId) {
 				if (logUnmappedActions) show(actionId);
 			}
