@@ -42,23 +42,23 @@ public class Sounds {
 	}
 
 	private Sounds(Function<String, Sound> load) {
-		oneUp = load.fun("/fridaymario/sounds/smb_1-up.wav");
-		oneDown = load.fun("/fridaymario/sounds/smb_pipe.wav");
-		coin = load.fun("/fridaymario/sounds/smb_coin.wav");
-		bowserfalls = load.fun("/fridaymario/sounds/smb_bowserfalls.wav");
-		breakblock = load.fun("/fridaymario/sounds/smb_breakblock.wav");
-		fireball = load.fun("/fridaymario/sounds/smb_fireball.wav");
-		fireworks = load.fun("/fridaymario/sounds/smb_fireworks.wav");
-		gameover = load.fun("/fridaymario/sounds/smb_gameover.wav");
-		jumpSmall = load.fun("/fridaymario/sounds/smb_jump-small.wav");
-		jumpSuper = load.fun("/fridaymario/sounds/smb_jump-super.wav");
-		kick = load.fun("/fridaymario/sounds/smb_kick.wav");
-		stomp = load.fun("/fridaymario/sounds/smb_stomp.wav");
-		powerup = load.fun("/fridaymario/sounds/smb_powerup.wav");
-		powerupAppears = load.fun("/fridaymario/sounds/smb_powerup_appears.wav");
+		oneUp = load.fun("/fridaymario/sounds/smb_1-up.au");
+		oneDown = load.fun("/fridaymario/sounds/smb_pipe.au");
+		coin = load.fun("/fridaymario/sounds/smb_coin.au");
+		bowserfalls = load.fun("/fridaymario/sounds/smb_bowserfalls.au");
+		breakblock = load.fun("/fridaymario/sounds/smb_breakblock.au");
+		fireball = load.fun("/fridaymario/sounds/smb_fireball.au");
+		fireworks = load.fun("/fridaymario/sounds/smb_fireworks.au");
+		gameover = load.fun("/fridaymario/sounds/smb_gameover.au");
+		jumpSmall = load.fun("/fridaymario/sounds/smb_jump-small.au");
+		jumpSuper = load.fun("/fridaymario/sounds/smb_jump-super.au");
+		kick = load.fun("/fridaymario/sounds/smb_kick.au");
+		stomp = load.fun("/fridaymario/sounds/smb_stomp.au");
+		powerup = load.fun("/fridaymario/sounds/smb_powerup.au");
+		powerupAppears = load.fun("/fridaymario/sounds/smb_powerup_appears.au");
 
-		marioSong = load.fun("/fridaymario/sounds/mario_08.wav");
-		zeldaSong = load.fun("/fridaymario/sounds/zelda_04.wav");
+		marioSong = load.fun("/fridaymario/sounds/mario_08.au");
+		zeldaSong = load.fun("/fridaymario/sounds/zelda_04.au");
 	}
 
 	private static byte[] loadBytes(String fileName) {
