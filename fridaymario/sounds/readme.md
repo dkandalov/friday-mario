@@ -6,6 +6,6 @@ and converted from mpeg wav to pcm wav with "ffmpeg -i input.wav -f wav -acodec 
 Copied from http://themushroomkingdom.net/media/smb/wav
  - other *.wav files
 
-All files converted to *.au with "ffmpeg -i input.wav output.au" for compatibility reasons.
+All files converted to *.au with "ffmpeg -i input.wav -ac 2 output.au" for compatibility reasons.
 
 See also http://www.superluigibros.com/super-mario-bros-3-sound-effects
