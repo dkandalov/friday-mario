@@ -81,7 +81,8 @@ public class VcsActions implements Restartable {
 		public static Listener listener;
 
 		@NotNull @Override
-		public CheckinHandler createHandler(CheckinProjectPanel checkinProjectPanel, CommitContext commitContext) {
+		public CheckinHandler createHandler(@NotNull CheckinProjectPanel checkinProjectPanel,
+		                                    @NotNull CommitContext commitContext) {
 			return new CheckinHandler() {
 				@Override public void checkinSuccessful() {
 					if (listener != null) {
