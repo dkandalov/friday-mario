@@ -136,6 +136,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		for (Project project : ProjectManager.getInstance().getOpenProjects()) {
 			projectManagerListener.projectClosed(project);
 		}
+		ProjectManager.getInstance().removeProjectManagerListener(projectManagerListener);
 	}
 
 	@SuppressWarnings("ConstantConditions")
