@@ -7,11 +7,12 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationAdapter;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.*;
+import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerAdapter;
 import com.intellij.openapi.project.ProjectManagerListener;
+import com.intellij.openapi.util.SystemInfo;
 import fridaymario.listeners.*;
 import fridaymario.sounds.SilentSound;
 import fridaymario.sounds.Sounds;
@@ -52,6 +53,13 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		initApplicationListeners();
 		initProjectListeners();
 		Settings.getInstance().setPluginEnabled(true);
+
+		// see https://github.com/dkandalov/friday-mario/issues/3#issuecomment-160421286
+		// and http://keithp.com/blogs/Java-Sound-on-Linux/
+		if (SystemInfo.isLinux && System.getProperty("javax.sound.sampled.Clip").equals("org.classpath.icedtea.pulseaudio.PulseAudioMixerProvider")) {
+			show("JDK used by your IDE can lock up or fail to play sounds.<br/>" +
+				 "Please see <a href=\"http://keithp.com/blogs/Java-Sound-on-Linux/\">http://keithp.com/blogs/Java-Sound-on-Linux</a> to fix it.");
+		}
 	}
 
 	public void dispose() {
