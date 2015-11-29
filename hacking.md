@@ -11,6 +11,10 @@ You can build it as a standard IntelliJ plugin:
 
 Reloading plugin at runtime
 ===========================
+***The instructions below don't work anymore. 
+The main reason is that some of IntelliJ APIs are difficult to make reloadable.
+In particular, using persistent settings like in fridaymario.Settings.***
+
 Because it is annoying to restart IDE after each code change
 there is alternative way to restart plugin using [liveplugin](https://github.com/dkandalov/live-plugin)
 and make development more iterative and fun.
