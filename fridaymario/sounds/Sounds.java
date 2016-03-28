@@ -25,40 +25,42 @@ public class Sounds {
 	public final Sound marioSong;
 	public final Sound zeldaSong;
 
-	public static Sounds create() {
-		return new Sounds(new Function<String, Sound>() {
-			@Override public Sound fun(String fileName) {
-				return new Sound(loadBytes(fileName), fileName);
+	public static Sounds create(final boolean actionSoundsEnabled, final boolean backgroundMusicEnabled) {
+		return new Sounds(new Function<Config, Sound>() {
+			@Override public Sound fun(Config config) {
+				boolean enabled = (config.isBackgroundMusic && backgroundMusicEnabled) || (!config.isBackgroundMusic && actionSoundsEnabled);
+				return enabled ?
+						new Sound(loadBytes(config.filePath), config.filePath) :
+						new SilentSound(loadBytes(config.filePath), config.filePath, SilentSound.Listener.none);
 			}
 		});
 	}
 
 	public static Sounds createSilent(final SilentSound.Listener listener) {
-		return new Sounds(new Function<String, Sound>() {
-			@Override public Sound fun(String fileName) {
-				return new SilentSound(loadBytes(fileName), fileName, listener);
+		return new Sounds(new Function<Config, Sound>() {
+			@Override public Sound fun(Config config) {
+				return new SilentSound(loadBytes(config.filePath), config.filePath, listener);
 			}
 		});
 	}
 
-	private Sounds(Function<String, Sound> load) {
-		oneUp = load.fun("/fridaymario/sounds/smb_1-up.au");
-		oneDown = load.fun("/fridaymario/sounds/smb_pipe.au");
-		coin = load.fun("/fridaymario/sounds/smb_coin.au");
-		bowserfalls = load.fun("/fridaymario/sounds/smb_bowserfalls.au");
-		breakblock = load.fun("/fridaymario/sounds/smb_breakblock.au");
-		fireball = load.fun("/fridaymario/sounds/smb_fireball.au");
-		fireworks = load.fun("/fridaymario/sounds/smb_fireworks.au");
-		gameover = load.fun("/fridaymario/sounds/smb_gameover.au");
-		jumpSmall = load.fun("/fridaymario/sounds/smb_jump-small.au");
-		jumpSuper = load.fun("/fridaymario/sounds/smb_jump-super.au");
-		kick = load.fun("/fridaymario/sounds/smb_kick.au");
-		stomp = load.fun("/fridaymario/sounds/smb_stomp.au");
-		powerup = load.fun("/fridaymario/sounds/smb_powerup.au");
-		powerupAppears = load.fun("/fridaymario/sounds/smb_powerup_appears.au");
-
-		marioSong = load.fun("/fridaymario/sounds/mario_08.au");
-		zeldaSong = load.fun("/fridaymario/sounds/zelda_04.au");
+	private Sounds(Function<Config, Sound> load) {
+		oneUp = load.fun(new Config("/fridaymario/sounds/smb_1-up.au"));
+		oneDown = load.fun(new Config("/fridaymario/sounds/smb_pipe.au"));
+		coin = load.fun(new Config("/fridaymario/sounds/smb_coin.au"));
+		bowserfalls = load.fun(new Config("/fridaymario/sounds/smb_bowserfalls.au"));
+		breakblock = load.fun(new Config("/fridaymario/sounds/smb_breakblock.au"));
+		fireball = load.fun(new Config("/fridaymario/sounds/smb_fireball.au"));
+		fireworks = load.fun(new Config("/fridaymario/sounds/smb_fireworks.au"));
+		gameover = load.fun(new Config("/fridaymario/sounds/smb_gameover.au", true));
+		jumpSmall = load.fun(new Config("/fridaymario/sounds/smb_jump-small.au"));
+		jumpSuper = load.fun(new Config("/fridaymario/sounds/smb_jump-super.au"));
+		kick = load.fun(new Config("/fridaymario/sounds/smb_kick.au"));
+		stomp = load.fun(new Config("/fridaymario/sounds/smb_stomp.au"));
+		powerup = load.fun(new Config("/fridaymario/sounds/smb_powerup.au"));
+		powerupAppears = load.fun(new Config("/fridaymario/sounds/smb_powerup_appears.au"));
+		marioSong = load.fun(new Config("/fridaymario/sounds/mario_08.au", true));
+		zeldaSong = load.fun(new Config("/fridaymario/sounds/zelda_04.au", true));
 	}
 
 	private static byte[] loadBytes(String fileName) {
@@ -68,6 +70,20 @@ public class Sounds {
 			return StreamUtil.loadFromStream(inputStream);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	private static class Config {
+		public final String filePath;
+		public final boolean isBackgroundMusic;
+
+		public Config(String filePath) {
+			this(filePath, false);
+		}
+
+		public Config(String filePath, boolean isBackgroundMusic) {
+			this.filePath = filePath;
+			this.isBackgroundMusic = isBackgroundMusic;
 		}
 	}
 }

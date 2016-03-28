@@ -35,6 +35,11 @@ public class SilentSound extends Sound {
 	}
 
 	public interface Listener {
+		Listener none = new Listener() {
+			@Override public void playing(String soundName) {}
+			@Override public void stopped(String soundName) {}
+		};
+
 		void playing(String soundName);
 		void stopped(String soundName);
 	}

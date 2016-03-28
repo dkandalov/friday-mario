@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>FridayMario</id>
     <name>FridayMario</name>
-    <version>0.1.3 kernc fix beta</version>
+    <version>0.1.4 easter beta</version>
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/friday-mario">Dmitry Kandalov</vendor>
     <description><![CDATA[
         The first plugin in the world to gamify development in IntelliJ IDEs.<br/>
@@ -11,7 +11,7 @@
         ]]></description>
 
     <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="135" />
+    <idea-version since-build="135.0" />
 
     <!-- see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
@@ -19,10 +19,13 @@
     <extensions defaultExtensionNs="com.intellij"/>
 
     <actions>
-        <action class="fridaymario.IntelliJAppComponent$StartStop" id="FridayMario.StartStop" text="Stop Friday Mario">
+        <group id="FridayMario.Menu" text="Friday Mario" popup="true">
             <add-to-group anchor="last" group-id="ToolsMenu"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="alt shift m"/>
-        </action>
+            <action class="fridaymario.ToggleActionSounds" id="FridayMario.ToggleActionSounds" text="Sounds on Actions">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift m"/>
+            </action>
+            <action class="fridaymario.ToggleBackgroundMusic" id="FridayMario.StartStop" text="Background Music"/>
+        </group>
     </actions>
 
     <application-components>

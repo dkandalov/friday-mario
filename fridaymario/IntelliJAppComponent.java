@@ -3,8 +3,6 @@ package fridaymario;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationAdapter;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
@@ -45,14 +43,13 @@ public class IntelliJAppComponent implements ApplicationComponent {
 
 	@Override public void disposeComponent() {
 		if (!Settings.getInstance().isPluginEnabled()) return;
-		dispose();
+		dispose(true);
 	}
 
 	public void init() {
 		soundPlayer = new ActionListeningSoundPlayer(createSounds(), createLoggingListener()).init();
 		initApplicationListeners();
 		initProjectListeners();
-		Settings.getInstance().setPluginEnabled(true);
 
 		// see https://github.com/dkandalov/friday-mario/issues/3#issuecomment-160421286
 		// and http://keithp.com/blogs/Java-Sound-on-Linux/
@@ -62,11 +59,14 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		}
 	}
 
-	public void dispose() {
+	public void dispose(boolean isIdeShutdown) {
+		if (soundPlayer == null) return;
+
 		disposeProjectListeners();
 		disposeApplicationListeners();
-		soundPlayer.stop();
-		Settings.getInstance().setPluginEnabled(false);
+		soundPlayer.stop(isIdeShutdown);
+
+		soundPlayer = null;
 	}
 
 	private void initApplicationListeners() {
@@ -141,10 +141,11 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	}
 
 	private void disposeProjectListeners() {
-		for (Project project : ProjectManager.getInstance().getOpenProjects()) {
+		ProjectManager projectManager = ProjectManager.getInstance();
+		for (Project project : projectManager.getOpenProjects()) {
 			projectManagerListener.projectClosed(project);
 		}
-		ProjectManager.getInstance().removeProjectManagerListener(projectManagerListener);
+		projectManager.removeProjectManagerListener(projectManagerListener);
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -165,16 +166,12 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private Sounds createSounds() {
 		if (silentMode) {
 			return Sounds.createSilent(new SilentSound.Listener() {
-				@Override public void playing(String soundName) {
-					show(soundName);
-				}
-
-				@Override public void stopped(String soundName) {
-					show("stopped: " + soundName);
-				}
+				@Override public void playing(String soundName) { show(soundName); }
+				@Override public void stopped(String soundName) { show("stopped: " + soundName); }
 			});
 		} else {
-			return Sounds.create();
+			Settings settings = Settings.getInstance();
+			return Sounds.create(settings.actionSoundsEnabled, settings.backgroundMusicEnabled);
 		}
 	}
 
@@ -197,7 +194,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		ApplicationManager.getApplication().getMessageBus().syncPublisher(Notifications.TOPIC).notify(notification);
 	}
 
-	private static IntelliJAppComponent instance() {
+	static IntelliJAppComponent instance() {
 		return ApplicationManager.getApplication().getComponent(IntelliJAppComponent.class);
 	}
 
@@ -210,24 +207,23 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		}
 	}
 
-
-	@SuppressWarnings("ComponentNotRegistered") // inspection is wrong
-	public static class StartStop extends AnAction {
-		@Override public void actionPerformed(@NotNull AnActionEvent event) {
-			if (Settings.getInstance().isPluginEnabled()) {
-				instance().dispose();
-			} else {
-				instance().init();
-			}
-		}
-
-		@Override public void update(@NotNull AnActionEvent event) {
-			if (Settings.getInstance().isPluginEnabled()) {
-				event.getPresentation().setText("Stop Friday Mario");
-			} else {
-				event.getPresentation().setText("Start Friday Mario");
-			}
-		}
+	public void setBackgroundMusicEnabled(boolean value) {
+		Settings.getInstance().setBackgroundMusicEnabled(value);
+		update();
 	}
 
+	public void setActionSoundsEnabled(boolean value) {
+		Settings.getInstance().setActionSoundsEnabled(value);
+		update();
+	}
+
+	private void update() {
+		Settings settings = Settings.getInstance();
+		if (!settings.actionSoundsEnabled && !settings.backgroundMusicEnabled) {
+			dispose(false);
+		} else {
+			dispose(false);
+			init();
+		}
+	}
 }
