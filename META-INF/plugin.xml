@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>FridayMario</id>
     <name>FridayMario</name>
-    <version>0.1.4 easter beta</version>
+    <version>0.1.5 easter beta</version>
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/friday-mario">Dmitry Kandalov</vendor>
     <description><![CDATA[
         The first plugin in the world to gamify development in IntelliJ IDEs.<br/>
