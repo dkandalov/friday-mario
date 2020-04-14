@@ -1,0 +1,57 @@
+buildscript {
+	ext.kotlin_version = "1.3.70"
+	repositories {
+		mavenCentral()
+		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+		maven { url "http://dl.bintray.com/jetbrains/intellij-plugin-service" }
+	}
+}
+plugins {
+	id "org.jetbrains.intellij" version "0.4.16"
+	id "org.jetbrains.kotlin.jvm" version "1.3.70"
+}
+apply plugin:"java"
+apply plugin:"kotlin"
+apply plugin:"idea"
+apply plugin:"org.jetbrains.intellij"
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+}
+
+sourceSets {
+	main {
+		java { srcDir "./src" }
+		kotlin { srcDir "./src" }
+		resources { srcDir "./resources" }
+	}
+}
+
+compileKotlin {
+	kotlinOptions {
+		apiVersion = "1.3"
+		languageVersion = "1.3"
+        // Compiler flag to allow building against pre-released versions of Kotlin
+        // because IJ EAP can be built using pre-released Kotlin but it's still worth doing to check API compatibility
+        freeCompilerArgs = ["-Xskip-metadata-version-check"] 
+    }
+}
+
+intellij {
+	// To find available IDE versions see https://www.jetbrains.com/intellij-repository/releases
+	def ideVersion = System.getenv().getOrDefault(
+			"IDEA_VERSION_FOR_PLUGIN",
+			"201.6668.113"
+//			"LATEST-EAP-SNAPSHOT"
+	)
+	println("Using ide version: ${ideVersion}")
+	version ideVersion
+	pluginName "friday-mario"
+  plugins = ["java"]
+	downloadSources true
+	sameSinceUntilBuild false
+	updateSinceUntilBuild false
+}
