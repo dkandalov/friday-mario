@@ -24,12 +24,11 @@ public class Sound {
 		this.name = name;
 	}
 
-	public Sound play() {
+	public void play() {
 		playSoundFromStream(new ByteArrayInputStream(bytes), 0);
-		return this;
 	}
 
-	public Sound playAndWait() {
+	public void playAndWait() {
 		playSoundFromStream(new ByteArrayInputStream(bytes), 0);
 
 		if (clip != null) {
@@ -38,19 +37,16 @@ public class Sound {
 			} catch (InterruptedException ignored) {
 			}
 		}
-		return this;
 	}
 
-	public Sound playInBackground() {
+	public void playInBackground() {
 		playSoundFromStream(new ByteArrayInputStream(bytes), Clip.LOOP_CONTINUOUSLY);
-		return this;
 	}
 
-	public Sound stop() {
+	public void stop() {
 		if (clip != null) {
 			clip.stop();
 		}
-		return this;
 	}
 
 	/**

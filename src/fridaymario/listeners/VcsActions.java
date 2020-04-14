@@ -13,8 +13,6 @@ import com.intellij.openapi.vcs.update.UpdatedFilesListener;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-
 public class VcsActions implements Restartable {
 	private final MessageBusConnection busConnection;
 	private final UpdatedFilesListener updatedListener;
@@ -24,11 +22,7 @@ public class VcsActions implements Restartable {
 	public VcsActions(Project project, final Listener listener) {
 		this.busConnection = project.getMessageBus().connect();
 
-		updatedListener = new UpdatedFilesListener() {
-			@Override public void consume(Set<String> files) {
-				listener.onVcsUpdate();
-			}
-		};
+		updatedListener = files -> listener.onVcsUpdate();
 
 		// see git4idea.push.GitPushResultNotification#create
 		// see org.zmlx.hg4idea.push.HgPusher#push

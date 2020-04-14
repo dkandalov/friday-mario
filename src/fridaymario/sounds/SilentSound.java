@@ -10,24 +10,20 @@ public class SilentSound extends Sound {
 		this.listener = listener;
 	}
 
-	@Override public Sound play() {
+	@Override public void play() {
 		listener.playing(soundName);
-		return this;
 	}
 
-	@Override public Sound playAndWait() {
+	@Override public void playAndWait() {
 		listener.playing(soundName);
-		return this;
 	}
 
-	@Override public Sound playInBackground() {
+	@Override public void playInBackground() {
 		listener.playing(soundName);
-		return this;
 	}
 
-	@Override public Sound stop() {
+	@Override public void stop() {
 		listener.stopped("stopped: " + soundName);
-		return this;
 	}
 
 	@Override public String toString() {

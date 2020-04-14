@@ -34,10 +34,10 @@ compileKotlin {
 	kotlinOptions {
 		apiVersion = "1.3"
 		languageVersion = "1.3"
-        // Compiler flag to allow building against pre-released versions of Kotlin
-        // because IJ EAP can be built using pre-released Kotlin but it's still worth doing to check API compatibility
-        freeCompilerArgs = ["-Xskip-metadata-version-check"] 
-    }
+		// Compiler flag to allow building against pre-released versions of Kotlin
+		// because IJ EAP can be built using pre-released Kotlin but it's still worth doing to check API compatibility
+		freeCompilerArgs = ["-Xskip-metadata-version-check"]
+	}
 }
 
 intellij {
@@ -50,7 +50,7 @@ intellij {
 	println("Using ide version: ${ideVersion}")
 	version ideVersion
 	pluginName "friday-mario"
-  plugins = ["java"]
+	plugins = ["java"]
 	downloadSources true
 	sameSinceUntilBuild false
 	updateSinceUntilBuild false

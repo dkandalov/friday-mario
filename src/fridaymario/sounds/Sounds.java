@@ -26,22 +26,16 @@ public class Sounds {
 	public final Sound zeldaSong;
 
 	public static Sounds create(final boolean actionSoundsEnabled, final boolean backgroundMusicEnabled) {
-		return new Sounds(new Function<Config, Sound>() {
-			@Override public Sound fun(Config config) {
-				boolean enabled = (config.isBackgroundMusic && backgroundMusicEnabled) || (!config.isBackgroundMusic && actionSoundsEnabled);
-				return enabled ?
-						new Sound(loadBytes(config.filePath), config.filePath) :
-						new SilentSound(loadBytes(config.filePath), config.filePath, SilentSound.Listener.none);
-			}
+		return new Sounds(config -> {
+			boolean enabled = (config.isBackgroundMusic && backgroundMusicEnabled) || (!config.isBackgroundMusic && actionSoundsEnabled);
+			return enabled ?
+					new Sound(loadBytes(config.filePath), config.filePath) :
+					new SilentSound(loadBytes(config.filePath), config.filePath, SilentSound.Listener.none);
 		});
 	}
 
 	public static Sounds createSilent(final SilentSound.Listener listener) {
-		return new Sounds(new Function<Config, Sound>() {
-			@Override public Sound fun(Config config) {
-				return new SilentSound(loadBytes(config.filePath), config.filePath, listener);
-			}
-		});
+		return new Sounds(config -> new SilentSound(loadBytes(config.filePath), config.filePath, listener));
 	}
 
 	private Sounds(Function<Config, Sound> load) {

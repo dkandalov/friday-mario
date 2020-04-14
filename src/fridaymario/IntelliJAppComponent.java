@@ -22,10 +22,10 @@ import java.util.Map;
 import static com.intellij.openapi.util.text.StringUtil.isEmptyOrSpaces;
 
 public class IntelliJAppComponent implements ApplicationComponent {
-	private final Map<Project, Refactoring> refactoringByProject = new HashMap<Project, Refactoring>();
-	private final Map<Project, VcsActions> vcsActionsByProject = new HashMap<Project, VcsActions>();
-	private final Map<Project, Compilation> compilationByProject = new HashMap<Project, Compilation>();
-	private final Map<Project, UnitTests> unitTestsByProject = new HashMap<Project, UnitTests>();
+	private final Map<Project, Refactoring> refactoringByProject = new HashMap<>();
+	private final Map<Project, VcsActions> vcsActionsByProject = new HashMap<>();
+	private final Map<Project, Compilation> compilationByProject = new HashMap<>();
+	private final Map<Project, UnitTests> unitTestsByProject = new HashMap<>();
 
 	private ActionListeningSoundPlayer soundPlayer;
 	private AllActions allActions;
@@ -89,7 +89,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 
 	private void initProjectListeners() {
 		projectManagerListener = new ProjectManagerAdapter() {
-			@Override public void projectOpened(Project project) {
+			@Override public void projectOpened(@NotNull Project project) {
 				if (!refactoringByProject.containsKey(project)) {
 					Refactoring refactoring = new Refactoring(project, soundPlayer);
 					refactoring.start();
@@ -115,7 +115,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 				}
 			}
 
-			@Override public void projectClosed(Project project) {
+			@Override public void projectClosed(@NotNull Project project) {
 				if (refactoringByProject.containsKey(project)) {
 					refactoringByProject.get(project).stop();
 					refactoringByProject.remove(project);
@@ -149,7 +149,6 @@ public class IntelliJAppComponent implements ApplicationComponent {
 		projectManager.removeProjectManagerListener(projectManagerListener);
 	}
 
-	@SuppressWarnings("ConstantConditions")
 	@NotNull @Override public String getComponentName() {
 		return this.getClass().getCanonicalName();
 	}

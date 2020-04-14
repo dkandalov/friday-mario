@@ -35,7 +35,7 @@
     </application-components>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceInterface="fridaymario.Settings" serviceImplementation="fridaymario.Settings"/>
+        <applicationService serviceImplementation="fridaymario.Settings"/>
         <checkinHandlerFactory implementation="fridaymario.listeners.VcsActions$MyCheckinHandlerFactory"/>
     </extensions>
 

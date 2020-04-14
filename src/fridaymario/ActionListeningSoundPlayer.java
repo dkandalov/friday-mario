@@ -110,7 +110,7 @@ public class ActionListeningSoundPlayer implements
 	}
 
 	private static Map<String, Sound> refactoringSounds(Sounds sounds) {
-		Map<String, Sound> result = new HashMap<String, Sound>();
+		Map<String, Sound> result = new HashMap<>();
 		result.put("refactoring.rename", sounds.coin);
 		result.put("refactoring.extractVariable", sounds.coin);
 		result.put("refactoring.extract.method", sounds.coin);
@@ -121,7 +121,7 @@ public class ActionListeningSoundPlayer implements
 	}
 
 	private static Map<String, Sound> editorSounds(Sounds sounds) {
-		Map<String, Sound> result = new HashMap<String, Sound>();
+		Map<String, Sound> result = new HashMap<>();
 
 		result.put("EditorUp", sounds.kick);
 		result.put("EditorDown", sounds.kick);
