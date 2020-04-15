@@ -2,7 +2,6 @@ package fridaymario.listeners;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.Notifications;
-import com.intellij.notification.NotificationsAdapter;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.CheckinProjectPanel;
 import com.intellij.openapi.vcs.changes.CommitContext;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class VcsActions implements Restartable {
 	private final MessageBusConnection busConnection;
 	private final UpdatedFilesListener updatedListener;
-	private final NotificationsAdapter pushListener;
+	private final Notifications pushListener;
 	private final Listener listener;
 
 	public VcsActions(Project project, final Listener listener) {
@@ -26,7 +25,7 @@ public class VcsActions implements Restartable {
 
 		// see git4idea.push.GitPushResultNotification#create
 		// see org.zmlx.hg4idea.push.HgPusher#push
-		pushListener = new NotificationsAdapter() {
+		pushListener = new Notifications() {
 			@Override public void notify(@NotNull Notification notification) {
 				if (!isVcsNotification(notification)) return;
 

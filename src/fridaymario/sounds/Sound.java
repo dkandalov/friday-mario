@@ -1,7 +1,6 @@
 package fridaymario.sounds;
 
 import com.intellij.openapi.diagnostic.Logger;
-import org.jetbrains.annotations.NotNull;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -59,13 +58,11 @@ public class Sound {
 			if (!stream.markSupported()) stream = new BufferedInputStream(stream);
 			clip.open(AudioSystem.getAudioInputStream(stream));
 
-			final AtomicReference<LineListener> lineListener = new AtomicReference<LineListener>();
-			LineListener listener = new LineListener() {
-				@Override public void update(@NotNull LineEvent event) {
-					if (event.getType() == LineEvent.Type.STOP) {
-						clip.close();
-						clip.removeLineListener(lineListener.get());
-					}
+			final AtomicReference<LineListener> lineListener = new AtomicReference<>();
+			LineListener listener = event -> {
+				if (event.getType() == LineEvent.Type.STOP) {
+					clip.close();
+					clip.removeLineListener(lineListener.get());
 				}
 			};
 			lineListener.set(listener);
@@ -74,11 +71,7 @@ public class Sound {
 			this.clip = clip;
 
 			// The wrapper thread is unnecessary, unless it blocks on the Clip finishing;
-			new Thread(new Runnable() {
-				@Override public void run() {
-					clip.loop(loopCount);
-				}
-			}).start();
+			new Thread(() -> clip.loop(loopCount)).start();
 		} catch (Exception e) {
 			logger.warn(e);
 		}

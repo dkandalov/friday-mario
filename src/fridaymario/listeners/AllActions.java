@@ -5,13 +5,16 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
+import org.jetbrains.annotations.NotNull;
 
 public class AllActions implements Restartable {
-	private final AnActionListener.Adapter actionListener;
+	private final AnActionListener actionListener;
 
 	public AllActions(final Listener listener) {
-		actionListener = new AnActionListener.Adapter() {
-			@Override public void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event) {
+		actionListener = new AnActionListener() {
+			@Override public void beforeActionPerformed(@NotNull AnAction action,
+			                                            @NotNull DataContext dataContext,
+			                                            @NotNull AnActionEvent event) {
 				listener.onAction(ActionManager.getInstance().getId(action));
 			}
 		};

@@ -4,11 +4,11 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationAdapter;
+import com.intellij.openapi.application.ApplicationListener;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.project.ProjectManagerAdapter;
 import com.intellij.openapi.project.ProjectManagerListener;
 import com.intellij.openapi.util.SystemInfo;
 import fridaymario.listeners.*;
@@ -31,7 +31,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private AllActions allActions;
 
 	private ProjectManagerListener projectManagerListener;
-	private ApplicationAdapter applicationListener;
+	private ApplicationListener applicationListener;
 	private boolean silentMode;
 	private boolean logUnmappedActions;
 
@@ -88,7 +88,7 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	}
 
 	private void initProjectListeners() {
-		projectManagerListener = new ProjectManagerAdapter() {
+		projectManagerListener = new ProjectManagerListener() {
 			@Override public void projectOpened(@NotNull Project project) {
 				if (!refactoringByProject.containsKey(project)) {
 					Refactoring refactoring = new Refactoring(project, soundPlayer);

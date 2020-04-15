@@ -1,19 +1,20 @@
 package fridaymario.listeners;
 
-import com.intellij.openapi.compiler.CompilationStatusAdapter;
+import com.intellij.openapi.compiler.CompilationStatusListener;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerManager;
 import com.intellij.openapi.project.Project;
+import org.jetbrains.annotations.NotNull;
 
 public class Compilation implements Restartable {
 	private final Project project;
-	private final CompilationStatusAdapter compilationListener;
+	private final CompilationStatusListener compilationListener;
 
 	public Compilation(Project project, final Listener listener) {
 		this.project = project;
-		this.compilationListener = new CompilationStatusAdapter() {
+		this.compilationListener = new CompilationStatusListener() {
 			@Override
-			public void compilationFinished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
+			public void compilationFinished(boolean aborted, int errors, int warnings, @NotNull CompileContext compileContext) {
 				if (errors > 0) {
 					listener.compilationFailed();
 				} else {
