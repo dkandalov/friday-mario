@@ -1,12 +1,13 @@
 package fridaymario;
 
+import com.intellij.ide.AppLifecycleListener;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationAdapter;
 import com.intellij.openapi.application.ApplicationListener;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerListener;
@@ -17,11 +18,12 @@ import fridaymario.sounds.Sounds;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static com.intellij.openapi.util.text.StringUtil.isEmptyOrSpaces;
+import static com.intellij.openapi.util.text.StringUtilRt.isEmptyOrSpaces;
 
-public class IntelliJAppComponent implements ApplicationComponent {
+public class IntelliJAppComponent {
 	private final Map<Project, Refactoring> refactoringByProject = new HashMap<>();
 	private final Map<Project, VcsActions> vcsActionsByProject = new HashMap<>();
 	private final Map<Project, Compilation> compilationByProject = new HashMap<>();
@@ -35,15 +37,19 @@ public class IntelliJAppComponent implements ApplicationComponent {
 	private boolean silentMode;
 	private boolean logUnmappedActions;
 
+	public IntelliJAppComponent() {
+		Application application = ApplicationManager.getApplication();
+		application.getMessageBus().connect().subscribe(AppLifecycleListener.TOPIC, new AppLifecycleListener() {
+			@Override public void appFrameCreated(@NotNull List<String> commandLineArgs) {
+				if (!Settings.getInstance().isPluginEnabled()) return;
+				init();
+			}
 
-	@Override public void initComponent() {
-		if (!Settings.getInstance().isPluginEnabled()) return;
-		init();
-	}
-
-	@Override public void disposeComponent() {
-		if (!Settings.getInstance().isPluginEnabled()) return;
-		dispose(true);
+			@Override public void appWillBeClosed(boolean isRestart) {
+				if (!Settings.getInstance().isPluginEnabled()) return;
+				dispose(true);
+			}
+		});
 	}
 
 	public void init() {
@@ -147,10 +153,6 @@ public class IntelliJAppComponent implements ApplicationComponent {
 			projectManagerListener.projectClosed(project);
 		}
 		projectManager.removeProjectManagerListener(projectManagerListener);
-	}
-
-	@NotNull @Override public String getComponentName() {
-		return this.getClass().getCanonicalName();
 	}
 
 	public IntelliJAppComponent silentMode() {
