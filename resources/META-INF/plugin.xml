@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>FridayMario</id>
     <name>FridayMario</name>
-    <version>0.1.5 easter beta</version>
+    <version>0.1.6 beta</version>
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/friday-mario">Dmitry Kandalov</vendor>
     <description><![CDATA[
         The first plugin in the world to gamify development in IntelliJ IDEs.<br/>
@@ -11,7 +11,7 @@
         ]]></description>
 
     <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="201.5985" />
+    <idea-version since-build="201.5985"/>
 
     <!-- see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
