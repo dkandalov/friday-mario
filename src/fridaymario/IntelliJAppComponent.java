@@ -52,7 +52,7 @@ public class IntelliJAppComponent {
 		});
 	}
 
-	public void init() {
+	private void init() {
 		soundPlayer = new ActionListeningSoundPlayer(createSounds(), createLoggingListener()).init();
 		initApplicationListeners();
 		initProjectListeners();
@@ -66,7 +66,7 @@ public class IntelliJAppComponent {
 		}
 	}
 
-	public void dispose(boolean isIdeShutdown) {
+	private void dispose(boolean isIdeShutdown) {
 		if (soundPlayer == null) return;
 
 		disposeProjectListeners();
