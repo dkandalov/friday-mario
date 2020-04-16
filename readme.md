@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dkandalov/friday-mario.svg?branch=master)](https://travis-ci.org/dkandalov/friday-mario)
+
 ### What is this?
 This is a plugin which plays music and sounds from [Mario](http://en.wikipedia.org/wiki/Mario) on various IDE actions.
 See [this youtube video](http://youtu.be/tlrl25lwWDs).
