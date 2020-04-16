@@ -109,7 +109,7 @@ public class IntelliJAppComponent {
 				}
 
 				if (!compilationByProject.containsKey(project) && isIdeWithCompilation()) {
-					Compilation compilation = new Compilation(project, soundPlayer);
+					Compilation compilation = Compilation.factory.create(project, soundPlayer);
 					compilation.start();
 					compilationByProject.put(project, compilation);
 				}

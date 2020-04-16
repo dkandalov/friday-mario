@@ -4,10 +4,9 @@
     <version>0.1.6 beta</version>
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/friday-mario">Dmitry Kandalov</vendor>
     <description><![CDATA[
-        The first plugin in the world to gamify development in IntelliJ IDEs.<br/>
-        Basically, it plays sounds from Mario video game on various actions.<br/>
-        See <a href="http://youtu.be/tlrl25lwWDs">youtube video</a>.<br/><br/>
-        To start/stop use "Main menu -> Tools -> Start/Stop Friday Mario".
+        This is a plugin which plays music and sounds from Mario video game on various IDE actions.
+        See <a href="http://youtu.be/tlrl25lwWDs">this youtube video</a>.<br/><br/>
+        To enable/disable music or sounds use settings in "Main menu -> Tools -> Friday Mario".
         ]]></description>
 
     <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
@@ -16,7 +15,7 @@
     <!-- see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
 
-    <extensions defaultExtensionNs="com.intellij"/>
+    <depends optional="true" config-file="modules.java.xml">com.intellij.modules.java</depends>
 
     <actions>
         <group id="FridayMario.Menu" text="Friday Mario" popup="true">
