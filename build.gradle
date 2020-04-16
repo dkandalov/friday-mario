@@ -42,8 +42,7 @@ compileKotlin {
 
 intellij {
 	// To find available IDE versions see https://www.jetbrains.com/intellij-repository/releases
-	def ideVersion = System.getenv().getOrDefault(
-			"IDEA_VERSION_FOR_PLUGIN",
+	def ideVersion = System.getenv().getOrDefault("IJ_VERSION",
 			"201.6668.113"
 //			"LATEST-EAP-SNAPSHOT"
 	)
