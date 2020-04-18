@@ -27,11 +27,9 @@
         </group>
     </actions>
 
-    <application-components>
-        <component>
-            <implementation-class>fridaymario.IntelliJAppComponent</implementation-class>
-        </component>
-    </application-components>
+    <applicationListeners>
+        <listener class="fridaymario.IntelliJAppComponent" topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="fridaymario.Settings"/>
