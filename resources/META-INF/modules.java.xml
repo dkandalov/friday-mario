@@ -1,5 +1,7 @@
 <idea-plugin>
-    <applicationListeners>
-        <listener class="fridaymario.listeners.InitJavaCompilation" topic="com.intellij.ide.AppLifecycleListener"/>
-    </applicationListeners>
+    <application-components>
+        <component>
+            <implementation-class>fridaymario.listeners.InitJavaCompilation</implementation-class>
+        </component>
+    </application-components>
 </idea-plugin>
