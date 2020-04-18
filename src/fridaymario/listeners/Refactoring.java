@@ -1,5 +1,6 @@
 package fridaymario.listeners;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.refactoring.listeners.RefactoringEventData;
 import com.intellij.refactoring.listeners.RefactoringEventListener;
@@ -16,7 +17,7 @@ public class Refactoring implements Restartable {
 		this.busConnection = project.getMessageBus().connect();
 	}
 
-	@Override public void start() {
+	@Override public void start(Disposable disposable) {
 		busConnection.subscribe(RefactoringEventListener.REFACTORING_EVENT_TOPIC, new RefactoringEventListener() {
 			@Override public void refactoringDone(@NotNull String refactoringId, @Nullable RefactoringEventData afterData) {
 				listener.onRefactoring(refactoringId);

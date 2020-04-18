@@ -1,5 +1,6 @@
 package fridaymario.listeners;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -20,7 +21,7 @@ public class AllActions implements Restartable {
 		};
 	}
 
-	@Override public void start() {
+	@Override public void start(Disposable disposable) {
 		ActionManager.getInstance().addAnActionListener(actionListener);
 	}
 

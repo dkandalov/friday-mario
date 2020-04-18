@@ -2,6 +2,7 @@ package fridaymario.listeners;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.CheckinProjectPanel;
 import com.intellij.openapi.vcs.changes.CommitContext;
@@ -39,7 +40,7 @@ public class VcsActions implements Restartable {
 		this.listener = listener;
 	}
 
-	@Override public void start() {
+	@Override public void start(Disposable disposable) {
 		// using bus to listen to vcs updates because normal listener calls it twice
 		// (see also https://gist.github.com/dkandalov/8840509)
 		busConnection.subscribe(UpdatedFilesListener.UPDATED_FILES, updatedListener);

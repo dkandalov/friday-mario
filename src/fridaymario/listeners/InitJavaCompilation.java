@@ -1,6 +1,7 @@
 package fridaymario.listeners;
 
 import com.intellij.ide.AppLifecycleListener;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.compiler.CompilationStatusListener;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerManager;
@@ -22,7 +23,7 @@ public class InitJavaCompilation implements AppLifecycleListener {
 				}
 			};
 			return new Compilation() {
-				@Override public void start() {
+				@Override public void start(Disposable disposable) {
 					CompilerManager.getInstance(project).addCompilationStatusListener(compilationListener);
 				}
 

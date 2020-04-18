@@ -40,7 +40,7 @@ public class ActionListeningSoundPlayer implements
 		}
 	}
 
-	public void stopAndWait() {
+	public void stopAndPlayGameOver() {
 		if (stopped) return;
 		stopped = true;
 		sounds.marioSong.stop();

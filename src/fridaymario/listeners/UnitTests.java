@@ -4,6 +4,7 @@ import com.intellij.execution.testframework.TestsUIUtil;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ public class UnitTests implements Restartable {
 		this.busConnection = project.getMessageBus().connect();
 	}
 
-	@Override public void start() {
+	@Override public void start(Disposable disposable) {
 		busConnection.subscribe(Notifications.TOPIC, new Notifications() {
 			@Override public void notify(@NotNull Notification notification) {
 				if (notification.getGroupId().equals(TestsUIUtil.NOTIFICATION_GROUP.getDisplayId())) {

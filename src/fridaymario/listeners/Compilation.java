@@ -1,9 +1,10 @@
 package fridaymario.listeners;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 
 public abstract class Compilation implements Restartable {
-	@Override public void start() {
+	@Override public void start(Disposable disposable) {
 	}
 
 	@Override public void stop() {

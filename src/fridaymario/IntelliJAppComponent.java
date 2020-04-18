@@ -5,8 +5,6 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationAdapter;
-import com.intellij.openapi.application.ApplicationListener;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -33,7 +31,6 @@ public class IntelliJAppComponent {
 	private AllActions allActions;
 
 	private ProjectManagerListener projectManagerListener;
-	private ApplicationListener applicationListener;
 	private boolean silentMode;
 	private boolean logUnmappedActions;
 
@@ -47,6 +44,7 @@ public class IntelliJAppComponent {
 
 			@Override public void appWillBeClosed(boolean isRestart) {
 				if (!Settings.getInstance().isPluginEnabled()) return;
+				soundPlayer.stopAndPlayGameOver();
 				dispose(true);
 			}
 		});
@@ -78,18 +76,10 @@ public class IntelliJAppComponent {
 
 	private void initApplicationListeners() {
 		allActions = new AllActions(soundPlayer);
-		allActions.start();
-
-		applicationListener = new ApplicationAdapter() {
-			@Override public void applicationExiting() {
-				soundPlayer.stopAndWait();
-			}
-		};
-		ApplicationManager.getApplication().addApplicationListener(applicationListener);
+		allActions.start(ApplicationManager.getApplication());
 	}
 
 	private void disposeApplicationListeners() {
-		ApplicationManager.getApplication().removeApplicationListener(applicationListener);
 		allActions.stop();
 	}
 
@@ -98,25 +88,25 @@ public class IntelliJAppComponent {
 			@Override public void projectOpened(@NotNull Project project) {
 				if (!refactoringByProject.containsKey(project)) {
 					Refactoring refactoring = new Refactoring(project, soundPlayer);
-					refactoring.start();
+					refactoring.start(project);
 					refactoringByProject.put(project, refactoring);
 				}
 
 				if (!vcsActionsByProject.containsKey(project)) {
 					VcsActions vcsActions = new VcsActions(project, soundPlayer);
-					vcsActions.start();
+					vcsActions.start(project);
 					vcsActionsByProject.put(project, vcsActions);
 				}
 
 				if (!compilationByProject.containsKey(project) && isIdeWithCompilation()) {
 					Compilation compilation = Compilation.factory.create(project, soundPlayer);
-					compilation.start();
+					compilation.start(project);
 					compilationByProject.put(project, compilation);
 				}
 
 				if (!unitTestsByProject.containsKey(project)) {
 					UnitTests unitTests = new UnitTests(project, soundPlayer);
-					unitTests.start();
+					unitTests.start(project);
 					unitTestsByProject.put(project, unitTests);
 				}
 			}
