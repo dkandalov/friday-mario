@@ -9,12 +9,11 @@
         To enable/disable music or sounds use settings in "Main menu -> Tools -> Friday Mario".
         ]]></description>
 
-    <!-- see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <!-- see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
     <idea-version since-build="201.5985"/>
 
-    <!-- see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
-    <depends>com.intellij.modules.lang</depends>
-
+    <!-- see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
     <depends optional="true" config-file="modules.java.xml">com.intellij.modules.java</depends>
 
     <actions>
