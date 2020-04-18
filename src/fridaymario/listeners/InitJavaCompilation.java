@@ -24,11 +24,7 @@ public class InitJavaCompilation implements AppLifecycleListener {
 			};
 			return new Compilation() {
 				@Override public void start(Disposable disposable) {
-					CompilerManager.getInstance(project).addCompilationStatusListener(compilationListener);
-				}
-
-				@Override public void stop() {
-					CompilerManager.getInstance(project).removeCompilationStatusListener(compilationListener);
+					CompilerManager.getInstance(project).addCompilationStatusListener(compilationListener, disposable);
 				}
 			};
 		};

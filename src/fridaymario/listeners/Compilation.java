@@ -7,9 +7,6 @@ public abstract class Compilation implements Restartable {
 	@Override public void start(Disposable disposable) {
 	}
 
-	@Override public void stop() {
-	}
-
 	public static Factory factory = (project, listener) -> new Compilation() {
 	};
 

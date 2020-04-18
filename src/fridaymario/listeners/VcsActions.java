@@ -4,23 +4,24 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vcs.CheckinProjectPanel;
 import com.intellij.openapi.vcs.changes.CommitContext;
 import com.intellij.openapi.vcs.checkin.CheckinHandler;
 import com.intellij.openapi.vcs.checkin.CheckinHandlerFactory;
 import com.intellij.openapi.vcs.impl.CheckinHandlersManager;
 import com.intellij.openapi.vcs.update.UpdatedFilesListener;
-import com.intellij.util.messages.MessageBusConnection;
+import com.intellij.util.messages.MessageBus;
 import org.jetbrains.annotations.NotNull;
 
 public class VcsActions implements Restartable {
-	private final MessageBusConnection busConnection;
 	private final UpdatedFilesListener updatedListener;
 	private final Notifications pushListener;
 	private final Listener listener;
+	private final MessageBus messageBus;
 
 	public VcsActions(Project project, final Listener listener) {
-		this.busConnection = project.getMessageBus().connect();
+		this.messageBus = project.getMessageBus();
 
 		updatedListener = files -> listener.onVcsUpdate();
 
@@ -29,7 +30,6 @@ public class VcsActions implements Restartable {
 		pushListener = new Notifications() {
 			@Override public void notify(@NotNull Notification notification) {
 				if (!isVcsNotification(notification)) return;
-
 				if (matchTitleOf(notification, "Push successful")) {
 					listener.onVcsPush();
 				} else if (matchTitleOf(notification, "Push failed", "Push partially failed", "Push rejected", "Push partially rejected")) {
@@ -43,14 +43,10 @@ public class VcsActions implements Restartable {
 	@Override public void start(Disposable disposable) {
 		// using bus to listen to vcs updates because normal listener calls it twice
 		// (see also https://gist.github.com/dkandalov/8840509)
-		busConnection.subscribe(UpdatedFilesListener.UPDATED_FILES, updatedListener);
-		busConnection.subscribe(Notifications.TOPIC, pushListener);
+		messageBus.connect(disposable).subscribe(UpdatedFilesListener.UPDATED_FILES, updatedListener);
+		messageBus.connect(disposable).subscribe(Notifications.TOPIC, pushListener);
 		MyCheckinHandlerFactory.listener = listener;
-	}
-
-	@Override public void stop() {
-		busConnection.disconnect();
-		MyCheckinHandlerFactory.listener = null;
+		Disposer.register(disposable, () -> MyCheckinHandlerFactory.listener = null);
 	}
 
 	private static boolean isVcsNotification(Notification notification) {

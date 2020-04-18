@@ -22,11 +22,7 @@ public class AllActions implements Restartable {
 	}
 
 	@Override public void start(Disposable disposable) {
-		ActionManager.getInstance().addAnActionListener(actionListener);
-	}
-
-	@Override public void stop() {
-		ActionManager.getInstance().removeAnActionListener(actionListener);
+		ActionManager.getInstance().addAnActionListener(actionListener, disposable);
 	}
 
 	public interface Listener {
