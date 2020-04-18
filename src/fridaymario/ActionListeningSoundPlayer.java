@@ -30,21 +30,15 @@ public class ActionListeningSoundPlayer implements
 		return this;
 	}
 
-	public void stop(boolean isIdeShutdown) {
+	public void stop() {
 		if (stopped) return;
 		stopped = true;
 		sounds.marioSong.stop();
 		sounds.zeldaSong.stop();
-		if (isIdeShutdown) {
-			sounds.gameover.play();
-		}
 	}
 
 	public void stopAndPlayGameOver() {
-		if (stopped) return;
-		stopped = true;
-		sounds.marioSong.stop();
-		sounds.zeldaSong.stop();
+		stop();
 		sounds.gameover.playAndWait();
 	}
 

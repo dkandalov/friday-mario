@@ -28,22 +28,27 @@ public class IntelliJAppComponent implements AppLifecycleListener {
 
 	@Override public void appFrameCreated(@NotNull List<String> commandLineArgs) {
 		if (!Settings.getInstance().isPluginEnabled()) return;
-		init();
+		disposable = init();
 	}
 
 	@Override public void appWillBeClosed(boolean isRestart) {
 		if (!Settings.getInstance().isPluginEnabled()) return;
-		soundPlayer.stopAndPlayGameOver();
-		dispose(true);
+		if (soundPlayer != null) soundPlayer.stopAndPlayGameOver();
 	}
 
-	private void init() {
-		disposable = Disposer.newDisposable("FridayMario");
+	private Disposable init() {
+		Disposable disposable = Disposer.newDisposable("FridayMario");
 		Disposer.register(ApplicationManager.getApplication(), disposable);
 
 		soundPlayer = new ActionListeningSoundPlayer(createSounds(), createLoggingListener()).init();
-		initApplicationListeners(disposable);
-		initProjectListeners(disposable);
+		Disposer.register(disposable, () -> {
+			if (soundPlayer != null) {
+				soundPlayer.stop();
+				soundPlayer = null;
+			}
+		});
+		initApplicationListeners(soundPlayer, disposable);
+		initProjectListeners(soundPlayer, disposable);
 
 		// see https://github.com/dkandalov/friday-mario/issues/3#issuecomment-160421286
 		// and http://keithp.com/blogs/Java-Sound-on-Linux/
@@ -52,20 +57,14 @@ public class IntelliJAppComponent implements AppLifecycleListener {
 			show("JDK used by your IDE can lock up or fail to play sounds.<br/>" +
 				 "Please see <a href=\"http://keithp.com/blogs/Java-Sound-on-Linux/\">http://keithp.com/blogs/Java-Sound-on-Linux</a> to fix it.");
 		}
+		return disposable;
 	}
 
-	private void dispose(boolean isIdeShutdown) {
-		if (soundPlayer == null) return;
-		disposable.dispose();
-		soundPlayer.stop(isIdeShutdown);
-		soundPlayer = null;
-	}
-
-	private void initApplicationListeners(Disposable disposable) {
+	private void initApplicationListeners(ActionListeningSoundPlayer soundPlayer, Disposable disposable) {
 		new AllActions(soundPlayer).start(disposable);
 	}
 
-	private void initProjectListeners(Disposable disposable) {
+	private void initProjectListeners(ActionListeningSoundPlayer soundPlayer, Disposable disposable) {
 		ProjectManagerListener projectManagerListener = new ProjectManagerListener() {
 			@Override public void projectOpened(@NotNull Project project) {
 				new Refactoring(project, soundPlayer).start(project);
@@ -144,9 +143,7 @@ public class IntelliJAppComponent implements AppLifecycleListener {
 	}
 
 	private void update() {
-		dispose(false);
-		if (Settings.getInstance().isPluginEnabled()) {
-			init();
-		}
+		if (disposable != null) disposable.dispose();
+		if (Settings.getInstance().isPluginEnabled()) disposable = init();
 	}
 }
