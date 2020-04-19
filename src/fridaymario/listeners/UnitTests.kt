@@ -1,41 +1,27 @@
-package fridaymario.listeners;
+package fridaymario.listeners
 
-import com.intellij.execution.testframework.TestsUIUtil;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.messages.MessageBus;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.execution.testframework.TestsUIUtil
+import com.intellij.notification.Notification
+import com.intellij.notification.NotificationType
+import com.intellij.notification.Notifications
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.project.Project
 
-public class UnitTests implements Restartable {
-	private final Listener listener;
-	private final MessageBus messageBus;
+class UnitTests(private val project: Project, private val listener: Listener): Restartable {
+    override fun start(disposable: Disposable) {
+        project.messageBus.connect(disposable).subscribe(Notifications.TOPIC, object: Notifications {
+            override fun notify(notification: Notification) {
+                if (notification.groupId == TestsUIUtil.NOTIFICATION_GROUP.displayId) {
+                    val testsFailed = notification.type == NotificationType.ERROR
+                    if (testsFailed) listener.onUnitTestFailed()
+                    else listener.onUnitTestSucceeded()
+                }
+            }
+        })
+    }
 
-	public UnitTests(Project project, Listener listener) {
-		this.listener = listener;
-		this.messageBus = project.getMessageBus();
-	}
-
-	@Override public void start(Disposable disposable) {
-		messageBus.connect(disposable).subscribe(Notifications.TOPIC, new Notifications() {
-			@Override public void notify(@NotNull Notification notification) {
-				if (notification.getGroupId().equals(TestsUIUtil.NOTIFICATION_GROUP.getDisplayId())) {
-					boolean testsFailed = (notification.getType() == NotificationType.ERROR);
-					if (testsFailed) {
-						listener.onUnitTestFailed();
-					} else {
-						listener.onUnitTestSucceeded();
-					}
-				}
-			}
-		});
-	}
-
-	public interface Listener {
-		void onUnitTestSucceeded();
-
-		void onUnitTestFailed();
-	}
+    interface Listener {
+        fun onUnitTestSucceeded()
+        fun onUnitTestFailed()
+    }
 }
