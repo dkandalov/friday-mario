@@ -1,9 +1,6 @@
 package fridaymario
 
 import com.intellij.ide.AppLifecycleListener
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
@@ -11,12 +8,12 @@ import com.intellij.openapi.project.ProjectManager
 import com.intellij.openapi.project.ProjectManagerListener
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.SystemInfo
-import com.intellij.openapi.util.text.StringUtilRt
 import fridaymario.listeners.*
 import fridaymario.sounds.SilentSound
 import fridaymario.sounds.Sounds
 import fridaymario.util.newDisposable
 import fridaymario.util.registerParent
+import fridaymario.util.show
 import fridaymario.util.whenDisposed
 
 class IntelliJAppComponent: AppLifecycleListener {
@@ -82,7 +79,8 @@ class IntelliJAppComponent: AppLifecycleListener {
         for (project in ProjectManager.getInstance().openProjects) {
             projectManagerListener.projectOpened(project)
         }
-        ProjectManager.getInstance().addProjectManagerListener(projectManagerListener, parentDisposable)
+        ApplicationManager.getApplication().messageBus.connect(parentDisposable)
+            .subscribe(ProjectManager.TOPIC, projectManagerListener)
     }
 
     fun silentMode(): IntelliJAppComponent {
@@ -136,12 +134,5 @@ class IntelliJAppComponent: AppLifecycleListener {
     companion object {
         @JvmField
         var instance: IntelliJAppComponent? = null
-
-        private fun show(message: String) {
-            if (StringUtilRt.isEmptyOrSpaces(message)) return
-            val noTitle = ""
-            val notification = Notification("Friday Mario", noTitle, message, NotificationType.INFORMATION)
-            ApplicationManager.getApplication().messageBus.syncPublisher(Notifications.TOPIC).notify(notification)
-        }
     }
 }
