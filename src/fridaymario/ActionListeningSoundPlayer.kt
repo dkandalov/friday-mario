@@ -3,13 +3,12 @@ package fridaymario
 import fridaymario.listeners.*
 import fridaymario.sounds.Sound
 import fridaymario.sounds.Sounds
-import java.util.*
 
 class ActionListeningSoundPlayer(private val sounds: Sounds, private val listener: Listener):
     Compilation.Listener, Refactoring.Listener, UnitTests.Listener, VcsActions.Listener, AllActions.Listener {
 
-    private val soundsByAction: Map<String?, Sound>
-    private val soundsByRefactoring: Map<String?, Sound>
+    private val soundsByAction: Map<String, Sound> = editorSounds(sounds)
+    private val soundsByRefactoring: Map<String, Sound> = refactoringSounds(sounds)
     private var compilationFailed = false
     private var stopped = false
 
@@ -67,29 +66,17 @@ class ActionListeningSoundPlayer(private val sounds: Sounds, private val listene
         }
     }
 
-    override fun onUnitTestSucceeded() {
-        sounds.oneUp.play()
-    }
+    override fun onUnitTestSucceeded() = sounds.oneUp.play()
 
-    override fun onUnitTestFailed() {
-        sounds.oneDown.play()
-    }
+    override fun onUnitTestFailed() = sounds.oneDown.play()
 
-    override fun onVcsCommit() {
-        sounds.powerupAppears.play()
-    }
+    override fun onVcsCommit() = sounds.powerupAppears.play()
 
-    override fun onVcsUpdate() {
-        sounds.powerup.play()
-    }
+    override fun onVcsUpdate() = sounds.powerup.play()
 
-    override fun onVcsPush() {
-        sounds.powerup.play()
-    }
+    override fun onVcsPush() = sounds.powerup.play()
 
-    override fun onVcsPushFailed() {
-        sounds.oneDown.play()
-    }
+    override fun onVcsPushFailed() = sounds.oneDown.play()
 
     interface Listener {
         fun unmappedAction(actionId: String)
@@ -97,144 +84,143 @@ class ActionListeningSoundPlayer(private val sounds: Sounds, private val listene
     }
 
     companion object {
-        private fun refactoringSounds(sounds: Sounds): Map<String?, Sound> {
-            val result: MutableMap<String?, Sound> = HashMap()
-            result["refactoring.rename"] = sounds.coin
-            result["refactoring.extractVariable"] = sounds.coin
-            result["refactoring.extract.method"] = sounds.coin
-            result["refactoring.inline.local.variable"] = sounds.coin
-            result["refactoring.safeDelete"] = sounds.coin
-            result["refactoring.introduceParameter"] = sounds.coin
-            return result
-        }
+        private fun refactoringSounds(sounds: Sounds) = mapOf(
+            "refactoring.rename" to sounds.coin,
+            "refactoring.extractVariable" to sounds.coin,
+            "refactoring.extract.method" to sounds.coin,
+            "refactoring.inline.local.variable" to sounds.coin,
+            "refactoring.safeDelete" to sounds.coin,
+            "refactoring.introduceParameter" to sounds.coin
+        )
 
-        private fun editorSounds(sounds: Sounds): Map<String?, Sound> {
-            val result: MutableMap<String?, Sound> = HashMap()
-            result["EditorUp"] = sounds.kick
-            result["EditorDown"] = sounds.kick
-            result["EditorUpWithSelection"] = sounds.kick
-            result["EditorDownWithSelection"] = sounds.kick
-            result["EditorPreviousWord"] = sounds.kick
-            result["EditorNextWord"] = sounds.kick
-            result["EditorPreviousWordWithSelection"] = sounds.kick
-            result["EditorNextWordWithSelection"] = sounds.kick
-            result["EditorSelectWord"] = sounds.kick
-            result["EditorUnSelectWord"] = sounds.kick
-            result["\$SelectAll"] = sounds.kick
-            result["EditorLineStart"] = sounds.jumpSmall
-            result["EditorLineEnd"] = sounds.jumpSmall
-            result["EditorLineStartWithSelection"] = sounds.jumpSmall
-            result["EditorLineEndWithSelection"] = sounds.jumpSmall
-            result["EditorPageUp"] = sounds.jumpSuper
-            result["EditorPageDown"] = sounds.jumpSuper
-            result["GotoPreviousError"] = sounds.jumpSuper
-            result["GotoNextError"] = sounds.jumpSuper
-            result["FindNext"] = sounds.jumpSuper
-            result["FindPrevious"] = sounds.jumpSuper
-            result["MethodUp"] = sounds.jumpSuper
-            result["MethodDown"] = sounds.jumpSuper
-            result["Back"] = sounds.jumpSuper
-            result["Forward"] = sounds.jumpSuper
-            result["GotoSuperMethod"] = sounds.jumpSuper
-            result["GotoDeclaration"] = sounds.jumpSuper
-            result["GotoImplementation"] = sounds.jumpSuper
-            result["EditSource"] = sounds.jumpSuper // this is F4 navigate action
-            result["EditorPaste"] = sounds.fireball
-            result["ReformatCode"] = sounds.fireball
-            result["EditorToggleCase"] = sounds.fireball
-            result["ExpandLiveTemplateByTab"] = sounds.fireball
-            result["EditorCompleteStatement"] = sounds.fireball
-            result["EditorChooseLookupItem"] = sounds.fireball
-            result["EditorChooseLookupItemReplace"] = sounds.fireball
-            result["HippieCompletion"] = sounds.fireball
-            result["HippieBackwardCompletion"] = sounds.fireball
-            result["MoveStatementUp"] = sounds.fireball
-            result["MoveStatementDown"] = sounds.fireball
-            result["EditorStartNewLineBefore"] = sounds.fireball
-            result["EditorStartNewLine"] = sounds.fireball
-            result["EditorDuplicate"] = sounds.fireball
-            result["EditorBackSpace"] = sounds.breakblock
-            result["EditorJoinLines"] = sounds.breakblock
-            result["EditorDelete"] = sounds.breakblock
-            result["EditorDeleteLine"] = sounds.breakblock
-            result["EditorDeleteToWordStart"] = sounds.breakblock
-            result["EditorDeleteToWordEnd"] = sounds.breakblock
-            result["CommentByLineComment"] = sounds.breakblock
-            result["CommentByBlockComment"] = sounds.breakblock
-            result["ToggleBookmark"] = sounds.stomp
-            result["ToggleBookmarkWithMnemonic"] = sounds.stomp
-            result["ToggleLineBreakpoint"] = sounds.stomp
-            result["HighlightUsagesInFile"] = sounds.stomp
-            result["NextTab"] = sounds.jumpSuper
-            result["PreviousTab"] = sounds.jumpSuper
-            result["CloseEditor"] = sounds.fireworks
-            result["CloseAllEditorsButActive"] = sounds.fireworks
-            result["\$Undo"] = sounds.fireworks
-            result["\$Redo"] = sounds.fireworks
-            result["ExpandAllRegions"] = sounds.stomp
-            result["CollapseAllRegions"] = sounds.stomp
-            result["ExpandRegion"] = sounds.stomp
-            result["CollapseRegion"] = sounds.stomp
-            result["CollapseSelection"] = sounds.stomp
-            result["PasteMultiple"] = sounds.stomp
-            result["FileStructurePopup"] = sounds.stomp
-            result["ShowBookmarks"] = sounds.stomp
-            result["ViewBreakpoints"] = sounds.stomp
-            result["QuickJavaDoc"] = sounds.stomp
-            result["ParameterInfo"] = sounds.stomp
-            result["ShowIntentionActions"] = sounds.stomp
-            result["EditorToggleColumnMode"] = sounds.stomp
-            result["SurroundWith"] = sounds.stomp
-            result["InsertLiveTemplate"] = sounds.stomp
-            result["SurroundWithLiveTemplate"] = sounds.stomp
-            result["NewElement"] = sounds.stomp
-            result["Generate"] = sounds.stomp
-            result["OverrideMethods"] = sounds.stomp
-            result["ImplementMethods"] = sounds.stomp
-            result["ChangeSignature"] = sounds.stomp
-            result["ExtractMethod"] = sounds.stomp
-            result["Inline"] = sounds.stomp
-            result["Move"] = sounds.stomp
-            result["Find"] = sounds.stomp
-            result["FindInPath"] = sounds.stomp
-            result["Replace"] = sounds.stomp
-            result["ReplaceInPath"] = sounds.stomp
-            result["ChangesView.Diff"] = sounds.stomp
-            result["CompareClipboardWithSelection"] = sounds.stomp
-            result["Switcher"] = sounds.stomp
-            result["RecentFiles"] = sounds.stomp
-            result["GotoClass"] = sounds.stomp
-            result["GotoFile"] = sounds.stomp
-            result["GotoSymbol"] = sounds.stomp
-            result["SearchEverywhere"] = sounds.stomp
-            result["GotoLine"] = sounds.stomp
-            result["ShowUsages"] = sounds.stomp
-            result["FindUsages"] = sounds.stomp
-            result["ShowNavBar"] = sounds.stomp
-            result["RunInspection"] = sounds.stomp
-            result["SelectIn"] = sounds.stomp
-            result["QuickChangeScheme"] = sounds.stomp
-            result["ActivateProjectToolWindow"] = sounds.stomp
-            result["ActivateStructureToolWindow"] = sounds.stomp
-            result["ActivateFindToolWindow"] = sounds.stomp
-            result["ActivateChangesToolWindow"] = sounds.stomp
-            result["ActivateRunToolWindow"] = sounds.stomp
-            result["ActivateDebugToolWindow"] = sounds.stomp
-            result["ActivateMessagesToolWindow"] = sounds.stomp
-            result["ActivateFavoritesToolWindow"] = sounds.stomp
-            result["AddToFavoritesPopup"] = sounds.stomp
-            result["TypeHierarchy"] = sounds.stomp
-            result["HideActiveWindow"] = sounds.stomp
-            result["Vcs.QuickListPopupAction"] = sounds.stomp
-            result["Vcs.ShowMessageHistory"] = sounds.stomp
-            result["ChooseRunConfiguration"] = sounds.stomp
-            result["ChooseDebugConfiguration"] = sounds.stomp
-            return result
-        }
-    }
+        private fun editorSounds(sounds: Sounds): Map<String, Sound> {
+            return mapOf(
+                "EditorUp" to sounds.kick,
+                "EditorDown" to sounds.kick,
+                "EditorUpWithSelection" to sounds.kick,
+                "EditorDownWithSelection" to sounds.kick,
+                "EditorPreviousWord" to sounds.kick,
+                "EditorNextWord" to sounds.kick,
+                "EditorPreviousWordWithSelection" to sounds.kick,
+                "EditorNextWordWithSelection" to sounds.kick,
+                "EditorSelectWord" to sounds.kick,
+                "EditorUnSelectWord" to sounds.kick,
+                "\$SelectAll" to sounds.kick,
+                "EditorLineStart" to sounds.jumpSmall,
+                "EditorLineEnd" to sounds.jumpSmall,
+                "EditorLineStartWithSelection" to sounds.jumpSmall,
+                "EditorLineEndWithSelection" to sounds.jumpSmall,
+                "EditorPageUp" to sounds.jumpSuper,
+                "EditorPageDown" to sounds.jumpSuper,
+                "GotoPreviousError" to sounds.jumpSuper,
+                "GotoNextError" to sounds.jumpSuper,
+                "FindNext" to sounds.jumpSuper,
+                "FindPrevious" to sounds.jumpSuper,
+                "MethodUp" to sounds.jumpSuper,
+                "MethodDown" to sounds.jumpSuper,
+                "Back" to sounds.jumpSuper,
+                "Forward" to sounds.jumpSuper,
+                "GotoSuperMethod" to sounds.jumpSuper,
+                "GotoDeclaration" to sounds.jumpSuper,
+                "GotoImplementation" to sounds.jumpSuper,
+                "EditSource" to sounds.jumpSuper, // This is for F4 navigate action
+                "EditorPaste" to sounds.fireball,
+                "ReformatCode" to sounds.fireball,
+                "EditorToggleCase" to sounds.fireball,
+                "ExpandLiveTemplateByTab" to sounds.fireball,
+                "EditorCompleteStatement" to sounds.fireball,
+                "EditorChooseLookupItem" to sounds.fireball,
+                "EditorChooseLookupItemReplace" to sounds.fireball,
+                "HippieCompletion" to sounds.fireball,
+                "HippieBackwardCompletion" to sounds.fireball,
+                "MoveStatementUp" to sounds.fireball,
+                "MoveStatementDown" to sounds.fireball,
+                "EditorStartNewLineBefore" to sounds.fireball,
+                "EditorStartNewLine" to sounds.fireball,
+                "EditorDuplicate" to sounds.fireball,
+                "EditorBackSpace" to sounds.breakblock,
+                "EditorJoinLines" to sounds.breakblock,
+                "EditorDelete" to sounds.breakblock,
+                "EditorDeleteLine" to sounds.breakblock,
+                "EditorDeleteToWordStart" to sounds.breakblock,
+                "EditorDeleteToWordEnd" to sounds.breakblock,
+                "CommentByLineComment" to sounds.breakblock,
+                "CommentByBlockComment" to sounds.breakblock,
+                "ToggleBookmark" to sounds.stomp,
+                "ToggleBookmarkWithMnemonic" to sounds.stomp,
+                "ToggleLineBreakpoint" to sounds.stomp,
+                "HighlightUsagesInFile" to sounds.stomp,
 
-    init {
-        soundsByAction = editorSounds(sounds)
-        soundsByRefactoring = refactoringSounds(sounds)
+                "NextTab" to sounds.jumpSuper,
+                "PreviousTab" to sounds.jumpSuper,
+                "CloseEditor" to sounds.fireworks,
+                "CloseAllEditorsButActive" to sounds.fireworks,
+                "\$Undo" to sounds.fireworks,
+                "\$Redo" to sounds.fireworks,
+                "ExpandAllRegions" to sounds.stomp,
+                "CollapseAllRegions" to sounds.stomp,
+                "ExpandRegion" to sounds.stomp,
+                "CollapseRegion" to sounds.stomp,
+                "CollapseSelection" to sounds.stomp,
+                "PasteMultiple" to sounds.stomp,
+                "FileStructurePopup" to sounds.stomp,
+                "ShowBookmarks" to sounds.stomp,
+                "ViewBreakpoints" to sounds.stomp,
+                "QuickJavaDoc" to sounds.stomp,
+                "ParameterInfo" to sounds.stomp,
+                "ShowIntentionActions" to sounds.stomp,
+                "EditorToggleColumnMode" to sounds.stomp,
+                "SurroundWith" to sounds.stomp,
+                "InsertLiveTemplate" to sounds.stomp,
+                "SurroundWithLiveTemplate" to sounds.stomp,
+                "NewElement" to sounds.stomp,
+                "Generate" to sounds.stomp,
+                "OverrideMethods" to sounds.stomp,
+                "ImplementMethods" to sounds.stomp,
+
+                "ChangeSignature" to sounds.stomp,
+                "ExtractMethod" to sounds.stomp,
+                "Inline" to sounds.stomp,
+                "Move" to sounds.stomp,
+
+                "Find" to sounds.stomp,
+                "FindInPath" to sounds.stomp,
+                "Replace" to sounds.stomp,
+                "ReplaceInPath" to sounds.stomp,
+
+                "ChangesView.Diff" to sounds.stomp,
+                "CompareClipboardWithSelection" to sounds.stomp,
+
+                "Switcher" to sounds.stomp,
+                "RecentFiles" to sounds.stomp,
+                "GotoClass" to sounds.stomp,
+                "GotoFile" to sounds.stomp,
+                "GotoSymbol" to sounds.stomp,
+                "SearchEverywhere" to sounds.stomp,
+                "GotoLine" to sounds.stomp,
+                "ShowUsages" to sounds.stomp,
+                "FindUsages" to sounds.stomp,
+                "ShowNavBar" to sounds.stomp,
+                "RunInspection" to sounds.stomp,
+
+                "SelectIn" to sounds.stomp,
+                "QuickChangeScheme" to sounds.stomp,
+                "ActivateProjectToolWindow" to sounds.stomp,
+                "ActivateStructureToolWindow" to sounds.stomp,
+                "ActivateFindToolWindow" to sounds.stomp,
+                "ActivateChangesToolWindow" to sounds.stomp,
+                "ActivateRunToolWindow" to sounds.stomp,
+                "ActivateDebugToolWindow" to sounds.stomp,
+                "ActivateMessagesToolWindow" to sounds.stomp,
+                "ActivateFavoritesToolWindow" to sounds.stomp,
+                "AddToFavoritesPopup" to sounds.stomp,
+                "TypeHierarchy" to sounds.stomp,
+                "HideActiveWindow" to sounds.stomp,
+                "Vcs.QuickListPopupAction" to sounds.stomp,
+                "Vcs.ShowMessageHistory" to sounds.stomp,
+                "ChooseRunConfiguration" to sounds.stomp,
+                "ChooseDebugConfiguration" to sounds.stomp
+            )
+        }
     }
 }
