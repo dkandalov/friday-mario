@@ -5,6 +5,7 @@ import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.text.StringUtilRt
+import com.intellij.util.messages.MessageBus
 
 fun show(message: String) {
     if (StringUtilRt.isEmptyOrSpaces(message)) return
@@ -12,3 +13,5 @@ fun show(message: String) {
     val notification = Notification("Friday Mario", noTitle, message, NotificationType.INFORMATION)
     ApplicationManager.getApplication().messageBus.syncPublisher(Notifications.TOPIC).notify(notification)
 }
+
+val appMessageBus: MessageBus get() = ApplicationManager.getApplication().messageBus
