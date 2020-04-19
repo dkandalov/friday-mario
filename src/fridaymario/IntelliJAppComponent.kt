@@ -15,6 +15,9 @@ import com.intellij.openapi.util.text.StringUtilRt
 import fridaymario.listeners.*
 import fridaymario.sounds.SilentSound
 import fridaymario.sounds.Sounds
+import fridaymario.util.newDisposable
+import fridaymario.util.registerParent
+import fridaymario.util.whenDisposed
 
 class IntelliJAppComponent: AppLifecycleListener {
     private var soundPlayer: ActionListeningSoundPlayer? = null
@@ -39,15 +42,15 @@ class IntelliJAppComponent: AppLifecycleListener {
     }
 
     private fun init(): Disposable {
-        val disposable = Disposer.newDisposable("FridayMario")
-        Disposer.register(ApplicationManager.getApplication(), disposable)
+        val disposable = newDisposable("FridayMario").registerParent(ApplicationManager.getApplication())
+
         soundPlayer = ActionListeningSoundPlayer(createSounds(), createLoggingListener()).init()
-        Disposer.register(disposable, Disposable {
+        disposable.whenDisposed {
             if (soundPlayer != null) {
                 soundPlayer!!.stop()
                 soundPlayer = null
             }
-        })
+        }
         initApplicationListeners(soundPlayer, disposable)
         initProjectListeners(soundPlayer, disposable)
 
@@ -65,22 +68,21 @@ class IntelliJAppComponent: AppLifecycleListener {
         AllActions(soundPlayer).start(disposable)
     }
 
-    private fun initProjectListeners(soundPlayer: ActionListeningSoundPlayer?, disposable: Disposable) {
-        val projectManagerListener: ProjectManagerListener = object: ProjectManagerListener {
+    private fun initProjectListeners(soundPlayer: ActionListeningSoundPlayer?, parentDisposable: Disposable) {
+        val projectManagerListener = object: ProjectManagerListener {
             override fun projectOpened(project: Project) {
-                // TODO create child of project AND disposable?
-                Refactoring(project, soundPlayer).start(project)
-                VcsActions(project, soundPlayer).start(project)
-                Compilation.factory.create(project, soundPlayer).start(project)
-                UnitTests(project, soundPlayer).start(project)
+                val disposable = newDisposable().registerParent(parentDisposable, project)
+                Refactoring(project, soundPlayer).start(disposable)
+                VcsActions(project, soundPlayer).start(disposable)
+                Compilation.factory.create(project, soundPlayer).start(disposable)
+                UnitTests(project, soundPlayer).start(disposable)
             }
         }
 
-        // TODO is this necessary?
         for (project in ProjectManager.getInstance().openProjects) {
             projectManagerListener.projectOpened(project)
         }
-        ProjectManager.getInstance().addProjectManagerListener(projectManagerListener, disposable)
+        ProjectManager.getInstance().addProjectManagerListener(projectManagerListener, parentDisposable)
     }
 
     fun silentMode(): IntelliJAppComponent {
@@ -105,8 +107,8 @@ class IntelliJAppComponent: AppLifecycleListener {
         }
     }
 
-    private fun createLoggingListener(): ActionListeningSoundPlayer.Listener {
-        return object: ActionListeningSoundPlayer.Listener {
+    private fun createLoggingListener() =
+        object: ActionListeningSoundPlayer.Listener {
             override fun unmappedAction(actionId: String) {
                 if (logUnmappedActions) show(actionId)
             }
@@ -115,7 +117,6 @@ class IntelliJAppComponent: AppLifecycleListener {
                 if (logUnmappedActions) show(refactoringId)
             }
         }
-    }
 
     fun setBackgroundMusicEnabled(value: Boolean) {
         Settings.getInstance().setBackgroundMusicEnabled(value)
@@ -128,7 +129,7 @@ class IntelliJAppComponent: AppLifecycleListener {
     }
 
     private fun update() {
-        if (disposable != null) disposable!!.dispose()
+        if (disposable != null) Disposer.dispose(disposable!!)
         if (Settings.getInstance().isPluginEnabled) disposable = init()
     }
 
