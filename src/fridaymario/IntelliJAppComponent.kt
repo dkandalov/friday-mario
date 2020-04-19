@@ -132,7 +132,6 @@ class IntelliJAppComponent: AppLifecycleListener {
     }
 
     companion object {
-        @JvmField
         var instance: IntelliJAppComponent? = null
     }
 }

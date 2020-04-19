@@ -1,16 +1,15 @@
-package fridaymario;
+package fridaymario
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.project.DumbAware;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.ToggleAction
+import com.intellij.openapi.project.DumbAware
 
-public class ToggleBackgroundMusic extends ToggleAction implements DumbAware {
-	@Override public boolean isSelected(@NotNull AnActionEvent anActionEvent) {
-		return Settings.getInstance().backgroundMusicEnabled;
-	}
+class ToggleBackgroundMusic: ToggleAction(), DumbAware {
+    override fun isSelected(anActionEvent: AnActionEvent): Boolean {
+        return Settings.getInstance().backgroundMusicEnabled
+    }
 
-	@Override public void setSelected(@NotNull AnActionEvent anActionEvent, boolean value) {
-		IntelliJAppComponent.instance.setBackgroundMusicEnabled(value);
-	}
+    override fun setSelected(anActionEvent: AnActionEvent, value: Boolean) {
+        IntelliJAppComponent.instance!!.setBackgroundMusicEnabled(value)
+    }
 }
