@@ -49,7 +49,7 @@ class IntelliJAppComponent: AppLifecycleListener {
             }
         }
         initApplicationListeners(soundPlayer!!, disposable)
-        initProjectListeners(soundPlayer, disposable)
+        initProjectListeners(soundPlayer!!, disposable)
 
         // see https://github.com/dkandalov/friday-mario/issues/3#issuecomment-160421286
         // and http://keithp.com/blogs/Java-Sound-on-Linux/
@@ -65,7 +65,7 @@ class IntelliJAppComponent: AppLifecycleListener {
         AllActions(soundPlayer).start(disposable)
     }
 
-    private fun initProjectListeners(soundPlayer: ActionListeningSoundPlayer?, parentDisposable: Disposable) {
+    private fun initProjectListeners(soundPlayer: ActionListeningSoundPlayer, parentDisposable: Disposable) {
         val projectManagerListener = object: ProjectManagerListener {
             override fun projectOpened(project: Project) {
                 val disposable = newDisposable().registerParent(parentDisposable, project)
