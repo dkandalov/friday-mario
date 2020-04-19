@@ -93,8 +93,8 @@ class IntelliJAppComponent: AppLifecycleListener {
         return this
     }
 
-    private fun createSounds(): Sounds {
-        return if (silentMode) {
+    private fun createSounds() =
+        if (silentMode) {
             Sounds.createSilent(object: SilentSound.Listener {
                 override fun playing(soundName: String) = show(soundName)
                 override fun stopped(soundName: String) = show("stopped: $soundName")
@@ -103,7 +103,6 @@ class IntelliJAppComponent: AppLifecycleListener {
             val settings = Settings.getInstance()
             Sounds.create(settings.actionSoundsEnabled, settings.backgroundMusicEnabled)
         }
-    }
 
     private fun createLoggingListener() =
         object: ActionListeningSoundPlayer.Listener {

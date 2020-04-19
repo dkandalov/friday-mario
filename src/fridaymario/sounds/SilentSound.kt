@@ -17,8 +17,7 @@ class SilentSound(
         fun stopped(soundName: String)
 
         companion object {
-            @JvmField
-            val none: Listener = object: Listener {
+            val none = object: Listener {
                 override fun playing(soundName: String) {}
                 override fun stopped(soundName: String) {}
             }
