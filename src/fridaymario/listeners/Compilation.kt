@@ -1,22 +1,23 @@
-package fridaymario.listeners;
+package fridaymario.listeners
 
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.project.Project
 
-public abstract class Compilation implements Restartable {
-	@Override public void start(Disposable disposable) {
-	}
+abstract class Compilation: Restartable {
+    override fun start(disposable: Disposable) {}
 
-	public static Factory factory = (project, listener) -> new Compilation() {
-	};
+    interface Factory {
+        fun create(project: Project, listener: Listener): Compilation
+    }
 
-	public interface Factory {
-		Compilation create(Project project, Listener listener);
-	}
+    interface Listener {
+        fun compilationSucceeded()
+        fun compilationFailed()
+    }
 
-	public interface Listener {
-		void compilationSucceeded();
-
-		void compilationFailed();
-	}
+    companion object {
+        var factory: Factory = object: Factory {
+            override fun create(project: Project, listener: Listener) = object: Compilation() {}
+        }
+    }
 }
