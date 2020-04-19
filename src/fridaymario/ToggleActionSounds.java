@@ -11,6 +11,6 @@ public class ToggleActionSounds extends ToggleAction implements DumbAware {
 	}
 
 	@Override public void setSelected(@NotNull AnActionEvent anActionEvent, boolean value) {
-		IntelliJAppComponent.instance().setActionSoundsEnabled(value);
+		IntelliJAppComponent.instance.setActionSoundsEnabled(value);
 	}
 }

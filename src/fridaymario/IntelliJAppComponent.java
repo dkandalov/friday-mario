@@ -21,10 +21,15 @@ import java.util.List;
 import static com.intellij.openapi.util.text.StringUtilRt.isEmptyOrSpaces;
 
 public class IntelliJAppComponent implements AppLifecycleListener {
+	public static IntelliJAppComponent instance;
 	private ActionListeningSoundPlayer soundPlayer;
 	private Disposable disposable;
 	private boolean silentMode;
 	private boolean logUnmappedActions;
+
+	public IntelliJAppComponent() {
+		instance = this;
+	}
 
 	@Override public void appFrameCreated(@NotNull List<String> commandLineArgs) {
 		if (!Settings.getInstance().isPluginEnabled()) return;
@@ -69,6 +74,7 @@ public class IntelliJAppComponent implements AppLifecycleListener {
 	private void initProjectListeners(ActionListeningSoundPlayer soundPlayer, Disposable disposable) {
 		ProjectManagerListener projectManagerListener = new ProjectManagerListener() {
 			@Override public void projectOpened(@NotNull Project project) {
+				// TODO create child of project AND disposable?
 				new Refactoring(project, soundPlayer).start(project);
 				new VcsActions(project, soundPlayer).start(project);
 				Compilation.factory.create(project, soundPlayer).start(project);
@@ -128,10 +134,6 @@ public class IntelliJAppComponent implements AppLifecycleListener {
 		String noTitle = "";
 		Notification notification = new Notification("Friday Mario", noTitle, message, NotificationType.INFORMATION);
 		ApplicationManager.getApplication().getMessageBus().syncPublisher(Notifications.TOPIC).notify(notification);
-	}
-
-	static IntelliJAppComponent instance() {
-		return ApplicationManager.getApplication().getComponent(IntelliJAppComponent.class);
 	}
 
 	public void setBackgroundMusicEnabled(boolean value) {

@@ -11,6 +11,6 @@ public class ToggleBackgroundMusic extends ToggleAction implements DumbAware {
 	}
 
 	@Override public void setSelected(@NotNull AnActionEvent anActionEvent, boolean value) {
-		IntelliJAppComponent.instance().setBackgroundMusicEnabled(value);
+		IntelliJAppComponent.instance.setBackgroundMusicEnabled(value);
 	}
 }
