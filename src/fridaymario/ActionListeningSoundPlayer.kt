@@ -1,257 +1,240 @@
-package fridaymario;
+package fridaymario
 
-import fridaymario.listeners.*;
-import fridaymario.sounds.Sound;
-import fridaymario.sounds.Sounds;
+import fridaymario.listeners.*
+import fridaymario.sounds.Sound
+import fridaymario.sounds.Sounds
+import java.util.*
 
-import java.util.HashMap;
-import java.util.Map;
+class ActionListeningSoundPlayer(private val sounds: Sounds, private val listener: Listener):
+    Compilation.Listener, Refactoring.Listener, UnitTests.Listener, VcsActions.Listener, AllActions.Listener {
 
-public class ActionListeningSoundPlayer implements
-		Compilation.Listener, Refactoring.Listener, UnitTests.Listener, VcsActions.Listener, AllActions.Listener {
+    private val soundsByAction: Map<String?, Sound>
+    private val soundsByRefactoring: Map<String?, Sound>
+    private var compilationFailed = false
+    private var stopped = false
 
-	private final Sounds sounds;
-	private final Listener listener;
-	private final Map<String, Sound> soundsByAction;
-	private final Map<String, Sound> soundsByRefactoring;
-	private boolean compilationFailed;
-	private boolean stopped;
+    fun init(): ActionListeningSoundPlayer {
+        sounds.marioSong.playInBackground()
+        return this
+    }
 
+    fun stop() {
+        if (stopped) return
+        stopped = true
+        sounds.marioSong.stop()
+        sounds.zeldaSong.stop()
+    }
 
-	public ActionListeningSoundPlayer(Sounds sounds, Listener listener) {
-		this.sounds = sounds;
-		this.listener = listener;
-		this.soundsByAction = editorSounds(sounds);
-		this.soundsByRefactoring = refactoringSounds(sounds);
-	}
+    fun stopAndPlayGameOver() {
+        stop()
+        sounds.gameover.playAndWait()
+    }
 
-	public ActionListeningSoundPlayer init() {
-		sounds.marioSong.playInBackground();
-		return this;
-	}
+    override fun onAction(actionId: String) {
+        val sound = soundsByAction[actionId]
+        if (sound != null) {
+            sound.play()
+        } else {
+            listener.unmappedAction(actionId)
+        }
+    }
 
-	public void stop() {
-		if (stopped) return;
-		stopped = true;
-		sounds.marioSong.stop();
-		sounds.zeldaSong.stop();
-	}
+    override fun onRefactoring(refactoringId: String) {
+        val sound = soundsByRefactoring[refactoringId]
+        if (sound != null) {
+            sound.play()
+        } else {
+            sounds.coin.play()
+            listener.unmappedRefactoring(refactoringId)
+        }
+    }
 
-	public void stopAndPlayGameOver() {
-		stop();
-		sounds.gameover.playAndWait();
-	}
+    override fun compilationSucceeded() {
+        sounds.oneUp.play()
+        if (compilationFailed) {
+            compilationFailed = false
+            sounds.marioSong.playInBackground()
+            sounds.zeldaSong.stop()
+        }
+    }
 
-	@Override public void onAction(String actionId) {
-		Sound sound = soundsByAction.get(actionId);
-		if (sound != null) {
-			sound.play();
-		} else {
-			listener.unmappedAction(actionId);
-		}
-	}
+    override fun compilationFailed() {
+        sounds.oneDown.play()
+        if (!compilationFailed) {
+            compilationFailed = true
+            sounds.zeldaSong.playInBackground()
+            sounds.marioSong.stop()
+        }
+    }
 
-	@Override public void onRefactoring(String refactoringId) {
-		Sound sound = soundsByRefactoring.get(refactoringId);
-		if (sound != null) {
-			sound.play();
-		} else {
-			sounds.coin.play();
-			listener.unmappedRefactoring(refactoringId);
-		}
-	}
+    override fun onUnitTestSucceeded() {
+        sounds.oneUp.play()
+    }
 
-	@Override public void compilationSucceeded() {
-		sounds.oneUp.play();
-		if (compilationFailed) {
-			compilationFailed = false;
-			sounds.marioSong.playInBackground();
-			sounds.zeldaSong.stop();
-		}
-	}
+    override fun onUnitTestFailed() {
+        sounds.oneDown.play()
+    }
 
-	@Override public void compilationFailed() {
-		sounds.oneDown.play();
-		if (!compilationFailed) {
-			compilationFailed = true;
-			sounds.zeldaSong.playInBackground();
-			sounds.marioSong.stop();
-		}
-	}
+    override fun onVcsCommit() {
+        sounds.powerupAppears.play()
+    }
 
-	@Override public void onUnitTestSucceeded() {
-		sounds.oneUp.play();
-	}
+    override fun onVcsUpdate() {
+        sounds.powerup.play()
+    }
 
-	@Override public void onUnitTestFailed() {
-		sounds.oneDown.play();
-	}
+    override fun onVcsPush() {
+        sounds.powerup.play()
+    }
 
-	@Override public void onVcsCommit() {
-		sounds.powerupAppears.play();
-	}
+    override fun onVcsPushFailed() {
+        sounds.oneDown.play()
+    }
 
-	@Override public void onVcsUpdate() {
-		sounds.powerup.play();
-	}
+    interface Listener {
+        fun unmappedAction(actionId: String)
+        fun unmappedRefactoring(refactoringId: String)
+    }
 
-	@Override public void onVcsPush() {
-		sounds.powerup.play();
-	}
+    companion object {
+        private fun refactoringSounds(sounds: Sounds): Map<String?, Sound> {
+            val result: MutableMap<String?, Sound> = HashMap()
+            result["refactoring.rename"] = sounds.coin
+            result["refactoring.extractVariable"] = sounds.coin
+            result["refactoring.extract.method"] = sounds.coin
+            result["refactoring.inline.local.variable"] = sounds.coin
+            result["refactoring.safeDelete"] = sounds.coin
+            result["refactoring.introduceParameter"] = sounds.coin
+            return result
+        }
 
-	@Override public void onVcsPushFailed() {
-		sounds.oneDown.play();
-	}
+        private fun editorSounds(sounds: Sounds): Map<String?, Sound> {
+            val result: MutableMap<String?, Sound> = HashMap()
+            result["EditorUp"] = sounds.kick
+            result["EditorDown"] = sounds.kick
+            result["EditorUpWithSelection"] = sounds.kick
+            result["EditorDownWithSelection"] = sounds.kick
+            result["EditorPreviousWord"] = sounds.kick
+            result["EditorNextWord"] = sounds.kick
+            result["EditorPreviousWordWithSelection"] = sounds.kick
+            result["EditorNextWordWithSelection"] = sounds.kick
+            result["EditorSelectWord"] = sounds.kick
+            result["EditorUnSelectWord"] = sounds.kick
+            result["\$SelectAll"] = sounds.kick
+            result["EditorLineStart"] = sounds.jumpSmall
+            result["EditorLineEnd"] = sounds.jumpSmall
+            result["EditorLineStartWithSelection"] = sounds.jumpSmall
+            result["EditorLineEndWithSelection"] = sounds.jumpSmall
+            result["EditorPageUp"] = sounds.jumpSuper
+            result["EditorPageDown"] = sounds.jumpSuper
+            result["GotoPreviousError"] = sounds.jumpSuper
+            result["GotoNextError"] = sounds.jumpSuper
+            result["FindNext"] = sounds.jumpSuper
+            result["FindPrevious"] = sounds.jumpSuper
+            result["MethodUp"] = sounds.jumpSuper
+            result["MethodDown"] = sounds.jumpSuper
+            result["Back"] = sounds.jumpSuper
+            result["Forward"] = sounds.jumpSuper
+            result["GotoSuperMethod"] = sounds.jumpSuper
+            result["GotoDeclaration"] = sounds.jumpSuper
+            result["GotoImplementation"] = sounds.jumpSuper
+            result["EditSource"] = sounds.jumpSuper // this is F4 navigate action
+            result["EditorPaste"] = sounds.fireball
+            result["ReformatCode"] = sounds.fireball
+            result["EditorToggleCase"] = sounds.fireball
+            result["ExpandLiveTemplateByTab"] = sounds.fireball
+            result["EditorCompleteStatement"] = sounds.fireball
+            result["EditorChooseLookupItem"] = sounds.fireball
+            result["EditorChooseLookupItemReplace"] = sounds.fireball
+            result["HippieCompletion"] = sounds.fireball
+            result["HippieBackwardCompletion"] = sounds.fireball
+            result["MoveStatementUp"] = sounds.fireball
+            result["MoveStatementDown"] = sounds.fireball
+            result["EditorStartNewLineBefore"] = sounds.fireball
+            result["EditorStartNewLine"] = sounds.fireball
+            result["EditorDuplicate"] = sounds.fireball
+            result["EditorBackSpace"] = sounds.breakblock
+            result["EditorJoinLines"] = sounds.breakblock
+            result["EditorDelete"] = sounds.breakblock
+            result["EditorDeleteLine"] = sounds.breakblock
+            result["EditorDeleteToWordStart"] = sounds.breakblock
+            result["EditorDeleteToWordEnd"] = sounds.breakblock
+            result["CommentByLineComment"] = sounds.breakblock
+            result["CommentByBlockComment"] = sounds.breakblock
+            result["ToggleBookmark"] = sounds.stomp
+            result["ToggleBookmarkWithMnemonic"] = sounds.stomp
+            result["ToggleLineBreakpoint"] = sounds.stomp
+            result["HighlightUsagesInFile"] = sounds.stomp
+            result["NextTab"] = sounds.jumpSuper
+            result["PreviousTab"] = sounds.jumpSuper
+            result["CloseEditor"] = sounds.fireworks
+            result["CloseAllEditorsButActive"] = sounds.fireworks
+            result["\$Undo"] = sounds.fireworks
+            result["\$Redo"] = sounds.fireworks
+            result["ExpandAllRegions"] = sounds.stomp
+            result["CollapseAllRegions"] = sounds.stomp
+            result["ExpandRegion"] = sounds.stomp
+            result["CollapseRegion"] = sounds.stomp
+            result["CollapseSelection"] = sounds.stomp
+            result["PasteMultiple"] = sounds.stomp
+            result["FileStructurePopup"] = sounds.stomp
+            result["ShowBookmarks"] = sounds.stomp
+            result["ViewBreakpoints"] = sounds.stomp
+            result["QuickJavaDoc"] = sounds.stomp
+            result["ParameterInfo"] = sounds.stomp
+            result["ShowIntentionActions"] = sounds.stomp
+            result["EditorToggleColumnMode"] = sounds.stomp
+            result["SurroundWith"] = sounds.stomp
+            result["InsertLiveTemplate"] = sounds.stomp
+            result["SurroundWithLiveTemplate"] = sounds.stomp
+            result["NewElement"] = sounds.stomp
+            result["Generate"] = sounds.stomp
+            result["OverrideMethods"] = sounds.stomp
+            result["ImplementMethods"] = sounds.stomp
+            result["ChangeSignature"] = sounds.stomp
+            result["ExtractMethod"] = sounds.stomp
+            result["Inline"] = sounds.stomp
+            result["Move"] = sounds.stomp
+            result["Find"] = sounds.stomp
+            result["FindInPath"] = sounds.stomp
+            result["Replace"] = sounds.stomp
+            result["ReplaceInPath"] = sounds.stomp
+            result["ChangesView.Diff"] = sounds.stomp
+            result["CompareClipboardWithSelection"] = sounds.stomp
+            result["Switcher"] = sounds.stomp
+            result["RecentFiles"] = sounds.stomp
+            result["GotoClass"] = sounds.stomp
+            result["GotoFile"] = sounds.stomp
+            result["GotoSymbol"] = sounds.stomp
+            result["SearchEverywhere"] = sounds.stomp
+            result["GotoLine"] = sounds.stomp
+            result["ShowUsages"] = sounds.stomp
+            result["FindUsages"] = sounds.stomp
+            result["ShowNavBar"] = sounds.stomp
+            result["RunInspection"] = sounds.stomp
+            result["SelectIn"] = sounds.stomp
+            result["QuickChangeScheme"] = sounds.stomp
+            result["ActivateProjectToolWindow"] = sounds.stomp
+            result["ActivateStructureToolWindow"] = sounds.stomp
+            result["ActivateFindToolWindow"] = sounds.stomp
+            result["ActivateChangesToolWindow"] = sounds.stomp
+            result["ActivateRunToolWindow"] = sounds.stomp
+            result["ActivateDebugToolWindow"] = sounds.stomp
+            result["ActivateMessagesToolWindow"] = sounds.stomp
+            result["ActivateFavoritesToolWindow"] = sounds.stomp
+            result["AddToFavoritesPopup"] = sounds.stomp
+            result["TypeHierarchy"] = sounds.stomp
+            result["HideActiveWindow"] = sounds.stomp
+            result["Vcs.QuickListPopupAction"] = sounds.stomp
+            result["Vcs.ShowMessageHistory"] = sounds.stomp
+            result["ChooseRunConfiguration"] = sounds.stomp
+            result["ChooseDebugConfiguration"] = sounds.stomp
+            return result
+        }
+    }
 
-	private static Map<String, Sound> refactoringSounds(Sounds sounds) {
-		Map<String, Sound> result = new HashMap<>();
-		result.put("refactoring.rename", sounds.coin);
-		result.put("refactoring.extractVariable", sounds.coin);
-		result.put("refactoring.extract.method", sounds.coin);
-		result.put("refactoring.inline.local.variable", sounds.coin);
-		result.put("refactoring.safeDelete", sounds.coin);
-		result.put("refactoring.introduceParameter", sounds.coin);
-		return result;
-	}
-
-	private static Map<String, Sound> editorSounds(Sounds sounds) {
-		Map<String, Sound> result = new HashMap<>();
-
-		result.put("EditorUp", sounds.kick);
-		result.put("EditorDown", sounds.kick);
-		result.put("EditorUpWithSelection", sounds.kick);
-		result.put("EditorDownWithSelection", sounds.kick);
-		result.put("EditorPreviousWord", sounds.kick);
-		result.put("EditorNextWord", sounds.kick);
-		result.put("EditorPreviousWordWithSelection", sounds.kick);
-		result.put("EditorNextWordWithSelection", sounds.kick);
-		result.put("EditorSelectWord", sounds.kick);
-		result.put("EditorUnSelectWord", sounds.kick);
-		result.put("$SelectAll", sounds.kick);
-		result.put("EditorLineStart", sounds.jumpSmall);
-		result.put("EditorLineEnd", sounds.jumpSmall);
-		result.put("EditorLineStartWithSelection", sounds.jumpSmall);
-		result.put("EditorLineEndWithSelection", sounds.jumpSmall);
-		result.put("EditorPageUp", sounds.jumpSuper);
-		result.put("EditorPageDown", sounds.jumpSuper);
-		result.put("GotoPreviousError", sounds.jumpSuper);
-		result.put("GotoNextError", sounds.jumpSuper);
-		result.put("FindNext", sounds.jumpSuper);
-		result.put("FindPrevious", sounds.jumpSuper);
-		result.put("MethodUp", sounds.jumpSuper);
-		result.put("MethodDown", sounds.jumpSuper);
-		result.put("Back", sounds.jumpSuper);
-		result.put("Forward", sounds.jumpSuper);
-		result.put("GotoSuperMethod", sounds.jumpSuper);
-		result.put("GotoDeclaration", sounds.jumpSuper);
-		result.put("GotoImplementation", sounds.jumpSuper);
-		result.put("EditSource", sounds.jumpSuper); // this is F4 navigate action
-
-		result.put("EditorPaste", sounds.fireball);
-		result.put("ReformatCode", sounds.fireball);
-		result.put("EditorToggleCase", sounds.fireball);
-		result.put("ExpandLiveTemplateByTab", sounds.fireball);
-		result.put("EditorCompleteStatement", sounds.fireball);
-		result.put("EditorChooseLookupItem", sounds.fireball);
-		result.put("EditorChooseLookupItemReplace", sounds.fireball);
-		result.put("HippieCompletion", sounds.fireball);
-		result.put("HippieBackwardCompletion", sounds.fireball);
-		result.put("MoveStatementUp", sounds.fireball);
-		result.put("MoveStatementDown", sounds.fireball);
-		result.put("EditorStartNewLineBefore", sounds.fireball);
-		result.put("EditorStartNewLine", sounds.fireball);
-		result.put("EditorDuplicate", sounds.fireball);
-		result.put("EditorBackSpace", sounds.breakblock);
-		result.put("EditorJoinLines", sounds.breakblock);
-		result.put("EditorDelete", sounds.breakblock);
-		result.put("EditorDeleteLine", sounds.breakblock);
-		result.put("EditorDeleteToWordStart", sounds.breakblock);
-		result.put("EditorDeleteToWordEnd", sounds.breakblock);
-		result.put("CommentByLineComment", sounds.breakblock);
-		result.put("CommentByBlockComment", sounds.breakblock);
-		result.put("ToggleBookmark", sounds.stomp);
-		result.put("ToggleBookmarkWithMnemonic", sounds.stomp);
-		result.put("ToggleLineBreakpoint", sounds.stomp);
-		result.put("HighlightUsagesInFile", sounds.stomp);
-
-		result.put("NextTab", sounds.jumpSuper);
-		result.put("PreviousTab", sounds.jumpSuper);
-		result.put("CloseEditor", sounds.fireworks);
-		result.put("CloseAllEditorsButActive", sounds.fireworks);
-		result.put("$Undo", sounds.fireworks);
-		result.put("$Redo", sounds.fireworks);
-		result.put("ExpandAllRegions", sounds.stomp);
-		result.put("CollapseAllRegions", sounds.stomp);
-		result.put("ExpandRegion", sounds.stomp);
-		result.put("CollapseRegion", sounds.stomp);
-		result.put("CollapseSelection", sounds.stomp);
-		result.put("PasteMultiple", sounds.stomp);
-		result.put("FileStructurePopup", sounds.stomp);
-		result.put("ShowBookmarks", sounds.stomp);
-		result.put("ViewBreakpoints", sounds.stomp);
-		result.put("QuickJavaDoc", sounds.stomp);
-		result.put("ParameterInfo", sounds.stomp);
-		result.put("ShowIntentionActions", sounds.stomp);
-		result.put("EditorToggleColumnMode", sounds.stomp);
-		result.put("SurroundWith", sounds.stomp);
-		result.put("InsertLiveTemplate", sounds.stomp);
-		result.put("SurroundWithLiveTemplate", sounds.stomp);
-		result.put("NewElement", sounds.stomp);
-		result.put("Generate", sounds.stomp);
-		result.put("OverrideMethods", sounds.stomp);
-		result.put("ImplementMethods", sounds.stomp);
-
-		result.put("ChangeSignature", sounds.stomp);
-		result.put("ExtractMethod", sounds.stomp);
-		result.put("Inline", sounds.stomp);
-		result.put("Move", sounds.stomp);
-
-		result.put("Find", sounds.stomp);
-		result.put("FindInPath", sounds.stomp);
-		result.put("Replace", sounds.stomp);
-		result.put("ReplaceInPath", sounds.stomp);
-
-		result.put("ChangesView.Diff", sounds.stomp);
-		result.put("CompareClipboardWithSelection", sounds.stomp);
-
-		result.put("Switcher", sounds.stomp);
-		result.put("RecentFiles", sounds.stomp);
-		result.put("GotoClass", sounds.stomp);
-		result.put("GotoFile", sounds.stomp);
-		result.put("GotoSymbol", sounds.stomp);
-		result.put("SearchEverywhere", sounds.stomp);
-		result.put("GotoLine", sounds.stomp);
-		result.put("ShowUsages", sounds.stomp);
-		result.put("FindUsages", sounds.stomp);
-		result.put("ShowNavBar", sounds.stomp);
-		result.put("RunInspection", sounds.stomp);
-
-		result.put("SelectIn", sounds.stomp);
-		result.put("QuickChangeScheme", sounds.stomp);
-		result.put("ActivateProjectToolWindow", sounds.stomp);
-		result.put("ActivateStructureToolWindow", sounds.stomp);
-		result.put("ActivateFindToolWindow", sounds.stomp);
-		result.put("ActivateChangesToolWindow", sounds.stomp);
-		result.put("ActivateRunToolWindow", sounds.stomp);
-		result.put("ActivateDebugToolWindow", sounds.stomp);
-		result.put("ActivateMessagesToolWindow", sounds.stomp);
-		result.put("ActivateFavoritesToolWindow", sounds.stomp);
-		result.put("AddToFavoritesPopup", sounds.stomp);
-		result.put("TypeHierarchy", sounds.stomp);
-		result.put("HideActiveWindow", sounds.stomp);
-		result.put("Vcs.QuickListPopupAction", sounds.stomp);
-		result.put("Vcs.ShowMessageHistory", sounds.stomp);
-
-		result.put("ChooseRunConfiguration", sounds.stomp);
-		result.put("ChooseDebugConfiguration", sounds.stomp);
-
-		return result;
-	}
-
-
-	public interface Listener {
-		void unmappedAction(String actionId);
-
-		void unmappedRefactoring(String refactoringId);
-	}
+    init {
+        soundsByAction = editorSounds(sounds)
+        soundsByRefactoring = refactoringSounds(sounds)
+    }
 }

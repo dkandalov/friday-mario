@@ -17,6 +17,6 @@ class Refactoring(private val project: Project, private val listener: Listener):
     }
 
     interface Listener {
-        fun onRefactoring(refactoringId: String?)
+        fun onRefactoring(refactoringId: String)
     }
 }

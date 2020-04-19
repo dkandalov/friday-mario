@@ -12,12 +12,13 @@ class AllActions(private val listener: Listener): Restartable {
     override fun start(disposable: Disposable) {
         appMessageBus.connect(disposable).subscribe(AnActionListener.TOPIC, object: AnActionListener {
             override fun beforeActionPerformed(action: AnAction, dataContext: DataContext, event: AnActionEvent) {
-                listener.onAction(ActionManager.getInstance().getId(action))
+                val actionId = ActionManager.getInstance().getId(action) ?: ""
+                listener.onAction(actionId)
             }
         })
     }
 
     interface Listener {
-        fun onAction(actionId: String?)
+        fun onAction(actionId: String)
     }
 }
