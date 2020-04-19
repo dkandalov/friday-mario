@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnusedDeclaration")
-@State(name = "FridayMarioConfig", storages = {@Storage(file = "$APP_CONFIG$/friday_mario_config.xml")})
+@State(name = "FridayMarioConfig", storages = {@Storage(value = "$APP_CONFIG$/friday_mario_config.xml")})
 public class Settings implements PersistentStateComponent<Settings> {
 	public Boolean pluginEnabled;
 	public boolean actionSoundsEnabled = true;

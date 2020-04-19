@@ -11,7 +11,7 @@ fun show(message: String) {
     if (StringUtilRt.isEmptyOrSpaces(message)) return
     val noTitle = ""
     val notification = Notification("Friday Mario", noTitle, message, NotificationType.INFORMATION)
-    ApplicationManager.getApplication().messageBus.syncPublisher(Notifications.TOPIC).notify(notification)
+    appMessageBus.syncPublisher(Notifications.TOPIC).notify(notification)
 }
 
 val appMessageBus: MessageBus get() = ApplicationManager.getApplication().messageBus

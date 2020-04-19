@@ -11,10 +11,7 @@ import com.intellij.openapi.util.SystemInfo
 import fridaymario.listeners.*
 import fridaymario.sounds.SilentSound
 import fridaymario.sounds.Sounds
-import fridaymario.util.newDisposable
-import fridaymario.util.registerParent
-import fridaymario.util.show
-import fridaymario.util.whenDisposed
+import fridaymario.util.*
 
 class IntelliJAppComponent: AppLifecycleListener {
     private var soundPlayer: ActionListeningSoundPlayer? = null
@@ -79,8 +76,7 @@ class IntelliJAppComponent: AppLifecycleListener {
         for (project in ProjectManager.getInstance().openProjects) {
             projectManagerListener.projectOpened(project)
         }
-        ApplicationManager.getApplication().messageBus.connect(parentDisposable)
-            .subscribe(ProjectManager.TOPIC, projectManagerListener)
+        appMessageBus.connect(parentDisposable).subscribe(ProjectManager.TOPIC, projectManagerListener)
     }
 
     fun silentMode(): IntelliJAppComponent {
