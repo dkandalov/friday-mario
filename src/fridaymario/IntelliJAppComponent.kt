@@ -48,7 +48,7 @@ class IntelliJAppComponent: AppLifecycleListener {
                 soundPlayer = null
             }
         }
-        initApplicationListeners(soundPlayer, disposable)
+        initApplicationListeners(soundPlayer!!, disposable)
         initProjectListeners(soundPlayer, disposable)
 
         // see https://github.com/dkandalov/friday-mario/issues/3#issuecomment-160421286
@@ -61,7 +61,7 @@ class IntelliJAppComponent: AppLifecycleListener {
         return disposable
     }
 
-    private fun initApplicationListeners(soundPlayer: ActionListeningSoundPlayer?, disposable: Disposable) {
+    private fun initApplicationListeners(soundPlayer: ActionListeningSoundPlayer, disposable: Disposable) {
         AllActions(soundPlayer).start(disposable)
     }
 
