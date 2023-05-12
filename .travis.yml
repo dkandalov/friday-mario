@@ -1,6 +1,0 @@
-language: java
-jdk: oraclejdk11
-
-env:
-  - IJ_VERSION=IC-201.6668.113
-  - IJ_VERSION=LATEST-EAP-SNAPSHOT
