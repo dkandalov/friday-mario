@@ -1,31 +1,18 @@
-buildscript {
-	ext.kotlin_version = "1.6.21"
-	repositories {
-		mavenCentral()
-		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-	}
-}
 plugins {
-	id "org.jetbrains.intellij" version "1.13.3"
+	id "org.jetbrains.intellij" version "1.16.0"
 	id "org.jetbrains.kotlin.jvm" version "1.6.21"
+	id "java"
 }
-apply plugin:"java"
-apply plugin:"kotlin"
-apply plugin:"idea"
-apply plugin:"org.jetbrains.intellij"
 
 repositories {
 	mavenCentral()
 }
 
-dependencies {
-}
-
 sourceSets {
 	main {
-		java { srcDir "./src" }
-		kotlin { srcDir "./src" }
-		resources { srcDir "./resources" }
+		java.srcDir "./src"
+		kotlin.srcDir "./src"
+		resources.srcDir "./resources"
 	}
 }
 
@@ -50,5 +37,7 @@ intellij {
 	plugins = ["java"]
 	downloadSources = true
 	sameSinceUntilBuild = false
-	updateSinceUntilBuild = false
+	updateSinceUntilBuild = false // Disable patching plugin.xml because "until" version is too restrictive (it's better to keep it open-ended).
 }
+buildSearchableOptions.enabled = false // Disable because it takes a long time and the plugin doesn't need it
+
