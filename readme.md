@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dkandalov/friday-mario.svg?branch=master)](https://travis-ci.org/dkandalov/friday-mario)
+[![Build Status](https://github.com/dkandalov/friday-mario/workflows/CI/badge.svg)](https://github.com/dkandalov/friday-mario/actions)
 
 ### What is this?
 This is a plugin which plays music and sounds from [Mario](http://en.wikipedia.org/wiki/Mario) video game on various IDE actions.
